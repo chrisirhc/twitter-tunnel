@@ -1176,8 +1176,6 @@ th {
 */
 /*	Styles by {Developer's Name}
 */
-/*	Styles by {Developer's Name}
-*/
 @media all and (orientation:portrait) {}
 @media all and (orientation:landscape) {}
 @media screen and (max-device-width: 480px) {
@@ -1185,46 +1183,46 @@ th {
 }
 
 @media print {
-  /* line 41, ../src/style.scss */
+  /* line 40, ../src/style.scss */
   * {
     background: transparent !important;
     color: #444 !important;
     text-shadow: none !important;
   }
 
-  /* line 42, ../src/style.scss */
+  /* line 41, ../src/style.scss */
   a, a:visited {
     color: #444 !important;
     text-decoration: underline;
   }
 
-  /* line 43, ../src/style.scss */
+  /* line 42, ../src/style.scss */
   a:after {
     content: " (" attr(href) ")";
   }
 
-  /* line 44, ../src/style.scss */
+  /* line 43, ../src/style.scss */
   abbr:after {
     content: " (" attr(title) ")";
   }
 
-  /* line 45, ../src/style.scss */
+  /* line 44, ../src/style.scss */
   .ir a:after {
     content: "";
   }
 
-  /* line 46, ../src/style.scss */
+  /* line 45, ../src/style.scss */
   pre, blockquote {
     border: 1px solid #999;
     page-break-inside: avoid;
   }
 
-  /* line 47, ../src/style.scss */
+  /* line 46, ../src/style.scss */
   thead {
     display: table-header-group;
   }
 
-  /* line 48, ../src/style.scss */
+  /* line 47, ../src/style.scss */
   tr, img {
     page-break-inside: avoid;
   }
@@ -1233,13 +1231,13 @@ th {
     margin: 0.5cm;
 }
 
-  /* line 50, ../src/style.scss */
+  /* line 49, ../src/style.scss */
   p, h2, h3 {
     orphans: 3;
     widows: 3;
   }
 
-  /* line 51, ../src/style.scss */
+  /* line 50, ../src/style.scss */
   h2, h3 {
     page-break-after: avoid;
   }

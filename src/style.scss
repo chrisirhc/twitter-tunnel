@@ -20,8 +20,7 @@
 	You can add more developers in the /src/partials/ directory.
 	If you're working solo, you can just get rid of the next two lines and the two _dev1.scss and _dev2.scss partials
 */
-@import "partials/dev1";
-@import "partials/dev2";
+@import "partials/felix";
 
 @media all and (orientation:portrait) { 
 	
