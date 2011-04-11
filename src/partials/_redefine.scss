@@ -3,9 +3,7 @@ These styles redefine the way the elements look. It should be applied after the 
 */
 body {
 	@include ff-text;
-	font-size:13px;
-	*font-size:small;
-	line-height: 1.3em;
+	margin: 0;
 } 
 select, input, textarea, button {
 	@include ff-text;

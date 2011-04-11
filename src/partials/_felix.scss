@@ -1,0 +1,92 @@
+/*	Styles by {Developer's Name}
+*/
+
+header{
+	@include column(24);
+	height: 4*$vs;
+	background:#000 url(../img/header-bg.png) 0 0 repeat-x;
+	
+	h1{
+		padding-top: 10px;
+		font-family: 'Yanone Kaffeesatz';
+		font-size: 30px;
+		font-weight: 700;
+		@include text-shadow(#333, 0px, 2px, 0);
+	}
+
+	h2{
+		font-size: 14px;
+		font-weight: normal;
+		color: #999;
+	}
+}
+
+header h1, header h2{
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	color: white;
+	@include box-shadow(rgba(0,0,0,0.5), 0, 5px, 0);
+}
+
+#left-container{
+	@include column(17);
+	@include prepend(1);
+}
+
+#input-container{
+	padding-top: $vs;
+	padding-bottom: $vs;
+	height: 2*$vs;
+	
+	#input-container input[type=text]{
+		margin: 0;
+		border: #999 1px solid;
+		@include column(13);
+		min-height: 2*$vs;
+		font-size: 18px;
+		color: #999999;
+	}
+
+	#input-container input[type=submit]{
+		margin: 0;
+		@include column(3);
+	}
+}
+
+#twitter-tunnel-container{
+	height: 32*$vs;
+}
+
+#right-container{
+	@include column(5);
+	
+	padding-top: 1*$vs;
+	
+	h3{
+		font-size: 12px;
+		text-transform: uppercase;
+		color: #626262;
+	}
+	
+	div{
+		padding: 0 5px;
+		margin-bottom: 5px;
+		border: 1px solid #ccc;
+	}
+	
+	#now-visualizing-container{
+		span.keyword{
+			font-size: 12px;
+			@include border-radius(5px);
+			background: #899bf4;
+		}
+	}
+}
+
+
+footer{
+	@include column(24);
+	padding-top: 3*$vs;
+	padding-bottom: 1*$vs;
+}

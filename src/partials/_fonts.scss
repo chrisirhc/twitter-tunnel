@@ -31,7 +31,7 @@ Change this mixins to your preference
 	font-family: sans-serif;
 }
 @mixin ff-heading{
-	font-family: serif;
+	font-family: sans-serif;
 }
 @mixin ff-decorative{
 	font-family: cursive;
@@ -39,3 +39,29 @@ Change this mixins to your preference
 @mixin ff-mono{
 	font-family: monospace;
 }
+
+@font-face {
+  font-family: 'Yanone Kaffeesatz';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Yanone Kaffeesatz Regular'), local('YanoneKaffeesatz-Regular'), url('http://themes.googleusercontent.com/font?kit=YDAoLskQQ5MOAgvHUQCcLQa6gm6bS00u2Qn-iPLo1Go') format('woff');
+}
+@font-face {
+  font-family: 'Yanone Kaffeesatz';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Yanone Kaffeesatz Bold'), local('YanoneKaffeesatz-Bold'), url('http://themes.googleusercontent.com/font?kit=We_iSDqttE3etzfdfhuPRbJjSLMfVFmTspsxH0yGxjj3rGVtsTkPsbDajuO5ueQw') format('woff');
+}
+@font-face {
+  font-family: 'Yanone Kaffeesatz';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Yanone Kaffeesatz Light'), local('YanoneKaffeesatz-Light'), url('http://themes.googleusercontent.com/font?kit=We_iSDqttE3etzfdfhuPRbHVephy08vG3A_n649omsL3rGVtsTkPsbDajuO5ueQw') format('woff');
+}
+@font-face {
+  font-family: 'Yanone Kaffeesatz';
+  font-style: normal;
+  font-weight: 200;
+  src: local('Yanone Kaffeesatz Thin'), local('YanoneKaffeesatz-Thin'), url('http://themes.googleusercontent.com/font?kit=We_iSDqttE3etzfdfhuPRUDqw7A1uQWuQSM-rfHaMOr3rGVtsTkPsbDajuO5ueQw') format('woff');
+}
+
