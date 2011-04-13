@@ -22,6 +22,8 @@ h1,h2,h3,h4,h5,h6 {
 	@include ff-heading;
 	font-weight: bold;
 	letter-spacing: 0.01em;
+	margin: 0;
+	padding: 0;
 }
 html { overflow-y: scroll; }
 
