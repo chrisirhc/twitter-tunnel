@@ -464,9 +464,15 @@ th {
 	You can add more developers in the /src/partials/ directory.
 	If you're working solo, you can just get rid of the next two lines and the two _dev1.scss and _dev2.scss partials
 */
-/*	Styles by {Developer's Name}
+/*	Styles by Felix
 */
 /* line 4, ../src/partials/_felix.scss */
+body {
+  line-height: 40px;
+  font-size: 12px;
+}
+
+/* line 9, ../src/partials/_felix.scss */
 header {
   display: inline;
   float: left;
@@ -474,39 +480,37 @@ header {
   width: 960px;
   height: 80px;
   background: black url(../img/header-bg.png) 0 0 repeat-x;
+  border-bottom: 5px solid #999999;
 }
 /* line 138, ../../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
 * html header {
   overflow-x: hidden;
 }
-/* line 9, ../src/partials/_felix.scss */
-header h1 {
-  padding-top: 10px;
-  font-family: 'Yanone Kaffeesatz';
-  font-size: 30px;
-  font-weight: 700;
-  text-shadow: #333333 0px 2px 0;
-}
-/* line 17, ../src/partials/_felix.scss */
-header h2 {
-  font-size: 14px;
-  font-weight: normal;
-  color: #999;
-}
-
-/* line 24, ../src/partials/_felix.scss */
+/* line 15, ../src/partials/_felix.scss */
 header h1, header h2 {
   margin: 0;
   padding: 0;
   text-align: center;
-  color: white;
-  -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 5px 0 0;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 5px 0 0;
-  -o-box-shadow: rgba(0, 0, 0, 0.5) 0 5px 0 0;
-  box-shadow: rgba(0, 0, 0, 0.5) 0 5px 0 0;
+}
+/* line 21, ../src/partials/_felix.scss */
+header h1 {
+  color: #eee;
+  font-family: 'Yanone Kaffeesatz';
+  font-size: 30px;
+  padding-top: 20px;
+  line-height: 40px;
+  font-weight: 700;
+  text-shadow: #333333 0px 2px 0;
+}
+/* line 31, ../src/partials/_felix.scss */
+header h2 {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: normal;
+  color: #999;
 }
 
-/* line 32, ../src/partials/_felix.scss */
+/* line 39, ../src/partials/_felix.scss */
 #left-container {
   display: inline;
   float: left;
@@ -519,14 +523,14 @@ header h1, header h2 {
   overflow-x: hidden;
 }
 
-/* line 37, ../src/partials/_felix.scss */
+/* line 44, ../src/partials/_felix.scss */
 #input-container {
   padding-top: 20px;
   padding-bottom: 20px;
   height: 40px;
 }
-/* line 42, ../src/partials/_felix.scss */
-#input-container #input-container input[type=text] {
+/* line 49, ../src/partials/_felix.scss */
+#input-container input[type=text] {
   margin: 0;
   border: #999 1px solid;
   display: inline;
@@ -538,11 +542,11 @@ header h1, header h2 {
   color: #999999;
 }
 /* line 138, ../../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
-* html #input-container #input-container input[type=text] {
+* html #input-container input[type=text] {
   overflow-x: hidden;
 }
-/* line 51, ../src/partials/_felix.scss */
-#input-container #input-container input[type=submit] {
+/* line 58, ../src/partials/_felix.scss */
+#input-container input[type=submit] {
   margin: 0;
   display: inline;
   float: left;
@@ -550,16 +554,16 @@ header h1, header h2 {
   width: 111.25px;
 }
 /* line 138, ../../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
-* html #input-container #input-container input[type=submit] {
+* html #input-container input[type=submit] {
   overflow-x: hidden;
 }
 
-/* line 57, ../src/partials/_felix.scss */
+/* line 64, ../src/partials/_felix.scss */
 #twitter-tunnel-container {
   height: 640px;
 }
 
-/* line 61, ../src/partials/_felix.scss */
+/* line 68, ../src/partials/_felix.scss */
 #right-container {
   display: inline;
   float: left;
@@ -571,20 +575,24 @@ header h1, header h2 {
 * html #right-container {
   overflow-x: hidden;
 }
-/* line 66, ../src/partials/_felix.scss */
+/* line 73, ../src/partials/_felix.scss */
 #right-container h3 {
   font-size: 12px;
   text-transform: uppercase;
   color: #626262;
+  padding: 0;
+  margin: 5px 0;
 }
-/* line 72, ../src/partials/_felix.scss */
+/* line 81, ../src/partials/_felix.scss */
 #right-container div {
-  padding: 0 5px;
+  padding: 5px;
   margin-bottom: 5px;
   border: 1px solid #ccc;
+  background-color: #f3f3f3;
 }
-/* line 79, ../src/partials/_felix.scss */
+/* line 89, ../src/partials/_felix.scss */
 #right-container #now-visualizing-container span.keyword {
+  display: block;
   font-size: 12px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -593,9 +601,13 @@ header h1, header h2 {
   -khtml-border-radius: 5px;
   border-radius: 5px;
   background: #899bf4;
+  padding: 5px 10px;
+  margin: 5px 0px;
+  color: white;
+  border: 1px solid #5d73e0;
 }
 
-/* line 88, ../src/partials/_felix.scss */
+/* line 103, ../src/partials/_felix.scss */
 footer {
   display: inline;
   float: left;
@@ -603,6 +615,7 @@ footer {
   width: 960px;
   padding-top: 60px;
   padding-bottom: 20px;
+  font-size: 0.75em;
 }
 /* line 138, ../../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
 * html footer {
