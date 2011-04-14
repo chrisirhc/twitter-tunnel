@@ -18,7 +18,7 @@ g = new Dygraph(
 	"11,24\n" +
 	"12,58\n",
 	{
-		width: 717,
+		width: 676,
 		height: 90,
 		labels: [ "Date", "Tweets" ],
 		axisLabelFontSize: 10,

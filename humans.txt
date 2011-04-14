@@ -2,17 +2,18 @@
 /* TEAM */
 	[Position]: [Name]
 	Contact: [Email]
-	Twitter:
-	From:
+	Twitter: 
+	From: 
 
 /* THANKS */
 	[Position]: [Name]
-	Twitter:
-	From:
+	Twitter: 
+	From: 
 
 /* SITE */
 	Last update: [date]
 	Language: English
 	Standards: HTML5, CSS3
 	Components: JIT, Dygraphs, HTML5 Boilerplate, Tempo.js, CASS
-	
+
+
