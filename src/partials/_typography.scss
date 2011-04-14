@@ -3,6 +3,15 @@
 		margin:0;
 	}
 }
+
+h1,h2,h3,h4,h5,h6,p{
+	font-size: 1em;
+	margin: 0;
+	font-family:Helvetica Neue, Helvetica ,Arial,sans-serif;
+	font-weight: normal;
+}
+
+/*
 h1 {
 	font-size: 60px;
 	margin-bottom: 0.50em;
@@ -42,6 +51,8 @@ p {
 		padding: 0;
 	}
 }
+
+*/
 a {
 	text-decoration: none;
 }
@@ -84,8 +95,7 @@ li ul, li ol {
 	margin: 0;
 }
 ul, ol {
-	margin: 0 1.5em 1.5em 0;
-	padding-left: 3.333em;
+	margin: 0;
 }
 ul {
 	list-style-type: disc;

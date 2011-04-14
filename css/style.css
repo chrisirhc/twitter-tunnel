@@ -80,33 +80,33 @@ These styles redefine the way the elements look. It should be applied after the 
 /* line 4, ../src/partials/_redefine.scss */
 body {
   font-family: sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   *font-size: small;
-  line-height: 1.3em;
+  line-height: 1.5em;
 }
 
-/* line 10, ../src/partials/_redefine.scss */
+/* line 11, ../src/partials/_redefine.scss */
 select, input, textarea, button {
   font-family: sans-serif;
   font-size: 99%;
 }
 
-/* line 14, ../src/partials/_redefine.scss */
+/* line 15, ../src/partials/_redefine.scss */
 pre, code, kbd, samp {
   font-family: monospace;
 }
 
-/* line 17, ../src/partials/_redefine.scss */
+/* line 18, ../src/partials/_redefine.scss */
 blockquote {
   font-family: cursive;
 }
 
-/* line 20, ../src/partials/_redefine.scss */
+/* line 21, ../src/partials/_redefine.scss */
 body, select, input, textarea {
   color: #444;
 }
 
-/* line 21, ../src/partials/_redefine.scss */
+/* line 23, ../src/partials/_redefine.scss */
 h1, h2, h3, h4, h5, h6 {
   font-family: serif;
   font-weight: bold;
@@ -115,69 +115,70 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
 }
 
-/* line 28, ../src/partials/_redefine.scss */
+/* line 30, ../src/partials/_redefine.scss */
 html {
   overflow-y: scroll;
 }
 
-/* line 30, ../src/partials/_redefine.scss */
+/* line 32, ../src/partials/_redefine.scss */
 a, a:hover, a:active {
   outline: none;
 }
 
-/* line 31, ../src/partials/_redefine.scss */
+/* line 33, ../src/partials/_redefine.scss */
 a, a:active, a:visited {
   color: #607890;
 }
 
-/* line 32, ../src/partials/_redefine.scss */
+/* line 34, ../src/partials/_redefine.scss */
 a:hover {
   color: #036;
 }
 
-/* line 34, ../src/partials/_redefine.scss */
+/* line 36, ../src/partials/_redefine.scss */
 ul, ol {
-  margin-left: 1.8em;
+  margin: 0;
+  padding: 0;
 }
 
-/* line 35, ../src/partials/_redefine.scss */
+/* line 37, ../src/partials/_redefine.scss */
 ol {
   list-style-type: decimal;
 }
 
-/* line 37, ../src/partials/_redefine.scss */
+/* line 39, ../src/partials/_redefine.scss */
 nav ul, nav li {
   margin: 0;
 }
 
-/* line 38, ../src/partials/_redefine.scss */
+/* line 40, ../src/partials/_redefine.scss */
 small {
   font-size: 85%;
 }
 
-/* line 39, ../src/partials/_redefine.scss */
+/* line 41, ../src/partials/_redefine.scss */
 strong, th {
   font-weight: bold;
 }
 
-/* line 40, ../src/partials/_redefine.scss */
+/* line 42, ../src/partials/_redefine.scss */
 td, td img {
   vertical-align: top;
 }
 
-/* line 41, ../src/partials/_redefine.scss */
+/* line 43, ../src/partials/_redefine.scss */
 sub {
   vertical-align: sub;
   font-size: smaller;
 }
 
-/* line 42, ../src/partials/_redefine.scss */
+/* line 44, ../src/partials/_redefine.scss */
 sup {
   vertical-align: super;
   font-size: smaller;
 }
 
-/* line 43, ../src/partials/_redefine.scss */
+/* line 45, ../src/partials/_redefine.scss */
 pre {
   padding: 15px;
   white-space: pre;
@@ -186,47 +187,47 @@ pre {
   word-wrap: break-word;
 }
 
-/* line 44, ../src/partials/_redefine.scss */
+/* line 46, ../src/partials/_redefine.scss */
 textarea {
   overflow: auto;
 }
 
-/* line 45, ../src/partials/_redefine.scss */
+/* line 47, ../src/partials/_redefine.scss */
 .ie6 legend, .ie7 legend {
   margin-left: -7px;
 }
 
-/* line 46, ../src/partials/_redefine.scss */
+/* line 48, ../src/partials/_redefine.scss */
 input[type="radio"] {
   vertical-align: text-bottom;
 }
 
-/* line 47, ../src/partials/_redefine.scss */
+/* line 49, ../src/partials/_redefine.scss */
 input[type="checkbox"] {
   vertical-align: bottom;
 }
 
-/* line 48, ../src/partials/_redefine.scss */
+/* line 50, ../src/partials/_redefine.scss */
 .ie7 input[type="checkbox"] {
   vertical-align: baseline;
 }
 
-/* line 49, ../src/partials/_redefine.scss */
+/* line 51, ../src/partials/_redefine.scss */
 .ie6 input {
   vertical-align: text-bottom;
 }
 
-/* line 50, ../src/partials/_redefine.scss */
+/* line 52, ../src/partials/_redefine.scss */
 label, input[type=button], input[type=submit], button {
   cursor: pointer;
 }
 
-/* line 51, ../src/partials/_redefine.scss */
+/* line 53, ../src/partials/_redefine.scss */
 button, input, select, textarea {
   margin: 0;
 }
 
-/* line 53, ../src/partials/_redefine.scss */
+/* line 55, ../src/partials/_redefine.scss */
 input:invalid, textarea:invalid {
   border-radius: 1px;
   -moz-box-shadow: 0px 0px 5px red;
@@ -234,38 +235,38 @@ input:invalid, textarea:invalid {
   box-shadow: 0px 0px 5px red;
 }
 
-/* line 55, ../src/partials/_redefine.scss */
+/* line 57, ../src/partials/_redefine.scss */
 .no-boxshadow input:invalid,
 .no-boxshadow textarea:invalid {
   background-color: #f0dddd;
 }
 
-/* line 57, ../src/partials/_redefine.scss */
+/* line 59, ../src/partials/_redefine.scss */
 ::-moz-selection {
   background: #FF5E99;
   color: #fff;
   text-shadow: none;
 }
 
-/* line 58, ../src/partials/_redefine.scss */
+/* line 60, ../src/partials/_redefine.scss */
 ::selection {
   background: #FF5E99;
   color: #fff;
   text-shadow: none;
 }
 
-/* line 59, ../src/partials/_redefine.scss */
+/* line 61, ../src/partials/_redefine.scss */
 a:link {
   -webkit-tap-highlight-color: #FF5E99;
 }
 
-/* line 61, ../src/partials/_redefine.scss */
+/* line 63, ../src/partials/_redefine.scss */
 button {
   width: auto;
   overflow: visible;
 }
 
-/* line 62, ../src/partials/_redefine.scss */
+/* line 64, ../src/partials/_redefine.scss */
 .ie7 img {
   -ms-interpolation-mode: bicubic;
 }
@@ -275,153 +276,146 @@ h1 img, h2 img, h3 img, h4 img, h5 img, h6 img {
   margin: 0;
 }
 
-/* line 6, ../src/partials/_typography.scss */
-h1 {
-  font-size: 60px;
-  margin-bottom: 0.50em;
-}
-
-/* line 10, ../src/partials/_typography.scss */
-h2 {
-  font-size: 35px;
-  margin-bottom: 1em;
-}
-
-/* line 15, ../src/partials/_typography.scss */
-h3 {
-  font-size: 24px;
-  margin-bottom: 1.00em;
-}
-
-/* line 19, ../src/partials/_typography.scss */
-h4 {
-  font-size: 18px;
-  margin-bottom: 1.25em;
-}
-
-/* line 23, ../src/partials/_typography.scss */
-h5 {
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 1.50em;
-}
-
-/* line 28, ../src/partials/_typography.scss */
-h6 {
-  font-size: 14px;
+/* line 7, ../src/partials/_typography.scss */
+h1, h2, h3, h4, h5, h6, p {
+  font-size: 1em;
+  margin: 0;
+  font-family: Helvetica Neue, Helvetica ,Arial,sans-serif;
   font-weight: normal;
 }
 
-/* line 32, ../src/partials/_typography.scss */
+/*
+h1 {
+	font-size: 60px;
+	margin-bottom: 0.50em;
+}
+h2 {
+	font-size: 35px;
+	margin-bottom: 1em;
+	//font-weight: normal;
+}
+h3 {
+	font-size: 24px;
+	margin-bottom: 1.00em;
+}
+h4 {
+	font-size: 18px;
+	margin-bottom: 1.25em;
+}
+h5 {
+	font-size: 14px;
+	font-weight: bold;
+	margin-bottom: 1.50em;
+}
+h6 {
+	font-size: 14px;
+	font-weight: normal;
+}
 p {
-  margin: 0 0 1.5em;
-}
-/* line 34, ../src/partials/_typography.scss */
-p img.left {
-  display: inline;
-  float: left;
-  margin: 1.5em 1.5em 1.5em 0;
-  padding: 0;
-}
-/* line 39, ../src/partials/_typography.scss */
-p img.right {
-  display: inline;
-  float: right;
-  margin: 1.5em 0 1.5em 1.5em;
-  padding: 0;
+	margin: 0 0 1.5em;
+	img.left {
+		@include float-left;
+		margin: 1.5em 1.5em 1.5em 0;
+		padding: 0;
+	}
+	img.right {
+		@include float-right;
+		margin: 1.5em 0 1.5em 1.5em;
+		padding: 0;
+	}
 }
 
-/* line 45, ../src/partials/_typography.scss */
+*/
+/* line 56, ../src/partials/_typography.scss */
 a {
   text-decoration: none;
 }
 
-/* line 48, ../src/partials/_typography.scss */
+/* line 59, ../src/partials/_typography.scss */
 blockquote {
   margin: 1.5em;
   font-style: italic;
 }
 
-/* line 53, ../src/partials/_typography.scss */
+/* line 64, ../src/partials/_typography.scss */
 strong {
   font-weight: bold;
 }
 
-/* line 56, ../src/partials/_typography.scss */
+/* line 67, ../src/partials/_typography.scss */
 em {
   font-style: italic;
 }
 
-/* line 59, ../src/partials/_typography.scss */
+/* line 70, ../src/partials/_typography.scss */
 dfn {
   font-style: italic;
   font-weight: bold;
 }
 
-/* line 63, ../src/partials/_typography.scss */
+/* line 74, ../src/partials/_typography.scss */
 sup, sub {
   line-height: 0;
 }
 
-/* line 66, ../src/partials/_typography.scss */
+/* line 77, ../src/partials/_typography.scss */
 abbr, acronym {
   border-bottom: 1px dotted #666666;
 }
 
-/* line 69, ../src/partials/_typography.scss */
+/* line 80, ../src/partials/_typography.scss */
 address {
   margin: 0 0 1.5em;
   font-style: italic;
 }
 
-/* line 76, ../src/partials/_typography.scss */
+/* line 87, ../src/partials/_typography.scss */
 pre {
   margin: 1.5em 0;
   white-space: pre;
 }
 
-/* line 83, ../src/partials/_typography.scss */
+/* line 94, ../src/partials/_typography.scss */
 li ul, li ol {
   margin: 0;
 }
 
-/* line 86, ../src/partials/_typography.scss */
+/* line 97, ../src/partials/_typography.scss */
 ul, ol {
-  margin: 0 1.5em 1.5em 0;
-  padding-left: 3.333em;
+  margin: 0;
 }
 
-/* line 90, ../src/partials/_typography.scss */
+/* line 100, ../src/partials/_typography.scss */
 ul {
   list-style-type: disc;
 }
 
-/* line 93, ../src/partials/_typography.scss */
+/* line 103, ../src/partials/_typography.scss */
 ol {
   list-style-type: decimal;
 }
 
-/* line 96, ../src/partials/_typography.scss */
+/* line 106, ../src/partials/_typography.scss */
 dl {
   margin: 0 0 1.5em 0;
 }
-/* line 98, ../src/partials/_typography.scss */
+/* line 108, ../src/partials/_typography.scss */
 dl dt {
   font-weight: bold;
 }
 
-/* line 102, ../src/partials/_typography.scss */
+/* line 112, ../src/partials/_typography.scss */
 dd {
   margin-left: 1.5em;
 }
 
-/* line 105, ../src/partials/_typography.scss */
+/* line 115, ../src/partials/_typography.scss */
 table {
   margin-bottom: 1.4em;
   width: 100%;
 }
 
-/* line 109, ../src/partials/_typography.scss */
+/* line 119, ../src/partials/_typography.scss */
 th {
   font-weight: bold;
 }
@@ -442,6 +436,302 @@ th {
 */
 /*	Styles by Felix
 */
+/* line 7, ../src/partials/_felix.scss */
+header {
+  margin-top: 18px;
+  border-top: 1px solid #111;
+  padding-top: 8px;
+  padding-bottom: 9px;
+  border-bottom: 1px double #111;
+  line-height: 1.5em;
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 18, ../src/partials/_felix.scss */
+header h1 {
+  display: inline;
+  float: left;
+  margin-right: 10px;
+  width: 232.5px;
+  font-size: 18px;
+  font-weight: bold;
+}
+/* line 138, ../../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
+* html header h1 {
+  overflow-x: hidden;
+}
+/* line 23, ../src/partials/_felix.scss */
+header h3 {
+  display: inline;
+  float: left;
+  margin-right: 0;
+  width: 677.083px;
+  font-size: 14px;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
+}
+/* line 138, ../../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
+* html header h3 {
+  overflow-x: hidden;
+}
+
+/* line 32, ../src/partials/_felix.scss */
+#main {
+  padding-top: 18px;
+  padding-bottom: 54px;
+  overflow: hidden;
+  *zoom: 1;
+}
+/* line 36, ../src/partials/_felix.scss */
+#main h4 {
+  font-size: 14px;
+  font-weight: bold;
+  border-bottom: 1px solid #ccc;
+}
+
+/* line 46, ../src/partials/_felix.scss */
+#left-container {
+  display: inline;
+  float: left;
+  margin-right: 10px;
+  width: 232.5px;
+}
+/* line 138, ../../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
+* html #left-container {
+  overflow-x: hidden;
+}
+/* line 50, ../src/partials/_felix.scss */
+#left-container #keyword-container ul {
+  margin: 18px 0;
+}
+/* line 54, ../src/partials/_felix.scss */
+#left-container #keyword-container li {
+  list-style: none;
+  padding-left: 1em;
+  position: relative;
+}
+/* line 59, ../src/partials/_felix.scss */
+#left-container #keyword-container li span.delete-keyword {
+  position: absolute;
+  right: 1em;
+}
+/* line 63, ../src/partials/_felix.scss */
+#left-container #keyword-container li span.delete-keyword:hover {
+  text-decoration: underline;
+}
+/* line 69, ../src/partials/_felix.scss */
+#left-container #keyword-container li.keywords {
+  /* REMOVE for production */
+  color: #d32564;
+}
+/* line 73, ../src/partials/_felix.scss */
+#left-container #keyword-container li.keywords:hover {
+  /* REMOVE for production */
+  color: white;
+  background: #d32564;
+  cursor: pointer;
+}
+/* line 82, ../src/partials/_felix.scss */
+#left-container #keyword-container li.keywords.disabled {
+  text-decoration: line-through;
+  color: #ddd;
+}
+/* line 86, ../src/partials/_felix.scss */
+#left-container #keyword-container li.keywords.disabled:hover {
+  background: #bbb;
+}
+/* line 92, ../src/partials/_felix.scss */
+#left-container #keyword-container #add-keyword {
+  margin: 18px 0;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  text-decoration: underline;
+}
+/* line 97, ../src/partials/_felix.scss */
+#left-container #keyword-container #add-keyword:hover {
+  color: white;
+  background: #333;
+  cursor: pointer;
+}
+/* line 104, ../src/partials/_felix.scss */
+#left-container #keyword-container #add-keyword-container {
+  display: none;
+  margin: 18px 0;
+}
+/* line 108, ../src/partials/_felix.scss */
+#left-container #keyword-container #add-keyword-container input {
+  min-height: 1.5em;
+  border: 1px solid #bbb;
+}
+/* line 117, ../src/partials/_felix.scss */
+#left-container #keyword-container #add-keyword-container input[type=submit] {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -o-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #bbb;
+  background: #eee;
+}
+/* line 18, ../src/partials/_mixins.scss */
+#left-container #keyword-container #add-keyword-container input[type=submit]:hover {
+  background: #aaa;
+  border: 1px solid #888;
+  color: white;
+  cursor: pointer;
+}
+/* line 122, ../src/partials/_felix.scss */
+#left-container #keyword-container #add-keyword-container span {
+  min-height: 1.5em;
+  padding: 0 5px;
+}
+/* line 131, ../src/partials/_felix.scss */
+#left-container #details-container ol {
+  margin: 18px 0;
+  list-style: none;
+}
+/* line 134, ../src/partials/_felix.scss */
+#left-container #details-container ol li {
+  margin: 18px 0;
+}
+/* line 136, ../src/partials/_felix.scss */
+#left-container #details-container ol li img {
+  float: left;
+}
+/* line 140, ../src/partials/_felix.scss */
+#left-container #details-container ol li p {
+  margin-left: 60px;
+}
+/* line 142, ../src/partials/_felix.scss */
+#left-container #details-container ol li p span.username {
+  padding-right: 3px;
+  font-weight: bold;
+}
+/* line 147, ../src/partials/_felix.scss */
+#left-container #details-container ol li:hover {
+  background: #eee;
+}
+
+/* line 155, ../src/partials/_felix.scss */
+#right-container {
+  padding-left: 40px;
+  display: inline;
+  float: left;
+  margin-right: 0;
+  width: 677.083px;
+}
+/* line 138, ../../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
+* html #right-container {
+  overflow-x: hidden;
+}
+/* line 159, ../src/partials/_felix.scss */
+#right-container #overview-container {
+  position: relative;
+}
+/* line 162, ../src/partials/_felix.scss */
+#right-container #overview-container #dygraph-controller {
+  position: absolute;
+  right: 0px;
+  top: -5px;
+}
+/* line 167, ../src/partials/_felix.scss */
+#right-container #overview-container #dygraph-controller p {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -o-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #bbb;
+  padding: 0 5px;
+  margin: 0 1px;
+  float: left;
+}
+/* line 18, ../src/partials/_mixins.scss */
+#right-container #overview-container #dygraph-controller p:hover {
+  background: #aaa;
+  border: 1px solid #888;
+  color: white;
+  cursor: pointer;
+}
+/* line 176, ../src/partials/_felix.scss */
+#right-container #dygraph {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  padding: 18px 0;
+}
+/* line 181, ../src/partials/_felix.scss */
+#right-container #tunnel-container {
+  position: relative;
+}
+/* line 184, ../src/partials/_felix.scss */
+#right-container #tunnel-container #tunnel-controller {
+  position: absolute;
+  right: 0px;
+  top: -5px;
+}
+/* line 189, ../src/partials/_felix.scss */
+#right-container #tunnel-container #tunnel-controller p {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -o-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #bbb;
+  padding: 0 5px;
+  margin: 0 1px;
+  float: left;
+}
+/* line 18, ../src/partials/_mixins.scss */
+#right-container #tunnel-container #tunnel-controller p:hover {
+  background: #aaa;
+  border: 1px solid #888;
+  color: white;
+  cursor: pointer;
+}
+/* line 197, ../src/partials/_felix.scss */
+#right-container #tunnel-container #jit-container {
+  padding-top: 18px;
+  width: 100%;
+  height: 540px;
+}
+
+/* line 212, ../src/partials/_felix.scss */
+footer {
+  display: inline;
+  float: left;
+  margin-right: 0;
+  width: 960px;
+  border-top: 1px solid #aaa;
+  padding: 18px 0;
+}
+/* line 138, ../../../../../../../.rvm/gems/ruby-1.9.2-p180/gems/compass-0.10.6/frameworks/blueprint/stylesheets/blueprint/_grid.scss */
+* html footer {
+  overflow-x: hidden;
+}
+
 @media all and (orientation:portrait) {}
 @media all and (orientation:landscape) {}
 @media screen and (max-device-width: 480px) {

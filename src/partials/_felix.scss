@@ -1,5 +1,218 @@
 /*	Styles by Felix
 */
 
-#graphdiv{
+$left-width: 6;
+$right-width: 17;
+
+header{
+	
+	margin-top: 1*$v;
+	border-top: 1px solid #111;
+	padding-top: 0.5*$v - 1;
+	
+	padding-bottom: 0.5*$v;
+	border-bottom: 1px double #111;
+	
+	line-height: 1.5em;
+	
+	h1{
+		@include column($left-width);
+		font-size: 18px;
+		font-weight: bold;
+	}
+	h3{
+		@include column($right-width, true);
+		font-size: 14px;
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
+	}
+	
+	@include clearfix;
 }
+
+#main{
+	padding-top: 1*$v;
+	padding-bottom: 3*$v;
+	
+	h4{
+		font-size: 14px;
+		font-weight: bold;
+		border-bottom: 1px solid #ccc;
+	}
+	
+	@include clearfix;
+	
+}
+
+#left-container{
+	@include column($left-width);
+	
+	#keyword-container{
+		ul{
+			margin: 1*$v 0;
+		}
+		
+		li{
+			list-style: none;
+			padding-left: 1em;
+			position:relative;
+			
+			span.delete-keyword{
+				position: absolute;
+				right: 1em;
+				
+				&:hover{
+					text-decoration: underline;
+				}
+			}
+		}
+		
+		li.keywords{
+			/* REMOVE for production */
+			color: #d32564;
+			
+			&:hover{
+				/* REMOVE for production */
+				color: white;
+				background: #d32564;
+				cursor: pointer;
+			}
+			
+		}
+		
+		li.keywords.disabled{
+			text-decoration: line-through;
+			color: #ddd;
+			
+			&:hover{
+				background: #bbb;
+			}
+			
+		}
+		
+		#add-keyword{
+			margin: 1*$v 0;
+			@include user-select-none;
+			text-decoration: underline;
+			
+			&:hover{
+				color: white;
+				background: #333;
+				cursor: pointer;
+			}
+		}
+		
+		#add-keyword-container{
+			display:none;
+			margin: 1*$v 0;
+			
+			input{
+				min-height: 1.5em;
+				border: 1px solid #bbb;
+			}
+			
+			input[type=text]{
+				
+			}
+			
+			input[type=submit]{
+				@include simple-button;
+				background: #eee;
+			}
+			
+			span{
+				min-height: 1.5em;
+				padding: 0 5px;
+			}
+		}
+		
+	}
+	
+	#details-container{
+		ol{
+			margin: 1*$v 0;
+			list-style: none;
+			li{
+				margin: 1*$v 0;
+				img{
+					float: left;
+				}
+				
+				p{
+					margin-left: 60px;
+					span.username{
+						padding-right: 3px;
+						font-weight: bold;
+					}
+				}
+				&:hover{
+					background: #eee;
+				}
+			}
+		}
+	}	
+}
+
+#right-container{
+	@include prepend(1);
+	@include column($right-width, true);
+	
+	#overview-container{
+		position: relative;
+		
+		#dygraph-controller{
+			position: absolute;
+			right: 0px;
+			top: -5px;
+			
+			p{
+				@include simple-button;
+				padding: 0 5px;
+				margin: 0 1px;
+				float: left;
+			}
+		}
+	}
+	
+	#dygraph{
+		@include user-select-none;
+		padding: 1*$v 0;
+	}
+	
+	#tunnel-container{
+		position: relative;
+		
+		#tunnel-controller{
+			position: absolute;
+			right: 0px;
+			top: -5px;
+			
+			p{
+				@include simple-button;
+				padding: 0 5px;
+				margin: 0 1px;
+				float: left;
+			}
+		}
+		
+		#jit-container{
+			padding-top: 1*$v;
+		    width:100%;
+		    height:30*$v;
+		}
+		
+	}
+	
+	
+}
+
+
+
+
+
+footer{
+	@include column(24,true);
+	
+	border-top: 1px solid #aaa;
+	padding: 1*$v 0;
+}
+

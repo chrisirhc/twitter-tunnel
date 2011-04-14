@@ -1,0 +1,18 @@
+/* http://humanstxt.org/Standard.html */
+/* TEAM */
+	[Position]: [Name]
+	Contact: [Email]
+	Twitter:
+	From:
+
+/* THANKS */
+	[Position]: [Name]
+	Twitter:
+	From:
+
+/* SITE */
+	Last update: [date]
+	Language: English
+	Standards: HTML5, CSS3
+	Components: JIT, Dygraphs, HTML5 Boilerplate, Tempo.js, CASS
+	

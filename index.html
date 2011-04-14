@@ -9,7 +9,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	
-	<title></title>
+	<title>TwitterTunnel - Visualizing Twitter Conversation in 3D</title>
 	<meta name="description" content="">
 	<meta name="author" content="">
 	
@@ -25,15 +25,77 @@
 <body>
 <div id="container">
 	<header>
-	
+		<h1>❉ TwitterTunnel</h1>
+		<h3>Visualizing Twitter Conversation in 3D</h3>
+		<link rel="author" href="humans.txt" />
 	</header>
 	
 	<div id="main">
-	<div id="graphdiv"></div>
+		<div id="left-container">
+			<div id="keyword-container">
+				<h4>Keyword</h4>
+				<ul>
+					<li class="keywords">#friday
+						<span class="delete-keyword">x</span></li>
+					<li class="keywords disabled">#friday
+						<span class="delete-keyword">x</span></li>
+					<!--<li class="keywords" data-template>{{keyword}}
+						<span class="delete-keyword">x</span></li>	
+					<li data-template-fallback>Sorry, JavaScript required!</li>-->
+					<li id="add-keyword">+ Add new keyword</li>
+					<div id="add-keyword-container">
+						<form action="">
+							<input type="text" name="keyword" placeholder="Enter new hashtag, URL or keyword"/>
+							<input type="submit" value="Add"/>
+							<span>x</span>
+						</form>
+					</div>
+				</ul>
+			</div>
+			
+			<div id="details-container">
+				<h4>Details</h4>
+				<ol id="tweets-details">
+					<li>
+						<img src="http://a1.twimg.com/profile_images/1298141792/000037_normal.jpg" alt="">
+						<p><span class="username">PolitelyOffend</span>THIS KID IS MY NEW HERO! This, @amandapalmer, is a pirate gig. http://youtu.be/q4qqeE-AHIU #Friday #MacStore</p>
+					</li>
+					<li>
+						<img src="http://a1.twimg.com/profile_images/1298141792/000037_normal.jpg" alt="">
+						<p><span class="username">PolitelyOffend</span>THIS KID IS MY NEW HERO! This, @amandapalmer, is a pirate gig. http://youtu.be/q4qqeE-AHIU #Friday #MacStore</p>
+					</li>
+					<!--<li data-template>
+						<img src="{{profile_image_url}}" alt="">
+						<p><span class="username">{{from_user}}</span>{{text}}</p>
+					</li>
+					<li data-template-fallback>Sorry, JavaScript required!</li>-->
+				</ol>
+			</div>
+		</div>
+		<div id="right-container">
+			<div id="overview-container">
+				<h4>Overview</h4>
+				<div id="dygraph-controller">
+					<p id="dygraph-button-6-hour">6 Hour</p>
+					<p id="dygraph-button-24-hour">24 Hour</p>
+					<p id="dygraph-button-3-day">3 Days</p>
+					<p id="dygraph-button-all">All</p>
+				</div>
+				<div id="dygraph"></div>
+			</div>
+			<div id="tunnel-container">
+				<h4>Tunnel</h4>
+				<div id="tunnel-controller">
+					<p id="tunnel-button-backward">↓ Backward</p>
+					<p id="tunnel-button-forward">↑ Forward</p>
+				</div>
+				<div id="jit-container"></div>
+			</div>
+		</div>
 	</div>
 	
 	<footer>
-	
+		<p>Home | About | Humans.txt</p>
 	</footer>
 </div> <!-- end of #container -->
 
@@ -45,6 +107,7 @@
 <!-- scripts concatenated and minified via ant build script-->
 <script src="js/plugins.js"></script>
 <script src="js/mylibs/dygraphs/dygraph-combined.js"></script>
+<script src="js/mylibs/jit.js"></script>
 <script src="js/script.js"></script>
 <!-- end concatenated and minified scripts-->
 
