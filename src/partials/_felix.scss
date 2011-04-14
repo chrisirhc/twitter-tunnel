@@ -1,5 +1,9 @@
 /*	Styles by Felix
 */
 
+#container{
+	@include container;
+}
+
 #graphdiv{
 }

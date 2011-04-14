@@ -434,6 +434,14 @@ th {
 */
 /*	Styles by Felix
 */
+/* line 4, ../src/partials/_felix.scss */
+#container {
+  width: 960px;
+  margin: 0 auto;
+  overflow: hidden;
+  *zoom: 1;
+}
+
 @media all and (orientation:portrait) {}
 @media all and (orientation:landscape) {}
 @media screen and (max-device-width: 480px) {
