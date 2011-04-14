@@ -21,6 +21,7 @@ header{
 		font-weight: bold;
 	}
 	h3{
+		@include prepend(1);
 		@include column($right-width, true);
 		font-size: 14px;
 		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
