@@ -426,6 +426,14 @@ th {
   font-weight: bold;
 }
 
+/* line 14, ../src/style.scss */
+#container {
+  width: 960px;
+  margin: 0 auto;
+  overflow: hidden;
+  *zoom: 1;
+}
+
 /*
 	Individual stylesheets for each developer.
 	If you're using a version control system like github, or svn, this helps avoid mergin errors.
@@ -434,14 +442,6 @@ th {
 */
 /*	Styles by Felix
 */
-/* line 4, ../src/partials/_felix.scss */
-#container {
-  width: 960px;
-  margin: 0 auto;
-  overflow: hidden;
-  *zoom: 1;
-}
-
 @media all and (orientation:portrait) {}
 @media all and (orientation:landscape) {}
 @media screen and (max-device-width: 480px) {
