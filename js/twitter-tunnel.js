@@ -11,7 +11,7 @@ $(function(){
 		
 		Method:
 		toggle: toggle the state of `active`
-		(not done) getTweets: get the tweets for the keyword, format the data and save them to `tweet` as arrays
+		getTweets: asynchronously get the tweets for the keyword, format the data and save them to `tweet` as arrays
 		
 	*/
 	window.Keyword = Backbone.Model.extend({

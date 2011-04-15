@@ -4,14 +4,14 @@
 $left-width: 6;
 $right-width: 17;
 
+body{
+}
+
 header{
 	
 	margin-top: 1*$v;
-	border-top: 1px solid #111;
-	padding-top: 0.5*$v - 1;
-	
-	padding-bottom: 0.5*$v;
-	border-bottom: 1px double #111;
+	padding-top: 1.5*$v - 1;
+	padding-bottom: 0.5*$v - 1;
 	
 	line-height: 1.5em;
 	
@@ -28,16 +28,20 @@ header{
 	}
 	
 	@include clearfix;
+	
 }
 
 #main{
+	
 	padding-top: 1*$v;
 	padding-bottom: 3*$v;
 	
 	h4{
-		font-size: 14px;
+		font-size: 12px;
 		font-weight: bold;
-		border-bottom: 1px solid #ccc;
+		text-transform: uppercase;
+		border-bottom: 1px solid #ddd;
+		outline-bottom: 1px solid #fff;
 	}
 	
 	@include clearfix;
@@ -92,6 +96,7 @@ header{
 		
 		#add-keyword{
 			margin: 1*$v 0;
+			padding-left: 1em;
 			@include user-select-none;
 			text-decoration: underline;
 			
@@ -110,6 +115,7 @@ header{
 				min-height: 1.5em;
 				border: 1px solid #bbb;
 				width: 100%;
+				background-color: #fff;
 			}
 			
 			span{
@@ -125,7 +131,8 @@ header{
 			margin: 1*$v 0;
 			list-style: none;
 			li{
-				margin: 1*$v 0;
+				margin: 0.5*$v 0;
+				padding: 0.5*$v 1*$v;
 				img{
 					float: left;
 				}
@@ -152,13 +159,13 @@ header{
 	#overview-container{
 		position: relative;
 		
-		#dygraph-controller{
+		#overview-controller{
 			position: absolute;
 			right: 0px;
 			top: -5px;
 			
 			p{
-				@include simple-button;
+				@include clean-gray;
 				padding: 0 5px;
 				margin: 0 1px;
 				float: left;
@@ -167,9 +174,10 @@ header{
 		}
 	}
 	
-	#dygraph{
+	#overview{
 		@include user-select-none;
 		padding: 1*$v 0;
+		height: 10*$v;
 	}
 	
 	#tunnel-container{
@@ -182,7 +190,7 @@ header{
 			
 			
 			p{
-				@include simple-button;
+				@include clean-gray;
 				padding: 0 5px;
 				margin: 0 1px;
 				float: left;
@@ -198,7 +206,6 @@ header{
 		
 	}
 	
-	
 }
 
 
@@ -206,9 +213,11 @@ header{
 
 
 footer{
+	
 	@include column(24,true);
 	
 	border-top: 1px solid #aaa;
 	padding: 1*$v 0;
+	
 }
 
