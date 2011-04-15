@@ -34,23 +34,16 @@
 		<div id="left-container">
 			<div id="keyword-container">
 				<h4>Keyword</h4>
-				<ul>
-					<li class="keywords">#friday
+				<ul id="keywords-list">
+					<li class="keywords"><span class="keyword">#friday</span>
 						<span class="delete-keyword">x</span></li>
 					<li class="keywords disabled">#friday
-						<span class="delete-keyword">x</span></li>
-					<!--<li class="keywords" data-template>{{keyword}}
 						<span class="delete-keyword">x</span></li>	
-					<li data-template-fallback>Sorry, JavaScript required!</li>-->
-					<li id="add-keyword">+ Add new keyword</li>
-					<div id="add-keyword-container">
-						<form action="">
-							<input type="text" name="keyword" placeholder="Enter new hashtag, URL or keyword"/>
-							<input type="submit" value="Add"/>
-							<span>x</span>
-						</form>
-					</div>
 				</ul>
+				<div id="add-keyword">+ Add new keyword</div>
+				<div id="add-keyword-container">
+					<input type="text" name="keyword" id="keyword-input-text"placeholder="Enter new hashtag, URL or keyword"/>
+				</div>
 			</div>
 			
 			<div id="details-container">
@@ -109,6 +102,10 @@
 <script src="js/mylibs/dygraphs/dygraph-combined.js"></script>
 <script src="js/mylibs/jit.js"></script>
 <script src="js/script.js"></script>
+<script src="js/libs/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/libs/backbone-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/libs/backbone-localstorage.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/twitter-tunnel.js" type="text/javascript" charset="utf-8"></script>
 <!-- end concatenated and minified scripts-->
 
 
@@ -118,8 +115,8 @@
 <![endif]-->
 
 <!-- yui profiler and profileviewer - remove for production -->
-<script src="js/profiling/yahoo-profiling.min.js"></script>
-<script src="js/profiling/config.js"></script>
+<!--<script src="js/profiling/yahoo-profiling.min.js"></script>
+<script src="js/profiling/config.js"></script> -->
 <!-- end profiling code -->
 
 

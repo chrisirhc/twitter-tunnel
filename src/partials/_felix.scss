@@ -109,15 +109,7 @@ header{
 			input{
 				min-height: 1.5em;
 				border: 1px solid #bbb;
-			}
-			
-			input[type=text]{
-				
-			}
-			
-			input[type=submit]{
-				@include simple-button;
-				background: #eee;
+				width: 100%;
 			}
 			
 			span{
@@ -170,6 +162,7 @@ header{
 				padding: 0 5px;
 				margin: 0 1px;
 				float: left;
+				font-size: 10px;
 			}
 		}
 	}
@@ -187,11 +180,13 @@ header{
 			right: 0px;
 			top: -5px;
 			
+			
 			p{
 				@include simple-button;
 				padding: 0 5px;
 				margin: 0 1px;
 				float: left;
+				font-size: 10px;
 			}
 		}
 		

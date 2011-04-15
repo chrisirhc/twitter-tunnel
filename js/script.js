@@ -400,21 +400,6 @@ $(document).ready(function(){
 		unzoomGraph();
 	});
 	
-	
-	// keyword interation
-	$('#add-keyword').click(function(){
-		$(this).hide();
-		$('#add-keyword-container').show();
-	});
-	
-	$('li.keywords').click(function(){
-		$(this).toggleClass('disabled')
-	});
-	
-	$('span.delete-keyword').click(function(){
-		$(this).parent().slideUp('fast');
-	});
-	
 	//load graph.  
 	// rgraph.loadJSON(json, 1);  
 
