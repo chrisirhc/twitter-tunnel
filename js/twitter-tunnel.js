@@ -6,7 +6,8 @@ $(function(){
 		Attributes:
 		content: (string) inputted keyword
 		active: (boolean) whether the keyword should be visualized
-		tweets: (array) tweets related to the keyword
+		(not done) color: (string) css color for the nodes
+		(not done) tweets: (array) tweets related to the keyword
 		
 		Method:
 		toggle: toggle the state of `active`
