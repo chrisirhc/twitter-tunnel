@@ -5,6 +5,9 @@ $left-width: 4;
 $center-width: 12;
 $right-width: 6;
 
+$center-width-collapsed-left: 17;
+$center-width-collapsed-right: 19;
+
 body{
 }
 
@@ -35,7 +38,6 @@ header{
 #main{
 	
 	padding-top: 1*$v;
-	padding-bottom: 3*$v;
 	
 	h4{
 		font-size: 12px;
@@ -51,6 +53,7 @@ header{
 
 #left-container{
 	@include column($left-width);
+	@include append(1);
 	
 	#keyword-container{
 		ul{
@@ -126,9 +129,23 @@ header{
 	}	
 }
 
+
+
 #center-container{
-	@include prepend(1);
-	@include column($center-width);
+	&.normal{
+		@include column($center-width);
+		@include append(1);
+	}
+	
+	&.collapsed-left{
+		@include column($center-width-collapsed-left);
+		@include append(1);
+	}
+
+	&.collapsed-right{
+		@include column($center-width-collapsed-right, true);
+		@include append(0);
+	}
 	
 	#overview-container{
 		position: relative;
@@ -184,7 +201,6 @@ header{
 
 
 #right-container{
-	@include prepend(1);
 	@include column($right-width, true);
 	
 	#details-container{
