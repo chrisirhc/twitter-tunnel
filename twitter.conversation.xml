@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table xmlns="http://query.yahooapis.com/v1/schema/table.xsd" https="false">
+  <meta>
+    <author>Chris Chua</author>
+    <description></description>
+    <documentationURL></documentationURL>
+    <sampleQuery>select * from {table} where q='earthquake';</sampleQuery>
+  </meta>
+  <bindings>
+    <select itemPath="" produces="XML">
+      <urls>
+        <url></url>
+      </urls>
+      <inputs>
+        <key id="q" type="xs:string" paramType="query" required="true"/>
+      </inputs>
+      <execute><![CDATA[
+        var parents;
+        var type;
+
+        var query = null;
+        // use 'trim_user' later with my own open data table
+
+        query = y.query("use 'http://www.datatables.org/twitter/twitter.search.xml';" +
+        "use 'http://www.datatables.org/twitter/twitter.status.xml';" + 
+        "select * from twitter.status where id in (select id_str from twitter.search where q=@q);",{q:q});
+
+        // loop through and get every relevant node
+        for each(var res in query.results.status) {
+          y.log(res);
+
+          // batch request
+
+        }
+
+        /*
+        query = y.query("select * from twitter.status where id=@id;",{id:id});
+        */
+
+        // sort before returning
+
+        response.object = query.results;
+        ]]></execute>
+    </select>
+  </bindings>
+</table>
+
+<!--
+<status>
+  <created_at>Mon Apr 18 20:16:12 +0000 2011</created_at>
+  <id>60074167726383104</id>
+
+  <text>Haitian spirit helps to revive national sport - Boston.com: Since being struck by a major earthquake on Jan. 12,... http://bit.ly/iaWDs5</text>
+  <source>&lt;a href="http://twitterfeed.com" rel="nofollow"&gt;twitterfeed&lt;/a&gt;</source>
+  <truncated>false</truncated>
+  <favorited>false</favorited>
+  <in_reply_to_status_id/>
+  <in_reply_to_user_id/>
+
+  <in_reply_to_screen_name/>
+  <retweet_count>0</retweet_count>
+  <retweeted>false</retweeted>
+  <user>
+    <id>160534631</id>
+    <name>marc louis</name>
+    <screen_name>Marcl2</screen_name>
+
+    <location/>
+    <description/>
+    <profile_image_url>http://a0.twimg.com/profile_images/1032259654/s1057792088_30034262_811_normal.jpg</profile_image_url>
+    <url/>
+    <protected>false</protected>
+    <followers_count>972</followers_count>
+    <profile_background_color>C0DEED</profile_background_color>
+
+    <profile_text_color>333333</profile_text_color>
+    <profile_link_color>0084B4</profile_link_color>
+    <profile_sidebar_fill_color>DDEEF6</profile_sidebar_fill_color>
+    <profile_sidebar_border_color>C0DEED</profile_sidebar_border_color>
+    <friends_count>1407</friends_count>
+    <created_at>Mon Jun 28 12:50:15 +0000 2010</created_at>
+
+    <favourites_count>0</favourites_count>
+    <utc_offset/>
+    <time_zone/>
+    <profile_background_image_url>http://a3.twimg.com/a/1302214109/images/themes/theme1/bg.png</profile_background_image_url>
+    <profile_background_tile>false</profile_background_tile>
+    <profile_use_background_image>true</profile_use_background_image>
+    <notifications/>
+
+    <geo_enabled>false</geo_enabled>
+    <verified>false</verified>
+    <following/>
+    <statuses_count>5707</statuses_count>
+    <lang>fr</lang>
+    <contributors_enabled>false</contributors_enabled>
+
+    <follow_request_sent/>
+    <listed_count>4</listed_count>
+    <show_all_inline_media>false</show_all_inline_media>
+    <default_profile>true</default_profile>
+    <default_profile_image>false</default_profile_image>
+    <is_translator>false</is_translator>
+
+  </user>
+  <geo/>
+  <coordinates/>
+  <place/>
+  <contributors/>
+</status>
+-->
