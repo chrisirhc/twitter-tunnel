@@ -1,5 +1,16 @@
 $(function(){
 	
+	/*  Tweet Model
+		Stores single tweet
+		
+		Attributes:
+		username: (string) username of the tweet
+		content: (string) content of the tweet
+		parent: (cid)
+		
+	*/
+	
+	
 	/*  Keyword Model
 		Stores tweets of some keyword and the state
 		
@@ -7,7 +18,7 @@ $(function(){
 		content: (string) inputted keyword
 		active: (boolean) whether the keyword should be visualized
 		(not done) color: (string) css color for the nodes
-		(not done) tweets: (array) tweets related to the keyword
+		(not done) tweets: (id Backbone.Collection) tweets related to the keyword
 		
 		Method:
 		toggle: toggle the state of `active`
@@ -153,6 +164,11 @@ $(function(){
 			if (e.keyCode != 13) return;
 			console.log('adding keyword');
 			Keywords.create(this.newAttributes());
+			
+			// Tell LineChartView to load the new tweets data
+			
+			// Tell TunnelView to load the tweets
+			
 			this.hideInputBox();
 		}
 	})

@@ -130,308 +130,223 @@ var masterChart,
 
 
 
-//If a node in this JSON structure  
-//has the "$type" or "$dim" parameters  
-//defined it will override the "type" and  
-//"dim" parameters globally defined in the  
-//RGraph constructor.  
-var json = [{  
-    "id": "node0",  
-    "name": "node0 name",  
-    "data": {  
-        "$dim": 16.759175934208628,  
-        "some other key": "some other value"  
-    },  
-    "adjacencies": [{  
-        "nodeTo": "node1",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node2",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node3",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node4",  
-        "data": {  
-            "$type":"arrow",  
-            "$color":"#dd99dd",  
-            "$dim":25,  
-            "weight": 1  
-        }  
-    }, {  
-        "nodeTo": "node5",  
-        "data": {  
-            "weight": 1  
-        }  
-    }]  
-}, {  
-    "id": "node1",  
-    "name": "node1 name",  
-    "data": {  
-        "$dim": 13.077119090372014,  
-        "$type": "square",  
-        "some other key": "some other value"  
-    },  
-    "adjacencies": [{  
-        "nodeTo": "node0",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node2",  
-        "data": {  
-            "weight": 1  
-        }  
-    }, {  
-        "nodeTo": "node3",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node4",  
-        "data": {  
-            "weight": 1  
-        }  
-    }, {  
-        "nodeTo": "node5",  
-        "data": {  
-            "weight": 1  
-        }  
-    }]  
-}, {  
-    "id": "node2",  
-    "name": "node2 name",  
-    "data": {  
-        "$dim": 24.937383149648717,  
-        "$type": "triangle",  
-        "some other key": "some other value"  
-    },  
-    "adjacencies": [{  
-        "nodeTo": "node0",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node1",  
-        "data": {  
-            "weight": 1  
-        }  
-    }, {  
-        "nodeTo": "node3",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node4",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node5",  
-        "data": {  
-            "weight": 1  
-        }  
-    }]  
-}, {  
-    "id": "node3",  
-    "name": "node3 name",  
-    "data": {  
-        "$dim": 10.53272740718869,  
-        "some other key": "some other value"  
-    },  
-    "adjacencies": [{  
-        "nodeTo": "node0",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node1",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node2",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node4",  
-        "data": {  
-            "$type":"arrow",  
-            "$direction": ["node4", "node3"],  
-            "$dim":25,  
-            "$color":"#dd99dd",  
-            "weight": 1  
-        }  
-    }, {  
-        "nodeTo": "node5",  
-        "data": {  
-            "weight": 3  
-        }  
-    }]  
-}, {  
-    "id": "node4",  
-    "name": "node4 name",  
-    "data": {  
-        "$dim": 5.3754347037767345,  
-        "$type":"triangle",  
-        "some other key": "some other value"  
-    },  
-    "adjacencies": [{  
-        "nodeTo": "node0",  
-        "data": {  
-            "weight": 1  
-        }  
-    }, {  
-        "nodeTo": "node1",  
-        "data": {  
-            "weight": 1  
-        }  
-    }, {  
-        "nodeTo": "node2",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node3",  
-        "data": {  
-            "weight": 1  
-        }  
-    }, {  
-        "nodeTo": "node5",  
-        "data": {  
-            "weight": 3  
-        }  
-    }]  
-}, {  
-    "id": "node5",  
-    "name": "node5 name",  
-    "data": {  
-        "$dim": 32.26403873194912,  
-        "$type": "star",  
-        "some other key": "some other value"  
-    },  
-    "adjacencies": [{  
-        "nodeTo": "node0",  
-        "data": {  
-            "weight": 1  
-        }  
-    }, {  
-        "nodeTo": "node1",  
-        "data": {  
-            "weight": 1  
-        }  
-    }, {  
-        "nodeTo": "node2",  
-        "data": {  
-            "weight": 1  
-        }  
-    }, {  
-        "nodeTo": "node3",  
-        "data": {  
-            "weight": 3  
-        }  
-    }, {  
-        "nodeTo": "node4",  
-        "data": {  
-            "weight": 3  
-        }  
-    }]  
-}];
+	    //init data
+	    var json = {
+	      id: "0",
+	      name: "Faux Node",
+	      data: {
+	        "$alpha": 0
+	      },
+	      children: [
+	        {
+	        "id": "10aoeu",
+	        name: "a",
+	        data: {
+	          "created_at": {
+	            "datetime_gmt": "2011-03-13 05:31:32",
+	            "unix_timestamp": 1299994292
+	          }
+	        },
+	        "children": [
+	          {
+	          "id": "46809596156841984aoeu",
+	          name: "b",
+	          data: {
+	            "created_at": {
+	              "datetime_gmt": "2011-03-13 05:47:32",
+	              "unix_timestamp": 1299995252
+	            }
+	          },
+	          "children": [{
+	            "id": "46814919412297728aoeu",
+	            name: "c",
+	            data: {
+	                "created_at": {
+	                "datetime_gmt": "2011-03-13 06:08:41",
+	                "unix_timestamp": 1299996521
+	              }
+	            }
+	          }]
+	        },
+	        {
+	          "id": "46820113336385536aoeu",
+	          data: {
+	              "created_at": {
+	              "datetime_gmt": "2011-03-13 06:29:19",
+	              "unix_timestamp": 1299997759
+	            }
+	          }
+	        },
+	        {
+	          "id": "46843301957083136aoeu",
+	          data: {
+	            "created_at": {
+	              "datetime_gmt": "2011-03-13 08:01:28",
+	              "unix_timestamp": 1300003288
+	            }
+	          },
+	          "children": [
+	            {
+	            "id": "46849020584402944aoeu",
+	            data: {
+	              "created_at": {
+	                "datetime_gmt": "2011-03-13 08:24:11",
+	                "unix_timestamp": 1300004651
+	              }
+	            }
+	          }
+	          ]
+	        }
+	        ]
+	      },
+	        {
+	      "id": "46805572842033152",
+	      name: "a",
+	      data: {
+	        "url": "http://twitoaster.com/country-sg/ellehcer/is-fakeraffles-the-pri-sch-secondary-sch-n-jc-all-tgt-in-one-acct/",
+	          "id": "46805572842033152",
+	        "title": "Is @fakeraffles the pri sch secondary sch n jc all tgt in one acct??",
+	        "content": "Is @fakeraffles the pri sch secondary sch n jc all tgt in one acct??",
+	        "created_at": {
+	          "datetime_gmt": "2011-03-13 05:31:32",
+	          "unix_timestamp": 1299994292
+	        },
+	        "last_reply_at": {
+	          "datetime_gmt": "2011-03-13 08:24:11",
+	          "unix_timestamp": 1300004651
+	        },
+	        "stats": {
+	          "total_mentions": 5,
+	          "total_replies": 5,
+	          "total_retweets": 0,
+	          "distinct_users": 4,
+	          "links": 1,
+	          "images": 0
+	        },
+	        "user": {
+	          "url": "http://twitoaster.com/country-sg/ellehcer/",
+	            "id": "49662707",
+	          "screen_name": "ellehcer",
+	          "profile_image_url": "http://a1.twimg.com/profile_images/1232777914/63167_468808438994_550823994_5794846_845255_n_normal.jpg"
+	        }
+	      },
+	      "children": [
+	        {
+	        "id": "46809596156841984",
+	        name: "b",
+	        data: {
+	          "type": "reply",
+	          "url": "http://twitoaster.com/country-sg/ellehcer/is-fakeraffles-the-pri-sch-secondary-sch-n-jc-all-tgt-in-one-acct/#comment-46809596156841984",
+	            "id": "46809596156841984",
+	          "content": "@ellehcer Note: RGPS is in no way affiliated to the Raffles schools.",
+	          "in_reply_to_status_id": "46805572842033152",
+	          "in_reply_to_url": "http://twitoaster.com/country-sg/ellehcer/is-fakeraffles-the-pri-sch-secondary-sch-n-jc-all-tgt-in-one-acct/",
+	            "created_at": {
+	            "datetime_gmt": "2011-03-13 05:47:32",
+	            "unix_timestamp": 1299995252
+	          },
+	          "user": {
+	            "url": false,
+	            "id": "265103284",
+	            "screen_name": "fakeRaffles",
+	            "profile_image_url": "http://a1.twimg.com/profile_images/1270548621/Raffles_Institution_Coat_of_Arms_normal.png"
+	          }
+	        },
+	        "children": [{
+	          "id": "46814919412297728",
+	          name: "c",
+	          data: {
+	            "type": "reply",
+	            "url": "http://twitoaster.com/country-sg/ellehcer/is-fakeraffles-the-pri-sch-secondary-sch-n-jc-all-tgt-in-one-acct/#comment-46814919412297728",
+	              "id": "46814919412297728",
+	            "content": "@fakeRaffles oh really. Oops sorry same name leh i not frm raffles how to know?",
+	            "in_reply_to_status_id": "46809596156841984",
+	            "in_reply_to_url": "http://twitoaster.com/country-sg/ellehcer/is-fakeraffles-the-pri-sch-secondary-sch-n-jc-all-tgt-in-one-acct/#comment-46809596156841984",
+	              "created_at": {
+	              "datetime_gmt": "2011-03-13 06:08:41",
+	              "unix_timestamp": 1299996521
+	            },
+	            "user": {
+	              "url": "http://twitoaster.com/country-sg/ellehcer/",
+	                "id": "49662707",
+	              "screen_name": "ellehcer",
+	              "profile_image_url": "http://a1.twimg.com/profile_images/1232777914/63167_468808438994_550823994_5794846_845255_n_normal.jpg"
+	            }
+	          }
+	        }]
+	      },
+	      {
+	        "id": "46820113336385536",
+	        data: {
+	          "type": "reply",
+	          "url": "http://twitoaster.com/country-sg/ellehcer/is-fakeraffles-the-pri-sch-secondary-sch-n-jc-all-tgt-in-one-acct/#comment-46820113336385536",
+	            "id": "46820113336385536",
+	          "content": "@ellehcer help japan http://1goldblog.blogspot.com/search?upd...",
+	            "in_reply_to_status_id": "46805572842033152",
+	          "in_reply_to_url": "http://twitoaster.com/country-sg/ellehcer/is-fakeraffles-the-pri-sch-secondary-sch-n-jc-all-tgt-in-one-acct/",
+	            "created_at": {
+	            "datetime_gmt": "2011-03-13 06:29:19",
+	            "unix_timestamp": 1299997759
+	          },
+	          "user": {
+	            "url": "http://twitoaster.com/digthegold/",
+	              "id": "247338955",
+	            "screen_name": "digthegold",
+	            "profile_image_url": "http://a1.twimg.com/profile_images/1268379387/1000000497_normal.jpg"
+	          }
+	        }
+	      },
+	      {
+	        "id": "46843301957083136",
+	        data: {
+	          "type": "reply",
+	          "url": "http://twitoaster.com/country-sg/ellehcer/is-fakeraffles-the-pri-sch-secondary-sch-n-jc-all-tgt-in-one-acct/#comment-46843301957083136",
+	            "id": "46843301957083136",
+	          "content": "@ellehcer no la it's fake sir Stamford raffles",
+	          "in_reply_to_status_id": "46805572842033152",
+	          "in_reply_to_url": "http://twitoaster.com/country-sg/ellehcer/is-fakeraffles-the-pri-sch-secondary-sch-n-jc-all-tgt-in-one-acct/",
+	            "created_at": {
+	            "datetime_gmt": "2011-03-13 08:01:28",
+	            "unix_timestamp": 1300003288
+	          },
+	          "user": {
+	            "url": false,
+	            "id": "252569439",
+	            "screen_name": "MagNET92",
+	            "profile_image_url": "http://a1.twimg.com/profile_images/1245139716/profpi_normal.jpg"
+	          }
+	        },
+	        "children": [
+	          {
+	          "id": "46849020584402944",
+	          data: {
+	            "type": "reply",
+	            "url": "http://twitoaster.com/country-sg/ellehcer/is-fakeraffles-the-pri-sch-secondary-sch-n-jc-all-tgt-in-one-acct/#comment-46849020584402944",
+	              "id": "46849020584402944",
+	            "content": "@MagNET92 ohhhhh. Okay but isn't he dead alr? Can't he be a real dead guy instd of pretending to be alive?",
+	            "in_reply_to_status_id": "46843301957083136",
+	            "in_reply_to_url": "http://twitoaster.com/country-sg/ellehcer/is-fakeraffles-the-pri-sch-secondary-sch-n-jc-all-tgt-in-one-acct/#comment-46843301957083136",
+	              "created_at": {
+	              "datetime_gmt": "2011-03-13 08:24:11",
+	              "unix_timestamp": 1300004651
+	            },
+	            "user": {
+	              "url": "http://twitoaster.com/country-sg/ellehcer/",
+	                "id": "49662707",
+	              "screen_name": "ellehcer",
+	              "profile_image_url": "http://a1.twimg.com/profile_images/1232777914/63167_468808438994_550823994_5794846_845255_n_normal.jpg"
+	            }
+	          }
+	        }
+	        ]
+	      }
+	      ]
+	}
+	    ]
+	    };
+	    //end
+	
 
-
-
-
-var rgraph = new $jit.RGraph({  
-  'injectInto': 'jit-container',  
-  //Optional: Add a background canvas  
-  //that draws some concentric circles.  
-  'background': {  
-    'CanvasStyles': {  
-      'strokeStyle': '#555',  
-      'shadowBlur': 50,  
-      'shadowColor': '#ccc'  
-    }  
-  },  
-    //Nodes and Edges parameters  
-    //can be overridden if defined in   
-    //the JSON input data.  
-    //This way we can define different node  
-    //types individually.  
-    Node: {  
-        'overridable': true,  
-         'color': '#cc0000'  
-    },  
-    Edge: {  
-        'overridable': true,  
-        'color': '#cccc00'  
-    },  
-    //Set polar interpolation.  
-    //Default's linear.  
-    interpolation: 'polar',  
-    //Change the transition effect from linear  
-    //to elastic.  
-    transition: $jit.Trans.Elastic.easeOut,  
-    //Change other animation parameters.  
-    duration:1000,  
-    fps: 30,  
-    //Change father-child distance.  
-    levelDistance: 200,  
-    //This method is called right before plotting  
-    //an edge. This method is useful to change edge styles  
-    //individually.  
-    onBeforePlotLine: function(adj){  
-        //Add some random lineWidth to each edge.  
-        if (!adj.data.$lineWidth)   
-            adj.data.$lineWidth = Math.random() * 5 + 1;  
-    },  
-      
-    onBeforeCompute: function(node){  
-        console.log("centering " + node.name + "...");  
-          
-        //Make right column relations list.  
-        var html = "<h4>" + node.name + "</h4><b>Connections:</b>";  
-        html += "<ul>";  
-        node.eachAdjacency(function(adj){  
-            var child = adj.nodeTo;  
-            html += "<li>" + child.name + "</li>";  
-        });  
-        html += "</ul>";   
-    },  
-    //Add node click handler and some styles.  
-    //This method is called only once for each node/label crated.  
-    onCreateLabel: function(domElement, node){  
-        domElement.innerHTML = node.name;  
-        domElement.onclick = function () {  
-            rgraph.onClick(node.id, { hideLabels: false });  
-        };  
-        var style = domElement.style;  
-        style.cursor = 'pointer';  
-        style.fontSize = "0.8em";  
-        style.color = "#fff";  
-    },  
-    //This method is called when rendering/moving a label.  
-    //This is method is useful to make some last minute changes  
-    //to node labels like adding some position offset.  
-    onPlaceLabel: function(domElement, node){  
-        var style = domElement.style;  
-        var left = parseInt(style.left);  
-        var w = domElement.offsetWidth;  
-        style.left = (left - w / 2) + 'px';  
-    },  
-      
-    onAfterCompute: function(){  
-        console.log("done");  
-    }  
-      
-});  
 
 
 
@@ -507,6 +422,9 @@ $(document).ready(function(){
 							max = extremesObject.max,
 							detailData = [],
 							xAxis = this.xAxis[0];
+						
+						console.log(min);
+						console.log(max);
 						
 						// reverse engineer the last part of the data
 						jQuery.each(this.series[0].data, function(i, point) {
@@ -714,6 +632,133 @@ $(document).ready(function(){
 	createMaster();
 	
 	
+	
+	
+	  var nodeColor = "#2278a7";
+	  var edgeColor = nodeColor;
+	  var bgcolor = "#fff";
+	  var lineWidth = 3;
+
+	    //init EventTunnel
+	     rgraph = new $jit.EventTunnel({
+	        //Where to append the visualization
+	        injectInto: 'infovis',
+	        //Optional: create a background canvas that plots
+	        //concentric circles.
+	        'background': {
+	          'CanvasStyles': {
+	            'strokeStyle': '#ccc'
+	          },
+	          // levelDistance = time interval in seconds
+	          levelDistance: 30 * 60,
+	          numberOfCircles: 5
+	        },
+	        // The canvas background color.
+	        backgroundColor: bgcolor,
+	        // Set the nearTime as the most recent tweet so that we can see
+	        // something
+	        nearTime: 1300004651,
+	        farTime: 1299986651,
+	        //Add navigation capabilities:
+	        //zooming by scrolling and panning.
+	        Navigation: {
+	          enable: true,
+	          panning: false,
+	          zooming: 10
+	        },
+
+	        //Set Node and Edge styles.
+	      Node: {
+	        dim: 10,
+	        overridable: true,
+	        color: nodeColor,
+	        lineWidth: lineWidth
+	      },
+
+	      NodeStyles: {
+	        enable: true,
+	        lineWidth: lineWidth,
+	        stylesHover: {
+	          dim: 15
+	        },
+	        duration: 600
+	      },
+
+	      onBeforePlotNode: function(node) {
+	        if (node.data.type == "reply") {
+	          node.data.$type = "reply";
+	        } else {
+	          node.data.$type = "retweet";
+	        }
+	        node.data.$lineWidth = lineWidth;
+	      },
+
+	      Edge: {
+	        overridable: true,
+	        color: edgeColor,
+	        lineWidth:lineWidth
+	      },
+
+	      onBeforePlotLine: function(adj){
+	        var nodeTo = adj.nodeTo;
+	        if (nodeTo.data.type != "reply") {
+	          adj.data.$type = "retweet";
+	        }
+	      },
+
+	      //Add the name of the node in the correponding label
+	      //and a click handler to move the graph.
+	      //This method is called once, on label creation.
+	      onCreateLabel: function(domElement, node){
+	        domElement.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+	        domElement.onclick = function(){
+	          rgraph.onClick(node.id);
+	          ;  }
+	      },
+	      //Change some label dom properties.
+	      //This method is called each time a label is plotted.
+	      onPlaceLabel: function(domElement, node){
+	        var style = domElement.style;
+	        style.display = '';
+	        style.cursor = 'pointer';
+
+	        style.fontSize = "0.8em";
+	        style.color = "#ccc";
+
+	        var left = parseInt(style.left);
+	        var w = domElement.offsetWidth;
+	        style.left = (left - w / 2) + 'px';
+	      }
+	    });
+	    //load JSON data
+	    rgraph.loadJSON(json);
+	    //trigger small animation
+	    rgraph.graph.eachNode(function(n) {
+	      var pos = n.getPos();
+	      pos.setc(0, 0);
+	    });
+	    rgraph.compute('end');
+	    rgraph.fx.animate({
+	      modes:['polar'],
+	      duration: 2000
+	    });
+	    //end
+	
+		// Go backward in time now time goes backward
+	    var button = $jit.id('tunnel-button-forward');
+	    button.onclick = function() {
+	      var nearTime = rgraph.config.nearTime + 1000;
+	      var farTime = rgraph.config.farTime + 1000;
+	      rgraph.fx.animateTime(nearTime, farTime, {modes:['polar'], duration:1000});
+	    };
+
+	    // Now time goes forward
+	    button = $jit.id('tunnel-button-backward');
+	  button.onclick = function() {
+	    var nearTime = rgraph.config.nearTime - 1000;
+	    var farTime = rgraph.config.farTime - 1000;
+	    rgraph.fx.animateTime(nearTime, farTime, {modes:['polar'], duration:1000});
+	  };
 	
 	
 });

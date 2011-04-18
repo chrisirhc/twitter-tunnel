@@ -731,7 +731,7 @@ header h3 {
   box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
 }
 /* line 201, ../src/partials/_felix.scss */
-#right-container #tunnel-container #jit-container {
+#right-container #tunnel-container #infovis {
   padding-top: 18px;
   width: 100%;
   height: 540px;

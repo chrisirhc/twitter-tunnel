@@ -1,28 +1,24 @@
 /*
-  Copyright (c) 2010, Nicolas Garcia Belmonte
-  All rights reserved
+Copyright (c) 2011 Sencha Inc. - Author: Nicolas Garcia Belmonte (http://philogb.github.com/)
 
-  > Redistribution and use in source and binary forms, with or without
-  > modification, are permitted provided that the following conditions are met:
-  >      * Redistributions of source code must retain the above copyright
-  >        notice, this list of conditions and the following disclaimer.
-  >      * Redistributions in binary form must reproduce the above copyright
-  >        notice, this list of conditions and the following disclaimer in the
-  >        documentation and/or other materials provided with the distribution.
-  >      * Neither the name of the organization nor the
-  >        names of its contributors may be used to endorse or promote products
-  >        derived from this software without specific prior written permission.
-  >
-  >  THIS SOFTWARE IS PROVIDED BY NICOLAS GARCIA BELMONTE ``AS IS'' AND ANY
-  >  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-  >  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  >  DISCLAIMED. IN NO EVENT SHALL NICOLAS GARCIA BELMONTE BE LIABLE FOR ANY
-  >  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-  >  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  >  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-  >  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-  >  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-  >  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
  */
  (function () { 
 
@@ -1051,6 +1047,7 @@ Options.Margin = {
 
   Options.Canvas = {
     injectInto: 'id',
+    type: '2D', //'3D'
     width: false,
     height: false,
     useCanvas: false,
@@ -1072,6 +1069,7 @@ Options.Margin = {
   Parameters:
   
   injectInto - *required* (string|element) The id of the DOM container for the visualization. It can also be an Element provided that it has an id.
+  type - (string) Context type. Default's 2D but can be 3D for webGL enabled browsers.
   width - (number) Default's to the *container's offsetWidth*. The width of the canvas.
   height - (number) Default's to the *container's offsetHeight*. The height of the canvas.
   useCanvas - (boolean|object) Default's *false*. You can pass another <Canvas> instance to be used by the visualization.
@@ -1083,11 +1081,23 @@ Options.Canvas = {
     $extend: true,
     
     injectInto: 'id',
+    type: '2D',
     width: false,
     height: false,
     useCanvas: false,
     withLabels: true,
-    background: false
+    background: false,
+    
+    Scene: {
+      Lighting: {
+        enable: false,
+        ambient: [1, 1, 1],
+        directional: {
+          direction: { x: -100, y: -100, z: -100 },
+          color: [0.5, 0.3, 0.1]
+        }
+      }
+    },
 };
 
 /*
@@ -1197,7 +1207,7 @@ Options.Tree = {
   type - (string) Default's *circle*. Node's shape. Node built-in types include 'circle', 'rectangle', 'square', 'ellipse', 'triangle', 'star'. The default Node type might vary in each visualization. You can also implement (non built-in) custom Node types into your visualizations.
   color - (string) Default's *#ccb*. Node color.
   alpha - (number) Default's *1*. The Node's alpha value. *1* is for full opacity.
-  dim - (number) Default's *3*. An extra parameter used by other node shapes such as circle or square, to determine the shape's diameter.
+  dim - (number) Default's *3*. An extra parameter used by 'circle', 'square', 'triangle' and 'star' node types. Depending on each shape, this parameter can set the radius of a circle, half the length of the side of a square, half the base and half the height of a triangle or the length of a side of a star (concave decagon).
   height - (number) Default's *20*. Used by 'rectangle' and 'ellipse' node types. The height of the node shape.
   width - (number) Default's *90*. Used by 'rectangle' and 'ellipse' node types. The width of the node shape.
   autoHeight - (boolean) Default's *false*. Whether to set an auto height for the node depending on the content of the Node's label.
@@ -1782,6 +1792,7 @@ Options.Events = {
   Parameters:
   
   enable - (boolean) Default's *false*. Whether to enable Navigation capabilities.
+  type - (string) Default's 'auto'. Whether to attach the navigation events onto the HTML labels (via event delegation) or to use the custom 'Native' canvas Event System of the library. When 'auto' set when you let the <Options.Label> *type* parameter decide this.
   panning - (boolean|string) Default's *false*. Set this property to *true* if you want to add Drag and Drop panning support to the visualization. You can also set this parameter to 'avoid nodes' to enable DnD panning but disable it if the DnD is taking place over a node. This is useful when some other events like Drag & Drop for nodes are added to <Graph.Nodes>.
   zooming - (boolean|number) Default's *false*. Set this property to a numeric value to turn mouse-scroll zooming on. The number will be proportional to the mouse-scroll sensitivity.
   
@@ -1922,12 +1933,24 @@ var ExtrasInitializer = {
   isEnabled: function() {
     return this.config.enable;
   },
-  isLabel: function(e, win) {
+  isLabel: function(e, win, group) {
     e = $.event.get(e, win);
     var labelContainer = this.labelContainer,
-        target = e.target || e.srcElement;
-    if(target && target.parentNode == labelContainer)
-      return target;
+        target = e.target || e.srcElement,
+        related = e.relatedTarget;
+    if(group) {
+      return related && related == this.viz.canvas.getCtx().canvas 
+          && !!target && this.isDescendantOf(target, labelContainer);
+    } else {
+      return this.isDescendantOf(target, labelContainer);
+    }
+  },
+  isDescendantOf: function(elem, par) {
+    while(elem && elem.parentNode) {
+      if(elem.parentNode == par)
+        return elem;
+      elem = elem.parentNode;
+    }
     return false;
   }
 };
@@ -2158,7 +2181,7 @@ Extras.Classes.Events = new Class({
   onMouseOut: function(e, win, event) {
    //mouseout a label
    var evt = $.event.get(e, win), label;
-   if(this.dom && (label = this.isLabel(e, win))) {
+   if(this.dom && (label = this.isLabel(e, win, true))) {
      this.config.onMouseLeave(this.viz.graph.getNode(label.id),
                               event, evt);
      this.hovered = false;
@@ -2181,7 +2204,7 @@ Extras.Classes.Events = new Class({
   onMouseOver: function(e, win, event) {
     //mouseover a label
     var evt = $.event.get(e, win), label;
-    if(this.dom && (label = this.isLabel(e, win))) {
+    if(this.dom && (label = this.isLabel(e, win, true))) {
       this.hovered = this.viz.graph.getNode(label.id);
       this.config.onMouseEnter(this.hovered,
                                event, evt);
@@ -2225,15 +2248,25 @@ Extras.Classes.Events = new Class({
   },
   
   onMouseDown: function(e, win, event) {
-    var evt = $.event.get(e, win);
-    this.pressed = event.getNode() || (this.config.enableForEdges && event.getEdge());
-    this.config.onDragStart(this.pressed, event, evt);
+    var evt = $.event.get(e, win), label;
+    if(this.dom) {
+      if(label = this.isLabel(e, win)) {
+        this.pressed = this.viz.graph.getNode(label.id);
+      }
+    } else {
+      this.pressed = event.getNode() || (this.config.enableForEdges && event.getEdge());
+    }
+    this.pressed && this.config.onDragStart(this.pressed, event, evt);
   },
   
   onTouchStart: function(e, win, event) {
-    var evt = $.event.get(e, win);
-    this.touched = event.getNode() || (this.config.enableForEdges && event.getEdge());
-    this.config.onTouchStart(this.touched, event, evt);
+    var evt = $.event.get(e, win), label;
+    if(this.dom && (label = this.isLabel(e, win))) {
+      this.touched = this.viz.graph.getNode(label.id);
+    } else {
+      this.touched = event.getNode() || (this.config.enableForEdges && event.getEdge());
+    }
+    this.touched && this.config.onTouchStart(this.touched, event, evt);
   },
   
   onTouchMove: function(e, win, event) {
@@ -2295,7 +2328,8 @@ Extras.Classes.Tips = new Class({
   
   onMouseOut: function(e, win) {
     //mouseout a label
-    if(this.dom && this.isLabel(e, win)) {
+    var evt = $.event.get(e, win);
+    if(this.dom && this.isLabel(e, win, true)) {
       this.hide(true);
       return;
     }
@@ -2312,7 +2346,7 @@ Extras.Classes.Tips = new Class({
   onMouseOver: function(e, win) {
     //mouseover a label
     var label;
-    if(this.dom && (label = this.isLabel(e, win))) {
+    if(this.dom && (label = this.isLabel(e, win, true))) {
       this.node = this.viz.graph.getNode(label.id);
       this.config.onShow(this.tip, this.node, label);
     }
@@ -2398,7 +2432,7 @@ Extras.Classes.NodeStyles = new Class({
     this.down = this.move = false;
     if(!this.hoveredNode) return;
     //mouseout a label
-    if(this.dom && this.isLabel(e, win)) {
+    if(this.dom && this.isLabel(e, win, true)) {
       this.toggleStylesOnHover(this.hoveredNode, false);
     }
     //mouseout canvas
@@ -2415,7 +2449,7 @@ Extras.Classes.NodeStyles = new Class({
   onMouseOver: function(e, win) {
     //mouseover a label
     var label;
-    if(this.dom && (label = this.isLabel(e, win))) {
+    if(this.dom && (label = this.isLabel(e, win, true))) {
       var node = this.viz.graph.getNode(label.id);
       if(node.selected) return;
       this.hoveredNode = node;
@@ -2593,7 +2627,7 @@ Extras.Classes.Navigation = new Class({
   
   onMouseDown: function(e, win, eventInfo) {
     if(!this.config.panning) return;
-    if(this.config.panning == 'avoid nodes' && eventInfo.getNode()) return;
+    if(this.config.panning == 'avoid nodes' && (this.dom? this.isLabel(e, win) : eventInfo.getNode())) return;
     this.pressed = true;
     this.pos = eventInfo.getPos();
     var canvas = this.canvas,
@@ -2610,7 +2644,7 @@ Extras.Classes.Navigation = new Class({
   onMouseMove: function(e, win, eventInfo) {
     if(!this.config.panning) return;
     if(!this.pressed) return;
-    if(this.config.panning == 'avoid nodes' && eventInfo.getNode()) return;
+    if(this.config.panning == 'avoid nodes' && (this.dom? this.isLabel(e, win) : eventInfo.getNode())) return;
     var thispos = this.pos, 
         currentPos = eventInfo.getPos(),
         canvas = this.canvas,
@@ -2721,19 +2755,22 @@ var Canvas;
     
     initialize: function(viz, opt) {
       this.viz = viz;
-      this.opt = opt;
+      this.opt = this.config = opt;
       var id = $.type(opt.injectInto) == 'string'? 
           opt.injectInto:opt.injectInto.id,
+          type = opt.type,
           idLabel = id + "-label", 
           wrapper = $(id),
           width = opt.width || wrapper.offsetWidth,
-          height = opt.height || wrapper.offsetHeight;
+          height = opt.height || wrapper.offsetHeight,
+          backgroundColor = opt.backgroundColor || wrapper.backgroundColor;
       this.id = id;
       //canvas options
       var canvasOptions = {
         injectInto: id,
         width: width,
-        height: height
+        height: height,
+        backgroundColor: backgroundColor
       };
       //create main wrapper
       this.element = $E('div', {
@@ -2741,14 +2778,15 @@ var Canvas;
         'style': {
           'position': 'relative',
           'width': width + 'px',
-          'height': height + 'px'
+          'height': height + 'px',
+          'backgroundColor' : backgroundColor
         }
       });
       //create label container
       this.labelContainer = this.createLabelContainer(opt.Label.type, 
           idLabel, canvasOptions);
       //create primary canvas
-      this.canvases.push(new Canvas.Base({
+      this.canvases.push(new Canvas.Base[type]({
         config: $.extend({idSuffix: '-canvas'}, canvasOptions),
         plot: function(base) {
           viz.fx.plot();
@@ -2761,7 +2799,12 @@ var Canvas;
       var back = opt.background;
       if(back) {
         var backCanvas = new Canvas.Background[back.type](viz, $.extend(back, canvasOptions));
-        this.canvases.push(new Canvas.Base(backCanvas));
+        var newCanvas = new Canvas.Base[type](backCanvas);
+        this.canvases.push(newCanvas);
+        if(back.type == 'Circles') {
+          this.circles = backCanvas;
+          this.circlesCanvas = newCanvas;
+        }
       }
       //insert canvases
       var len = this.canvases.length;
@@ -3004,7 +3047,8 @@ var Canvas;
     }
   });
   //base canvas wrapper
-  Canvas.Base = new Class({
+  Canvas.Base = {};
+  Canvas.Base['2D'] = new Class({
     translateOffsetX: 0,
     translateOffsetY: 0,
     scaleOffsetX: 1,
@@ -3119,28 +3163,209 @@ var Canvas;
         CanvasStyles: {},
         offset: 0
       }, options);
+      this.rings = this.resetRings();
+      this.animation = new Animation;
     },
     resize: function(width, height, base) {
       this.plot(base);
     },
-    plot: function(base) {
+
+    'plot': function(base) {
+      base.clear();
       var canvas = base.canvas,
           ctx = base.getCtx(),
           conf = this.config,
           styles = conf.CanvasStyles;
       //set canvas styles
       for(var s in styles) ctx[s] = styles[s];
-      var n = conf.numberOfCircles,
-          rho = conf.levelDistance;
-      for(var i=1; i<=n; i++) {
-        ctx.beginPath();
-        ctx.arc(0, 0, rho * i, 0, 2 * Math.PI, false);
-        ctx.stroke();
-        ctx.closePath();
+
+      for(var i = 0; i < this.rings.length; i++) {
+        this.rings[i].draw(ctx);
       }
-      //TODO(nico): print labels too!
+    },
+    'animate' : function(base, opt) {
+      this.augmentRings();
+
+
+      for(var i = 0; i < this.rings.length; i++) {
+         this.rings[i].compute('end');
+      }
+      var that = this;
+      this.animation.setOptions($.extend(opt, {
+        $animating: false,
+        compute: function(delta) {
+          for(var i = 0; i < that.rings.length; i++) {
+            that.rings[i].animate(delta);
+          }
+          that.plot(base);
+//          base.plot();
+          this.$animating = true;
+        },
+        complete: function() {
+          that.pruneRings();
+        }
+      })).start();
+    },
+    resetRings: function() {
+      rings = [];
+      var nearTime = this.viz.config.nearTime;
+      var farTime = this.viz.config.farTime;
+      var timeInterval = this.config.levelDistance;
+      var curTime = nearTime - timeInterval;
+      while(curTime > farTime) {
+        var ring = new Canvas.Background.Ring(this.viz, {time: curTime});
+        rings.push(ring);
+        curTime -= timeInterval;
+      }
+      return rings;
+    },
+    augmentRings: function() {
+      var nearTime = this.viz.config.nearTime;
+      var farTime = this.viz.config.farTime;
+      var timeInterval = this.config.levelDistance;
+      var firstRing = this.rings[0];
+      var newRing;
+      var options;
+      var last = this.rings.length - 1;
+
+      // Add rings to end
+      var nextRingTime = this.rings[last].time - timeInterval;
+      while(nextRingTime > farTime) {
+        options = {time: nextRingTime};
+        options = $.merge(firstRing.getState(), options);
+
+        newRing = new Canvas.Background.Ring(this.viz, options);
+        this.rings.push(newRing);
+        nextRingTime -= timeInterval;
+      }
+
+      // Add rings to the beginning.
+      var prevRingTime = this.rings[0].time + timeInterval;
+      while(prevRingTime < nearTime) {
+        options = {time: prevRingTime};
+        options = $.merge(firstRing.getState(), options);
+
+        newRing = new Canvas.Background.Ring(this.viz, options);
+        this.rings.unshift(newRing);
+        prevRingTime += timeInterval;
+      }
+    },
+    pruneRings: function() {
+      var nearTime = this.viz.config.nearTime;
+      var farTime = this.viz.config.farTime;
+
+      // Remove rings from end
+      var last = this.rings.length - 1;
+      while(this.rings[last].time < farTime && last >= 0) {
+        // Remove rings at the end
+        this.rings.pop();
+        last = this.rings.length - 1;
+      }
+
+      // Remove rings from beginning
+      while(this.rings[0].time > nearTime && this.rings.length > 0) {
+        this.rings.shift();
+      }
+
+    },
+    'compute' : function(property) {
+      for(var i = 0; i < this.rings.length; i++) {
+        this.rings[i].compute(property);
+      }
     }
+
   });
+
+  Canvas.Background.Ring = new Class({
+    'initialize' : function(viz, options) {
+      this.viz = viz;
+      this.time = options.time ? options.time : ((new Date()).getTime() / 1000);
+      // start and end keep track of start state and end states of an animation.
+      this.start = {
+        'nearTime': this.viz.config.nearTime,
+        'farTime': this.viz.config.farTime,
+        'scale' : this.viz.config.constantS,
+        'radius' : this.viz.config.constantR
+      };
+      this.end = {
+        'nearTime': this.viz.config.nearTime,
+        'farTime': this.viz.config.farTime,
+        'scale' : this.viz.config.constantS,
+        'radius' : this.viz.config.constantR
+      };
+      // current keeps track of the current state.
+      this.current = {
+        'nearTime': this.viz.config.nearTime,
+        'farTime': this.viz.config.farTime,
+        'scale' : this.viz.config.constantS,
+        'radius' : this.viz.config.constantR
+      };
+      var states = ['current', 'start', 'end'];
+      for(var i in states){
+        var state = states[i];
+        if(options[state]) {
+          this.copyProperties(this[state], options[state]);
+        }
+      }
+    },
+    'copyProperties': function(copyTo, copyFrom) {
+       for(var prop in copyFrom) {
+         copyTo[prop] = copyFrom[prop];
+       }
+    },
+    'getState': function() {
+      return{
+        'end': this.end,
+        'start': this.start,
+        'current': this.current
+      }
+    },
+    // computers 'start', 'end', or 'current'
+    'compute' : function(property) {
+      this[property] = {
+        'nearTime': this.viz.config.nearTime,
+        'farTime': this.viz.config.farTime,
+        'scale' : this.viz.config.constantS,
+        'radius' : this.viz.config.constantR
+      };
+    },
+    'calculateDistanceRadius': function(curTime){
+      var nearTime = this.current.nearTime;
+      var scale = this.current.scale;
+      var r = this.current.radius;
+      return r / (nearTime - curTime) * scale;
+    },
+    'animate': function(delta) {
+      this.current.nearTime = this.findDelta(delta, 'nearTime');
+      this.current.farTime = this.findDelta(delta, 'farTime');
+      this.current.radius = this.findDelta(delta, 'radius');
+      this.current.scale = this.findDelta(delta, 'scale');
+
+      if(delta >= 1) {
+        for(var prop in this.current) {
+          this.start[prop] = this.current[prop];
+          this.end[prop] = this.current[prop];
+        }
+      }
+
+    },
+    'findDelta': function(delta, prop) {
+        return (this.end[prop] - this.start[prop]) * delta + this.start[prop];
+    },
+    'draw': function(ctx) {
+
+      var rho = this.calculateDistanceRadius(this.time);
+      if(rho < 0) {
+        return;
+      }
+      ctx.beginPath();
+      ctx.arc(0, 0, rho, 0, 2 * Math.PI, false);
+      ctx.stroke();
+      ctx.closePath();
+    }
+
+
+  })
 })();
 
 
@@ -3179,8 +3404,8 @@ var Canvas;
 */
 
 var Polar = function(theta, rho) {
-  this.theta = theta;
-  this.rho = rho;
+  this.theta = theta || 0;
+  this.rho = rho || 0;
 };
 
 $jit.Polar = Polar;
@@ -3407,6 +3632,17 @@ Polar.prototype = {
     },
     
     /*
+      Method: isZero
+   
+      Returns *true* if the number is zero.
+   
+   */
+    isZero: function () {
+      var almostZero = 0.0001, abs = Math.abs;
+      return abs(this.theta) < almostZero && abs(this.rho) < almostZero;
+    },
+
+    /*
        Method: interpolate
     
         Calculates a polar interpolation between two points at a given delta moment.
@@ -3494,8 +3730,8 @@ Polar.KER = $P(0, 0);
 */
 
 var Complex = function(x, y) {
-  this.x = x;
-  this.y = y;
+  this.x = x || 0;
+  this.y = y || 0;
 };
 
 $jit.Complex = Complex;
@@ -3830,6 +4066,17 @@ Complex.prototype = {
         var sq = pos.squaredNorm();
         this.x = x * pos.x + y * pos.y; this.y = y * pos.x - x * pos.y;
         return this.$scale(1 / sq);
+    },
+
+    /*
+      Method: isZero
+   
+      Returns *true* if the number is zero.
+   
+   */
+    isZero: function () {
+      var almostZero = 0.0001, abs = Math.abs;
+      return abs(this.x) < almostZero && abs(this.y) < almostZero;
     }
 };
 
@@ -3880,7 +4127,7 @@ $jit.Graph = new Class({
 
   initialize: function(opt, Node, Edge, Label) {
     var innerOptions = {
-    'complex': false,
+    'klass': Complex,
     'Node': {}
     };
     this.Node = Node;
@@ -3992,7 +4239,7 @@ $jit.Graph = new Class({
         'data': $.merge(obj.data || {}, {}),
         'adjacencies': edges 
       }, this.opt.Node), 
-      this.opt.complex, 
+      this.opt.klass, 
       this.Node, 
       this.Edge,
       this.Label);
@@ -4512,7 +4759,7 @@ var Accessors;
 */
 Graph.Node = new Class({
     
-  initialize: function(opt, complex, Node, Edge, Label) {
+  initialize: function(opt, klass, Node, Edge, Label) {
     var innerOptions = {
       'id': '',
       'name': '',
@@ -4530,9 +4777,9 @@ Graph.Node = new Class({
         'end' : 0
       },
 
-      'pos': (complex && $C(0, 0)) || $P(0, 0),
-      'startPos': (complex && $C(0, 0)) || $P(0, 0),
-      'endPos': (complex && $C(0, 0)) || $P(0, 0)
+      'pos': new klass,
+      'startPos': new klass,
+      'endPos': new klass
     };
     
     $.extend(this, $.extend(innerOptions, opt));
@@ -5283,6 +5530,7 @@ Graph.Op = {
                     modes: ['node-property:alpha', 'linear'],
                     onComplete: function() {
                         that.removeNode(n, { type: 'nothing' });
+                        options.onComplete && options.onComplete();
                     }
                 }));
                 break;
@@ -5385,6 +5633,7 @@ Graph.Op = {
                     modes: ['edge-property:alpha', 'linear'],
                     onComplete: function() {
                         that.removeEdge(v, { type: 'nothing' });
+                        options.onComplete && options.onComplete();
                     }
                 }));
                 break;
@@ -5482,8 +5731,9 @@ Graph.Op = {
                     }));
                 } else {
                     viz.graph.eachNode(function(elem) {
-                        if (elem.id != root && elem.pos.getp().equals(Polar.KER)) {
-                          elem.pos.set(elem.endPos); elem.startPos.set(elem.endPos);
+                        if (elem.id != root && elem.pos.isZero()) {
+                          elem.pos.set(elem.endPos); 
+                          elem.startPos.set(elem.endPos);
                         }
                     });
                     viz.fx.animate($.merge(options, {
@@ -5946,14 +6196,27 @@ var NodeHelper = {
     (end code)
     */
     'render': function(type, pos, width, height, canvas){
-      var ctx = canvas.getCtx();
-      height /= 2;
-      width /= 2;
+      var ctx = canvas.getCtx(),
+          scalex = 1,
+          scaley = 1,
+          scaleposx = 1,
+          scaleposy = 1,
+          radius = 0;
+
+      if (width > height) {
+          radius = width / 2;
+          scaley = height / width;
+          scaleposy = width / height;
+      } else {
+          radius = height / 2;
+          scalex = width / height;
+          scaleposx = height / width;
+      }
+
       ctx.save();
-      ctx.scale(width / height, height / width);
+      ctx.scale(scalex, scaley);
       ctx.beginPath();
-      ctx.arc(pos.x * (height / width), pos.y * (width / height), height, 0,
-          Math.PI * 2, true);
+      ctx.arc(pos.x * scaleposx, pos.y * scaleposy, radius, 0, Math.PI * 2, true);
       ctx.closePath();
       ctx[type]();
       ctx.restore();
@@ -5976,14 +6239,25 @@ var NodeHelper = {
     (end code)
     */
     'contains': function(npos, pos, width, height){
-      // TODO(nico): be more precise...
-      width /= 2; 
-      height /= 2;
-      var dist = (width + height) / 2, 
-          diffx = npos.x - pos.x, 
-          diffy = npos.y - pos.y, 
-          diff = diffx * diffx + diffy * diffy;
-      return diff <= dist * dist;
+      var radius = 0,
+          scalex = 1,
+          scaley = 1,
+          diffx = 0,
+          diffy = 0,
+          diff = 0;
+
+      if (width > height) {
+	      radius = width / 2;
+	      scaley = height / width;
+      } else {
+          radius = height / 2;
+          scalex = width / height;
+      }
+
+      diffx = (npos.x - pos.x) * (1 / scalex);
+      diffy = (npos.y - pos.y) * (1 / scaley);
+      diff = diffx * diffx + diffy * diffy;
+      return diff <= radius * radius;
     }
   },
   /*
@@ -6091,7 +6365,7 @@ var NodeHelper = {
     
     type - (string) Possible options are 'fill' or 'stroke'.
     pos - (object) An *x*, *y* object with the position of the center of the triangle.
-    dim - (number) The dimension of the triangle.
+    dim - (number) Half the base and half the height of the triangle.
     canvas - (object) A <Canvas> instance.
     
     Example:
@@ -6123,7 +6397,7 @@ var NodeHelper = {
     
     npos - (object) An *x*, *y* object with the <Graph.Node> position.
     pos - (object) An *x*, *y* object with the position to check.
-    dim - (number) The dimension of the shape.
+    dim - (number) Half the base and half the height of the triangle.
     
     Example:
     (start code js)
@@ -6141,13 +6415,13 @@ var NodeHelper = {
     /*
     Method: render
     
-    Renders a star into the canvas.
+    Renders a star (concave decagon) into the canvas.
     
     Parameters:
     
     type - (string) Possible options are 'fill' or 'stroke'.
     pos - (object) An *x*, *y* object with the position of the center of the star.
-    dim - (number) The dimension of the star.
+    dim - (number) The length of a side of a concave decagon.
     canvas - (object) A <Canvas> instance.
     
     Example:
@@ -6183,7 +6457,7 @@ var NodeHelper = {
     
     npos - (object) An *x*, *y* object with the <Graph.Node> position.
     pos - (object) An *x*, *y* object with the position to check.
-    dim - (number) The dimension of the shape.
+    dim - (number) The length of a side of a concave decagon.
     
     Example:
     (start code js)
@@ -6464,6 +6738,98 @@ var EdgeHelper = {
   }
 };
 
+var ColorHelper = {
+  'parseColorToNum' : function(colorString) {
+    var len = colorString.length;
+    // Remove # symbol
+    if(colorString.charAt(0) == '#') {
+      colorString = colorString.substr(1, len);
+      len = colorString.length;
+    }
+    if(len == 3) {
+      var expandedColor =
+          colorString.charAt(0) + colorString.charAt(0) +
+          colorString.charAt(1) + colorString.charAt(1) +
+          colorString.charAt(2) + colorString.charAt(2);
+      colorString = expandedColor;
+      len = colorString.length;
+    }
+    return parseInt(colorString, 16);
+  },
+
+  'lightenColor' : function(colorString, colorStep) {
+    var colorNumber = this.parseColorToNum(colorString);
+    var r = this.getR(colorNumber);
+    var g = this.getG(colorNumber);
+    var b = this.getB(colorNumber);
+
+    r = r + colorStep > 0xFF ? 0xFF : r + colorStep;
+    g = g + colorStep > 0xFF ? 0xFF : g + colorStep;
+    b = b + colorStep  > 0xFF ? 0xFF : b + colorStep;
+
+    return this.colorToString(r,g,b);
+  },
+
+  'darkenColor' : function(colorString, colorStep) {
+    var colorNumber = this.parseColorToNum(colorString);
+    var r = this.getR(colorNumber);
+    var g = this.getG(colorNumber);
+    var b = this.getB(colorNumber);
+
+    r = (r << 8 - colorStep < 0xFF) ? 0 : r - colorStep;
+    g = (g << 8 - colorStep < 0xFF) ? 0 : g - colorStep;
+    b = (b << 8 - colorStep < 0xFF) ? 0 : b - colorStep;
+
+    return this.colorToString(r,g,b);
+  },
+
+  'avgColor' : function(colorString, color) {
+    var colorNumber = this.parseColorToNum(colorString);
+    var r = this.getR(colorNumber);
+    var g = this.getG(colorNumber);
+    var b = this.getB(colorNumber);
+
+    var r2 = this.getR(color);
+    var g2 = this.getG(color);
+    var b2 = this.getB(color);
+
+    r = (r + r2) >> 1;
+    g = (g + g2) >> 1;
+    b = (b + b2) >> 1;
+
+    return this.colorToString(r,g,b);
+  },
+
+  // type = 'fillStyle' or 'strokeStyle'
+  'setColor' : function(color, type, canvas) {
+    var ctx = canvas.getCtx();
+    ctx[type] = color;
+  },
+
+  'setLineWidth' : function(width, canvas) {
+    var ctx = canvas.getCtx();
+    ctx.lineWidth = width;
+  },
+
+  'getR' : function(rgbHexNum) {
+    return rgbHexNum >> 16;
+  },
+
+  'getG' : function(rgbHexNum) {
+    return rgbHexNum >> 8 & 0xFF;
+  },
+
+  'getB' : function(rgbHexNum) {
+    return rgbHexNum & 0xFF;
+  },
+
+  'colorToString' : function(r,g,b) {
+    colorNum = (r << 16) + (g << 8) + b;
+    return  '#' + colorNum.toString(16);
+  }
+
+};
+
 
 /*
  * File: Graph.Plot.js
@@ -6480,7 +6846,7 @@ var EdgeHelper = {
    edgeHelper - <EdgeHelper> object.
 */
 Graph.Plot = {
-    //Default intializer
+    //Default initializer
     initialize: function(viz, klass){
       this.viz = viz;
       this.config = viz.config;
@@ -6495,6 +6861,7 @@ Graph.Plot = {
     //Add helpers
     nodeHelper: NodeHelper,
     edgeHelper: EdgeHelper,
+    colorHelper: ColorHelper,
     
     Interpolator: {
         //node/edge property parsers
@@ -6826,7 +7193,7 @@ Graph.Plot = {
       
       //animate
       if(opt.hideLabels) this.labels.hideLabels(true);
-      animation.setOptions($.merge(opt, {
+      animation.setOptions($.extend(opt, {
         $animating: false,
         compute: function(delta) {
           graph.eachNode(function(node) { 
@@ -6963,52 +7330,46 @@ Graph.Plot = {
        (end code)
 
     */
-    plot: function(opt, animating) {
-      var viz = this.viz, 
-      aGraph = viz.graph, 
-      canvas = viz.canvas, 
-      id = viz.root, 
-      that = this, 
-      ctx = canvas.getCtx(), 
-      min = Math.min,
-      opt = opt || this.viz.controller;
-      opt.clearCanvas && canvas.clear();
-        
-      var root = aGraph.getNode(id);
-      if(!root) return;
-      
-      var T = !!root.visited;
-      aGraph.eachNode(function(node) {
-        var nodeAlpha = node.getData('alpha');
-        node.eachAdjacency(function(adj) {
-          var nodeTo = adj.nodeTo;
-          if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn) {
-            !animating && opt.onBeforePlotLine(adj);
-            ctx.save();
-            ctx.globalAlpha = min(nodeAlpha, 
-                nodeTo.getData('alpha'), 
-                adj.getData('alpha'));
-            that.plotLine(adj, canvas, animating);
-            ctx.restore();
-            !animating && opt.onAfterPlotLine(adj);
-          }
-        });
-        ctx.save();
-        if(node.drawn) {
-          !animating && opt.onBeforePlotNode(node);
-          that.plotNode(node, canvas, animating);
-          !animating && opt.onAfterPlotNode(node);
-        }
-        if(!that.labelsHidden && opt.withLabels) {
-          if(node.drawn && nodeAlpha >= 0.95) {
-            that.labels.plotLabel(canvas, node, opt);
-          } else {
-            that.labels.hideLabel(node, false);
-          }
-        }
-        ctx.restore();
-        node.visited = !T;
-      });
+   plot: function(opt, animating) {
+     var viz = this.viz, 
+         aGraph = viz.graph, 
+         canvas = viz.canvas, 
+         id = viz.root, 
+         that = this, 
+         ctx = canvas.getCtx(), 
+         min = Math.min,
+         opt = opt || this.viz.controller;
+     
+     opt.clearCanvas && canvas.clear();
+       
+     var root = aGraph.getNode(id);
+     if(!root) return;
+     
+     var T = !!root.visited;
+     aGraph.eachNode(function(node) {
+       var nodeAlpha = node.getData('alpha');
+       node.eachAdjacency(function(adj) {
+         var nodeTo = adj.nodeTo;
+         if(!!nodeTo.visited === T && node.drawn && nodeTo.drawn) {
+           !animating && opt.onBeforePlotLine(adj);
+           that.plotLine(adj, canvas, animating);
+           !animating && opt.onAfterPlotLine(adj);
+         }
+       });
+       if(node.drawn) {
+         !animating && opt.onBeforePlotNode(node);
+         that.plotNode(node, canvas, animating);
+         !animating && opt.onAfterPlotNode(node);
+       }
+       if(!that.labelsHidden && opt.withLabels) {
+         if(node.drawn && nodeAlpha >= 0.95) {
+           that.labels.plotLabel(canvas, node, opt);
+         } else {
+           that.labels.hideLabel(node, false);
+         }
+       }
+       node.visited = !T;
+     });
     },
 
   /*
@@ -7063,7 +7424,7 @@ Graph.Plot = {
               color = node.getData('color'),
               alpha = node.getData('alpha'),
               ctx = canvas.getCtx();
-          
+          ctx.save();
           ctx.lineWidth = width;
           ctx.fillStyle = ctx.strokeStyle = color;
           ctx.globalAlpha = alpha;
@@ -7073,6 +7434,7 @@ Graph.Plot = {
           }
 
           this.nodeTypes[f].render.call(this, node, canvas, animating);
+          ctx.restore();
         }
     },
     
@@ -7093,22 +7455,170 @@ Graph.Plot = {
       if(f != 'none') {
         var width = adj.getData('lineWidth'),
             color = adj.getData('color'),
-            ctx = canvas.getCtx();
+            ctx = canvas.getCtx(),
+            nodeFrom = adj.nodeFrom,
+            nodeTo = adj.nodeTo;
         
+        ctx.save();
         ctx.lineWidth = width;
         ctx.fillStyle = ctx.strokeStyle = color;
+        ctx.globalAlpha = Math.min(nodeFrom.getData('alpha'), 
+            nodeTo.getData('alpha'), 
+            adj.getData('alpha'));
         
         for(var s in ctxObj) {
           ctx[s] = adj.getCanvasStyle(s);
         }
 
         this.edgeTypes[f].render.call(this, adj, canvas, animating);
+        ctx.restore();
       }
     }    
   
 };
 
+/*
+  Object: Graph.Plot3D
+  
+  <Graph> 3D rendering and animation methods.
+  
+  Properties:
+  
+  nodeHelper - <NodeHelper> object.
+  edgeHelper - <EdgeHelper> object.
 
+*/
+Graph.Plot3D = $.merge(Graph.Plot, {
+  Interpolator: {
+    'linear': function(elem, props, delta) {
+      var from = elem.startPos.getc(true);
+      var to = elem.endPos.getc(true);
+      elem.pos.setc(this.compute(from.x, to.x, delta), 
+                    this.compute(from.y, to.y, delta),
+                    this.compute(from.z, to.z, delta));
+    }
+  },
+  
+  plotNode: function(node, canvas) {
+    if(node.getData('type') == 'none') return;
+    this.plotElement(node, canvas, {
+      getAlpha: function() {
+        return node.getData('alpha');
+      }
+    });
+  },
+  
+  plotLine: function(adj, canvas) {
+    if(adj.getData('type') == 'none') return;
+    this.plotElement(adj, canvas, {
+      getAlpha: function() {
+        return Math.min(adj.nodeFrom.getData('alpha'),
+                        adj.nodeTo.getData('alpha'),
+                        adj.getData('alpha'));
+      }
+    });
+  },
+  
+  plotElement: function(elem, canvas, opt) {
+    var gl = canvas.getCtx(),
+        viewMatrix = new Matrix4,
+        lighting = canvas.config.Scene.Lighting,
+        wcanvas = canvas.canvases[0],
+        program = wcanvas.program,
+        camera = wcanvas.camera;
+    
+    if(!elem.geometry) {
+      elem.geometry = new O3D[elem.getData('type')];
+    }
+    elem.geometry.update(elem);
+    if(!elem.webGLVertexBuffer) {
+      var vertices = [],
+          faces = [],
+          normals = [],
+          vertexIndex = 0,
+          geom = elem.geometry;
+      
+      for(var i=0, vs=geom.vertices, fs=geom.faces, fsl=fs.length; i<fsl; i++) {
+        var face = fs[i],
+            v1 = vs[face.a],
+            v2 = vs[face.b],
+            v3 = vs[face.c],
+            v4 = face.d? vs[face.d] : false,
+            n = face.normal;
+        
+        vertices.push(v1.x, v1.y, v1.z);
+        vertices.push(v2.x, v2.y, v2.z);
+        vertices.push(v3.x, v3.y, v3.z);
+        if(v4) vertices.push(v4.x, v4.y, v4.z);
+            
+        normals.push(n.x, n.y, n.z);
+        normals.push(n.x, n.y, n.z);
+        normals.push(n.x, n.y, n.z);
+        if(v4) normals.push(n.x, n.y, n.z);
+            
+        faces.push(vertexIndex, vertexIndex +1, vertexIndex +2);
+        if(v4) {
+          faces.push(vertexIndex, vertexIndex +2, vertexIndex +3);
+          vertexIndex += 4;
+        } else {
+          vertexIndex += 3;
+        }
+      }
+      //create and store vertex data
+      elem.webGLVertexBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, elem.webGLVertexBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+      //create and store faces index data
+      elem.webGLFaceBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elem.webGLFaceBuffer);
+      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(faces), gl.STATIC_DRAW);
+      elem.webGLFaceCount = faces.length;
+      //calculate vertex normals and store them
+      elem.webGLNormalBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, elem.webGLNormalBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
+    }
+    viewMatrix.multiply(camera.matrix, elem.geometry.matrix);
+    //send matrix data
+    gl.uniformMatrix4fv(program.viewMatrix, false, viewMatrix.flatten());
+    gl.uniformMatrix4fv(program.projectionMatrix, false, camera.projectionMatrix.flatten());
+    //send normal matrix for lighting
+    var normalMatrix = Matrix4.makeInvert(viewMatrix);
+    normalMatrix.$transpose();
+    gl.uniformMatrix4fv(program.normalMatrix, false, normalMatrix.flatten());
+    //send color data
+    var color = $.hexToRgb(elem.getData('color'));
+    color.push(opt.getAlpha());
+    gl.uniform4f(program.color, color[0] / 255, color[1] / 255, color[2] / 255, color[3]);
+    //send lighting data
+    gl.uniform1i(program.enableLighting, lighting.enable);
+    if(lighting.enable) {
+      //set ambient light color
+      if(lighting.ambient) {
+        var acolor = lighting.ambient;
+        gl.uniform3f(program.ambientColor, acolor[0], acolor[1], acolor[2]);
+      }
+      //set directional light
+      if(lighting.directional) {
+        var dir = lighting.directional,
+            color = dir.color,
+            pos = dir.direction,
+            vd = new Vector3(pos.x, pos.y, pos.z).normalize().$scale(-1);
+        gl.uniform3f(program.lightingDirection, vd.x, vd.y, vd.z);
+        gl.uniform3f(program.directionalColor, color[0], color[1], color[2]);
+      }
+    }
+    //send vertices data
+    gl.bindBuffer(gl.ARRAY_BUFFER, elem.webGLVertexBuffer);
+    gl.vertexAttribPointer(program.position, 3, gl.FLOAT, false, 0, 0);
+    //send normals data
+    gl.bindBuffer(gl.ARRAY_BUFFER, elem.webGLNormalBuffer);
+    gl.vertexAttribPointer(program.normal, 3, gl.FLOAT, false, 0, 0);
+    //draw!
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, elem.webGLFaceBuffer );
+    gl.drawElements(gl.TRIANGLES, elem.webGLFaceCount, gl.UNSIGNED_SHORT, 0);
+  }
+});
 
 /*
  * File: Graph.Label.js
@@ -8293,7 +8803,7 @@ $jit.ST= (function() {
             }
 
             this.graphOptions = {
-                'complex': true
+                'klass': Complex
             };
             this.graph = new Graph(this.graphOptions, this.config.Node, this.config.Edge);
             this.labels = new $ST.Label[canvasConfig.Label.type](this);
@@ -10152,32 +10662,32 @@ $jit.AreaChart = new Class({
         labels = json.label && $.splat(json.label),
         values = json.values,
         animate = this.config.animate,
-        that = this;
-    $.each(values, function(v) {
-      var n = graph.getByName(v.label);
-      if(n) {
+        that = this,
+        hashValues = {};
+
+    //convert the whole thing into a hash
+    for (var i = 0, l = values.length; i < l; i++) {
+      hashValues[values[i].label] = values[i];
+    }
+  
+    graph.eachNode(function(n) {
+      var v = hashValues[n.name],
+          stringArray = n.getData('stringArray'),
+          valArray = n.getData('valueArray'),
+          next = n.getData('next');
+      
+      if (v) {
         v.values = $.splat(v.values);
-        var stringArray = n.getData('stringArray'),
-            valArray = n.getData('valueArray');
         $.each(valArray, function(a, i) {
           a[0] = v.values[i];
           if(labels) stringArray[i] = labels[i];
         });
         n.setData('valueArray', valArray);
-        var prev = n.getData('prev'),
-            next = n.getData('next'),
-            nextNode = graph.getByName(next);
-        if(prev) {
-          var p = graph.getByName(prev);
-          if(p) {
-            var valArray = p.getData('valueArray');
-            $.each(valArray, function(a, i) {
-              a[1] = v.values[i];
-            });
-          }
-        }
-        if(!nextNode) {
-          var valArray = n.getData('valueArray');
+      }
+     
+      if(next) {
+        v = hashValues[next];
+        if(v) {
           $.each(valArray, function(a, i) {
             a[1] = v.values[i];
           });
@@ -10218,17 +10728,18 @@ $jit.AreaChart = new Class({
   
   <AreaChart.restore>.
  */  
-  filter: function() {
+  filter: function(filters, callback) {
     if(this.busy) return;
     this.busy = true;
     if(this.config.Tips.enable) this.st.tips.hide();
     this.select(false, false, false);
-    var args = Array.prototype.slice.call(arguments);
+    var args = $.splat(filters);
     var rt = this.st.graph.getNode(this.st.root);
     var that = this;
+    this.normalizeDims();
     rt.eachAdjacency(function(adj) {
       var n = adj.nodeTo, 
-          dimArray = n.getData('dimArray'),
+          dimArray = n.getData('dimArray', 'end'),
           stringArray = n.getData('stringArray');
       n.setData('dimArray', $.map(dimArray, function(d, i) {
         return ($.indexOf(args, stringArray[i]) > -1)? d:[0, 0];
@@ -10239,6 +10750,7 @@ $jit.AreaChart = new Class({
       duration:1500,
       onComplete: function() {
         that.busy = false;
+        callback && callback.onComplete();
       }
     });
   },
@@ -10258,7 +10770,7 @@ $jit.AreaChart = new Class({
   
   <AreaChart.filter>.
  */  
-  restore: function() {
+  restore: function(callback) {
     if(this.busy) return;
     this.busy = true;
     if(this.config.Tips.enable) this.st.tips.hide();
@@ -10270,6 +10782,7 @@ $jit.AreaChart = new Class({
       duration:1500,
       onComplete: function() {
         that.busy = false;
+        callback && callback.onComplete();
       }
     });
   },
@@ -10412,6 +10925,7 @@ $jit.AreaChart = new Class({
     });
   }
 });
+
 
 /*
  * File: Options.BarChart.js
@@ -11601,7 +12115,7 @@ $jit.Sunburst = new Class({
     }
 
     this.graphOptions = {
-      'complex': false,
+      'klass': Polar,
       'Node': {
         'selected': false,
         'exist': true,
@@ -13443,7 +13957,7 @@ $jit.Icicle = new Class({
     }
 
     this.graphOptions = {
-      'complex': true,
+      'klass': Complex,
       'Node': {
         'selected': false,
         'exist': true,
@@ -14047,9 +14561,10 @@ Layouts.ForceDirected = new Class({
     if(incremental) {
       (function iter() {
         for(var total=incremental.iter, j=0; j<total; j++) {
-          opt.t = opt.tstart * (1 - i++/(times -1));
+          opt.t = opt.tstart;
+          if(times) opt.t *= (1 - i++/(times -1));
           that.computePositionStep(property, opt);
-          if(i >= times) {
+          if(times && i >= times) {
             incremental.onComplete();
             return;
           }
@@ -14198,7 +14713,7 @@ $jit.ForceDirected = new Class( {
     }
 
     this.graphOptions = {
-      'complex': true,
+      'klass': Complex,
       'Node': {
         'selected': false,
         'exist': true,
@@ -14560,7 +15075,6 @@ $jit.ForceDirected.$extend = true;
             height = node.getData('height');
         this.nodeHelper.ellipse.render('fill', pos, width, height, canvas);
         },
-      // TODO(nico): be more precise...
       'contains': function(node, pos){
         var npos = node.pos.getc(true), 
             width = node.getData('width'), 
@@ -14805,7 +15319,7 @@ TM.Base = {
     }
 
     this.graphOptions = {
-      'complex': true,
+      'klass': Complex,
       'Node': {
         'selected': false,
         'exist': true,
@@ -15050,6 +15564,10 @@ TM.Base = {
     } else {
       handler.onComplete();
     }
+  },
+  
+  reposition: function() {
+    this.compute('end');
   }
 };
 
@@ -15579,7 +16097,7 @@ $jit.RGraph = new Class( {
     }
 
     this.graphOptions = {
-      'complex': false,
+      'klass': Polar,
       'Node': {
         'selected': false,
         'exist': true,
@@ -15707,7 +16225,7 @@ $jit.RGraph = new Class( {
     if (this.root != id && !this.busy) {
       this.busy = true;
       this.root = id;
-      that = this;
+      var that = this;
       this.controller.onBeforeCompute(this.graph.getNode(id));
       var obj = this.getNodeAndParentAngle(id);
 
@@ -15976,7 +16494,6 @@ $jit.RGraph.$extend = true;
             height = node.getData('height');
         this.nodeHelper.ellipse.render('fill', pos, width, height, canvas);
         },
-      // TODO(nico): be more precise...
       'contains': function(node, pos){
         var npos = node.pos.getc(true), 
             width = node.getData('width'), 
@@ -16093,6 +16610,836 @@ $jit.RGraph.$extend = true;
   });
 
 })($jit.RGraph);
+
+
+/*
+ * Class: Layouts.Tunnel
+ * 
+ * Implements a Tunnel Layout.
+ * 
+ * Implemented By:
+ * 
+ * <EventTunnel>
+ * 
+ */
+Layouts.Tunnel = new Class({
+
+  /*
+   * Method: compute
+   * 
+   * Computes nodes' positions.
+   * 
+   * Parameters:
+   * 
+   * property - _optional_ A <Graph.Node> position property to store the new
+   * positions. Possible values are 'pos', 'end' or 'start'.
+   * 
+   */
+  compute : function(property) {
+    var prop = $.splat(property || [ 'current', 'start', 'end' ]);
+    NodeDim.compute(this.graph, prop, this.config);
+    this.graph.computeLevels(this.root, 0, "ignore");
+    var lengthFunc = this.createLevelDistanceFunc(); 
+    this.computeAngularWidths(prop);
+    this.computePositions(prop, lengthFunc);
+  },
+
+  /*
+   * computePositions
+   * 
+   * Performs the main algorithm for computing node positions.
+   */
+  computePositions : function(property, getLength) {
+    var propArray = property;
+    var graph = this.graph;
+    var root = graph.getNode(this.root);
+    var parent = this.parent;
+    var config = this.config;
+
+    for ( var i=0, l=propArray.length; i < l; i++) {
+      var pi = propArray[i];
+      root.setPos($P(0, 0), pi);
+      root.setData('span', Math.PI * 2, pi);
+    }
+
+    root.angleSpan = {
+      begin : 0,
+      end : 2 * Math.PI
+    };
+
+    graph.eachBFS(this.root, function(elem) {
+      var angleSpan = elem.angleSpan.end - elem.angleSpan.begin;
+      var angleInit = elem.angleSpan.begin;
+      //Calculate the sum of all angular widths
+      var totalAngularWidths = 0, subnodes = [], maxDim = {};
+      elem.eachSubnode(function(sib) {
+        totalAngularWidths += sib._treeAngularWidth;
+        //get max dim
+        for ( var i=0, l=propArray.length; i < l; i++) {
+          var pi = propArray[i], dim = sib.getData('dim', pi);
+          maxDim[pi] = (pi in maxDim)? (dim > maxDim[pi]? dim : maxDim[pi]) : dim;
+        }
+        subnodes.push(sib);
+      }, "ignore");
+      //Maintain children order
+      //Second constraint for <http://bailando.sims.berkeley.edu/papers/infovis01.htm>
+      if (parent && parent.id == elem.id && subnodes.length > 0
+          && subnodes[0].dist) {
+        subnodes.sort(function(a, b) {
+          return (a.dist >= b.dist) - (a.dist <= b.dist);
+        });
+      }
+      //Calculate nodes positions.
+      for (var k = 0, ls=subnodes.length; k < ls; k++) {
+        var child = subnodes[k];
+        if (!child._flag) {
+          var angleProportion = child._treeAngularWidth / totalAngularWidths * angleSpan;
+          var theta = angleInit + angleProportion / 2;
+
+          for ( var i=0, l=propArray.length; i < l; i++) {
+            var pi = propArray[i];
+            child.setPos($P(theta, getLength(child)), pi);
+            child.setData('span', angleProportion, pi);
+            child.setData('dim-quotient', child.getData('dim', pi) / maxDim[pi], pi);
+          }
+
+          child.angleSpan = {
+            begin : angleInit,
+            end : angleInit + angleProportion
+          };
+          angleInit += angleProportion;
+        }
+      }
+    }, "ignore");
+  },
+
+  /*
+   * Method: setAngularWidthForNodes
+   * 
+   * Sets nodes angular widths.
+   */
+  setAngularWidthForNodes : function(prop) {
+    this.graph.eachBFS(this.root, function(elem, i) {
+      var diamValue = elem.getData('angularWidth', prop[0]) || 5;
+      elem._angularWidth = diamValue / i;
+    }, "ignore");
+  },
+
+  /*
+   * Method: setSubtreesAngularWidth
+   * 
+   * Sets subtrees angular widths.
+   */
+  setSubtreesAngularWidth : function() {
+    var that = this;
+    this.graph.eachNode(function(elem) {
+      that.setSubtreeAngularWidth(elem);
+    }, "ignore");
+  },
+
+  /*
+   * Method: setSubtreeAngularWidth
+   * 
+   * Sets the angular width for a subtree.
+   */
+  setSubtreeAngularWidth : function(elem) {
+    var that = this, nodeAW = elem._angularWidth, sumAW = 0;
+    elem.eachSubnode(function(child) {
+      that.setSubtreeAngularWidth(child);
+      sumAW += child._treeAngularWidth;
+    }, "ignore");
+    elem._treeAngularWidth = Math.max(nodeAW, sumAW);
+  },
+
+  /*
+   * Method: computeAngularWidths
+   * 
+   * Computes nodes and subtrees angular widths.
+   */
+  computeAngularWidths : function(prop) {
+    this.setAngularWidthForNodes(prop);
+    this.setSubtreesAngularWidth();
+  }
+
+});
+
+
+/*
+ * File: EventTunnel.js
+ *
+ */
+
+/*
+   Class: EventTunnel
+   
+   A radial graph visualization with advanced animations.
+   
+   Inspired by:
+ 
+   Animated Exploration of Dynamic Graphs with Radial Layout (Ka-Ping Yee, Danyel Fisher, Rachna Dhamija, Marti Hearst) <http://bailando.sims.berkeley.edu/papers/infovis01.htm>
+   
+   Note:
+   
+   This visualization was built and engineered from scratch, taking only the paper as inspiration, and only shares some features with the visualization described in the paper.
+   
+  Implements:
+  
+  All <Loader> methods
+  
+   Constructor Options:
+   
+   Inherits options from
+   
+   - <Options.Canvas>
+   - <Options.Controller>
+   - <Options.Node>
+   - <Options.Edge>
+   - <Options.Label>
+   - <Options.Events>
+   - <Options.Tips>
+   - <Options.NodeStyles>
+   - <Options.Navigation>
+   
+   Additionally, there are other parameters and some default values changed
+   
+   interpolation - (string) Default's *linear*. Describes the way nodes are interpolated. Possible values are 'linear' and 'polar'.
+   levelDistance - (number) Default's *100*. The distance between levels of the tree. 
+     
+   Instance Properties:
+
+   canvas - Access a <Canvas> instance.
+   graph - Access a <Graph> instance.
+   op - Access a <EventTunnel.Op> instance.
+   fx - Access a <EventTunnel.Plot> instance.
+   labels - Access a <EventTunnel.Label> interface implementation.
+*/
+
+$jit.EventTunnel = new Class( {
+
+  Implements: [
+      Loader, Extras, Layouts.Tunnel
+  ],
+
+  initialize: function(controller){
+    var $EventTunnel = $jit.EventTunnel;
+
+    var config = {
+      interpolation: 'linear',
+      // might have a farTime
+      // Basically, this time is the time endpoint that is on the near end of tunnel
+      // Current time in seconds since 1970
+      nearTime: (new Date()).getTime() / 1000,
+      // Far time = 5 hours ago.
+      farTime:  (new Date()).getTime() / 1000 - 5 * 60 * 60,
+      // Constant used to calculate distance.
+      constantR: 100,
+      constantS: 8000
+    };
+
+    this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge",
+        "Fx", "Controller", "Tips", "NodeStyles", "Events", "Navigation", "Label"), config, controller);
+
+    var canvasConfig = this.config;
+    if(canvasConfig.useCanvas) {
+      this.canvas = canvasConfig.useCanvas;
+      this.config.labelContainer = this.canvas.id + '-label';
+    } else {
+      if(canvasConfig.background) {
+        canvasConfig.background = $.merge({
+          type: 'Circles'
+        }, canvasConfig.background);
+      }
+      this.canvas = new Canvas(this, canvasConfig);
+      this.config.labelContainer = (typeof canvasConfig.injectInto == 'string'? canvasConfig.injectInto : canvasConfig.injectInto.id) + '-label';
+    }
+
+    this.graphOptions = {
+      'klass': Polar,
+      'Node': {
+        'selected': false,
+        'exist': true,
+        'drawn': true
+      }
+    };
+    this.graph = new Graph(this.graphOptions, this.config.Node,
+        this.config.Edge);
+    this.labels = new $EventTunnel.Label[canvasConfig.Label.type](this);
+    this.fx = new $EventTunnel.Plot(this, $EventTunnel);
+    this.op = new $EventTunnel.Op(this);
+    this.json = null;
+    this.root = null;
+    this.busy = false;
+    this.parent = false;
+    // initialize extras
+    this.initializeExtras();
+  },
+
+  'getCanvas': function() {
+    return this.canvas;
+  },
+  /* 
+  
+    createLevelDistanceFunc 
+  
+    Returns the levelDistance function used for calculating a node distance 
+    to its origin. The resulting function gets the
+    parent node as parameter and returns a float.
+
+   */
+  createLevelDistanceFunc: function(){
+    var nt = this.config.nearTime;
+    var s = this.config.constantS;
+    var r = this.config.constantR;
+    return function(elem){
+      // TODO change this to the time of the root ?
+      elem.name = (nt - elem.data.created_at.unix_timestamp);
+      return r / (nt - elem.data.created_at.unix_timestamp) * s;
+    };
+  },
+
+  /* 
+     Method: refresh 
+     
+     Computes positions and plots the tree.
+
+   */
+  refresh: function(){
+    this.compute();
+    this.plot();
+  },
+
+  reposition: function(){
+    this.compute('end');
+  },
+
+  /*
+   Method: plot
+  
+   Plots the EventTunnel. This is a shortcut to *fx.plot*.
+  */
+  plot: function(){
+    this.fx.plot();
+  },
+  /*
+   getNodeAndParentAngle
+  
+   Returns the _parent_ of the given node, also calculating its angle span.
+  */
+  getNodeAndParentAngle: function(id){
+    var theta = false;
+    var n = this.graph.getNode(id);
+    var ps = n.getParents();
+    var p = (ps.length > 0)? ps[0] : false;
+    if (p) {
+      var posParent = p.pos.getc(), posChild = n.pos.getc();
+      var newPos = posParent.add(posChild.scale(-1));
+      theta = Math.atan2(newPos.y, newPos.x);
+      if (theta < 0)
+        theta += 2 * Math.PI;
+    }
+    return {
+      parent: p,
+      theta: theta
+    };
+  },
+  /*
+   tagChildren
+  
+   Enumerates the children in order to maintain child ordering (second constraint of the paper).
+  */
+  tagChildren: function(par, id){
+    if (par.angleSpan) {
+      var adjs = [];
+      par.eachAdjacency(function(elem){
+        adjs.push(elem.nodeTo);
+      }, "ignore");
+      var len = adjs.length;
+      for ( var i = 0; i < len && id != adjs[i].id; i++)
+        ;
+      for ( var j = (i + 1) % len, k = 0; id != adjs[j].id; j = (j + 1) % len) {
+        adjs[j].dist = k++;
+      }
+    }
+  },
+  /* 
+  Method: onClick 
+  
+  Animates the <EventTunnel> to center the node specified by *id*.
+
+   Parameters:
+
+   id - A <Graph.Node> id.
+   opt - (optional|object) An object containing some extra properties described below
+   hideLabels - (boolean) Default's *true*. Hide labels when performing the animation.
+
+   Example:
+
+   (start code js)
+     rgraph.onClick('someid');
+     //or also...
+     rgraph.onClick('someid', {
+      hideLabels: false
+     });
+    (end code)
+    
+  */
+  onClick: function(id, opt){
+    if (this.root != id && !this.busy) {
+      this.busy = true;
+      this.root = id;
+      var that = this;
+      this.controller.onBeforeCompute(this.graph.getNode(id));
+      var obj = this.getNodeAndParentAngle(id);
+
+      // second constraint
+      this.tagChildren(obj.parent, id);
+      this.parent = obj.parent;
+      this.compute('end');
+
+      // first constraint
+      var thetaDiff = obj.theta - obj.parent.endPos.theta;
+      this.graph.eachNode(function(elem){
+        elem.endPos.set(elem.endPos.getp().add($P(thetaDiff, 0)));
+      });
+
+      var mode = this.config.interpolation;
+      opt = $.merge( {
+        onComplete: $.empty
+      }, opt || {});
+
+      this.fx.animate($.merge( {
+        hideLabels: true,
+        modes: [
+          mode
+        ]
+      }, opt, {
+        onComplete: function(){
+          that.busy = false;
+          opt.onComplete();
+        }
+      }));
+    }
+  }
+});
+
+$jit.EventTunnel.$extend = true;
+
+(function(EventTunnel){
+
+  /*
+     Class: EventTunnel.Op
+     
+     Custom extension of <Graph.Op>.
+
+     Extends:
+
+     All <Graph.Op> methods
+     
+     See also:
+     
+     <Graph.Op>
+
+  */
+  EventTunnel.Op = new Class( {
+
+    Implements: Graph.Op
+
+  });
+
+  /*
+     Class: EventTunnel.Plot
+    
+    Custom extension of <Graph.Plot>.
+  
+    Extends:
+  
+    All <Graph.Plot> methods
+    
+    See also:
+    
+    <Graph.Plot>
+  
+  */
+  EventTunnel.Plot = new Class( {
+
+    Implements: Graph.Plot,
+
+    animateTime: function(nearTime, farTime, opt, versor) {
+      this.viz.config.farTime = farTime;
+      this.viz.config.nearTime = nearTime;
+      this.viz.compute('end');
+      var circles = this.viz.canvas.circles;
+      opt = $.merge({clearCanvas: true},opt);
+      this.animate(opt, versor);
+      circles.animate(this.viz.canvas.circlesCanvas, opt);
+    }
+
+  });
+
+  /*
+    Object: EventTunnel.Label
+
+    Custom extension of <Graph.Label>. 
+    Contains custom <Graph.Label.SVG>, <Graph.Label.HTML> and <Graph.Label.Native> extensions.
+  
+    Extends:
+  
+    All <Graph.Label> methods and subclasses.
+  
+    See also:
+  
+    <Graph.Label>, <Graph.Label.Native>, <Graph.Label.HTML>, <Graph.Label.SVG>.
+  
+   */
+  EventTunnel.Label = {};
+
+  /*
+     EventTunnel.Label.Native
+
+     Custom extension of <Graph.Label.Native>.
+
+     Extends:
+
+     All <Graph.Label.Native> methods
+
+     See also:
+
+     <Graph.Label.Native>
+
+  */
+  EventTunnel.Label.Native = new Class( {
+    Implements: Graph.Label.Native
+  });
+
+  /*
+     EventTunnel.Label.SVG
+    
+    Custom extension of <Graph.Label.SVG>.
+  
+    Extends:
+  
+    All <Graph.Label.SVG> methods
+  
+    See also:
+  
+    <Graph.Label.SVG>
+  
+  */
+  EventTunnel.Label.SVG = new Class( {
+    Implements: Graph.Label.SVG,
+
+    initialize: function(viz){
+      this.viz = viz;
+    },
+
+    /* 
+       placeLabel
+
+       Overrides abstract method placeLabel in <Graph.Plot>.
+
+       Parameters:
+
+       tag - A DOM label element.
+       node - A <Graph.Node>.
+       controller - A configuration/controller object passed to the visualization.
+      
+     */
+    placeLabel: function(tag, node, controller){
+      var pos = node.pos.getc(true), 
+          canvas = this.viz.canvas,
+          ox = canvas.translateOffsetX,
+          oy = canvas.translateOffsetY,
+          sx = canvas.scaleOffsetX,
+          sy = canvas.scaleOffsetY,
+          radius = canvas.getSize();
+      var labelPos = {
+        x: Math.round(pos.x * sx + ox + radius.width / 2),
+        y: Math.round(pos.y * sy + oy + radius.height / 2)
+      };
+      tag.setAttribute('x', labelPos.x);
+      tag.setAttribute('y', labelPos.y);
+
+      controller.onPlaceLabel(tag, node);
+    }
+  });
+
+  /*
+     EventTunnel.Label.HTML
+
+     Custom extension of <Graph.Label.HTML>.
+
+     Extends:
+
+     All <Graph.Label.HTML> methods.
+
+     See also:
+
+     <Graph.Label.HTML>
+
+  */
+  EventTunnel.Label.HTML = new Class( {
+    Implements: Graph.Label.HTML,
+
+    initialize: function(viz){
+      this.viz = viz;
+    },
+    /* 
+       placeLabel
+
+       Overrides abstract method placeLabel in <Graph.Plot>.
+
+       Parameters:
+
+       tag - A DOM label element.
+       node - A <Graph.Node>.
+       controller - A configuration/controller object passed to the visualization.
+      
+     */
+    placeLabel: function(tag, node, controller){
+      var pos = node.pos.getc(true), 
+          canvas = this.viz.canvas,
+          ox = canvas.translateOffsetX,
+          oy = canvas.translateOffsetY,
+          sx = canvas.scaleOffsetX,
+          sy = canvas.scaleOffsetY,
+          radius = canvas.getSize();
+      var labelPos = {
+        x: Math.round(pos.x * sx + ox + radius.width / 2),
+        y: Math.round(pos.y * sy + oy + radius.height / 2)
+      };
+
+      var style = tag.style;
+      style.left = labelPos.x + 'px';
+      style.top = labelPos.y + 'px';
+      style.display = this.fitsInCanvas(labelPos, canvas)? '' : 'none';
+
+      controller.onPlaceLabel(tag, node);
+    }
+  });
+
+  /*
+    Class: EventTunnel.Plot.NodeTypes
+
+    This class contains a list of <Graph.Node> built-in types. 
+    Node types implemented are 'none', 'circle', 'triangle', 'rectangle', 'star', 'ellipse' and 'square'.
+
+    You can add your custom node types, customizing your visualization to the extreme.
+
+    Example:
+
+    (start code js)
+      EventTunnel.Plot.NodeTypes.implement({
+        'mySpecialType': {
+          'render': function(node, canvas) {
+            //print your custom node to canvas
+          },
+          //optional
+          'contains': function(node, pos) {
+            //return true if pos is inside the node or false otherwise
+          }
+        }
+      });
+    (end code)
+
+  */
+  EventTunnel.Plot.NodeTypes = new Class({
+    'none': {
+      'render': $.empty,
+      'contains': $.lambda(false)
+    },
+    'circle': {
+      'render': function(node, canvas){
+        var pos = node.pos.getc(true), 
+            dim = node.getData('dim');
+        this.nodeHelper.circle.render('fill', pos, dim, canvas);
+      },
+      'contains': function(node, pos){
+        var npos = node.pos.getc(true), 
+            dim = node.getData('dim');
+        return this.nodeHelper.circle.contains(npos, pos, dim);
+      }
+    },
+    'ellipse': {
+      'render': function(node, canvas){
+        var pos = node.pos.getc(true), 
+            width = node.getData('width'), 
+            height = node.getData('height');
+        this.nodeHelper.ellipse.render('fill', pos, width, height, canvas);
+        },
+      'contains': function(node, pos){
+        var npos = node.pos.getc(true), 
+            width = node.getData('width'), 
+            height = node.getData('height');
+        return this.nodeHelper.ellipse.contains(npos, pos, width, height);
+      }
+    },
+    'square': {
+      'render': function(node, canvas){
+        var pos = node.pos.getc(true), 
+            dim = node.getData('dim');
+        this.nodeHelper.square.render('fill', pos, dim, canvas);
+      },
+      'contains': function(node, pos){
+        var npos = node.pos.getc(true), 
+            dim = node.getData('dim');
+        return this.nodeHelper.square.contains(npos, pos, dim);
+      }
+    },
+    'rectangle': {
+      'render': function(node, canvas){
+        var pos = node.pos.getc(true), 
+            width = node.getData('width'), 
+            height = node.getData('height');
+        this.nodeHelper.rectangle.render('fill', pos, width, height, canvas);
+      },
+      'contains': function(node, pos){
+        var npos = node.pos.getc(true), 
+            width = node.getData('width'), 
+            height = node.getData('height');
+        return this.nodeHelper.rectangle.contains(npos, pos, width, height);
+      }
+    },
+    'triangle': {
+      'render': function(node, canvas){
+        var pos = node.pos.getc(true), 
+            dim = node.getData('dim');
+        this.nodeHelper.triangle.render('fill', pos, dim, canvas);
+      },
+      'contains': function(node, pos) {
+        var npos = node.pos.getc(true), 
+            dim = node.getData('dim');
+        return this.nodeHelper.triangle.contains(npos, pos, dim);
+      }
+    },
+    'star': {
+      'render': function(node, canvas){
+        var pos = node.pos.getc(true),
+            dim = node.getData('dim');
+        this.nodeHelper.star.render('fill', pos, dim, canvas);
+      },
+      'contains': function(node, pos) {
+        var npos = node.pos.getc(true),
+            dim = node.getData('dim');
+        return this.nodeHelper.star.contains(npos, pos, dim);
+      }
+    },
+    
+    'reply': {
+      'render': function(node, canvas){
+        var pos = node.pos.getc(true),
+            dim = node.getData('dim');
+
+        this.nodeHelper.circle.render('fill', pos, dim, canvas);
+      },
+      'contains': function(node, pos){
+        var npos = node.pos.getc(true),
+            dim = node.getData('dim');
+        return this.nodeHelper.circle.contains(npos, pos, dim);
+      }
+    },
+    
+    'retweet': {
+      'render': function(node, canvas){
+        var pos = node.pos.getc(true),
+            dim = node.getData('dim'),
+            color = node.getData('color'),
+            fillColor = this.colorHelper.avgColor(color, 0xFFFFFF),
+            strokeColor = this.colorHelper.avgColor(color, 0xbbbbbb),
+            lineWidth = node.getData('lineWidth');
+
+        fillColor = this.colorHelper.avgColor(fillColor, 0xFFFFFF);
+
+        this.colorHelper.setColor(strokeColor, 'strokeStyle', canvas);
+        this.colorHelper.setColor(fillColor, 'fillStyle', canvas);
+        this.colorHelper.setLineWidth(lineWidth, canvas);
+        this.nodeHelper.circle.render('fill', pos, dim, canvas);
+        this.nodeHelper.circle.render('stroke', pos, dim, canvas);
+
+
+
+      },
+      'contains': function(node, pos){
+        var npos = node.pos.getc(true),
+            dim = node.getData('dim');
+
+        return this.nodeHelper.circle.contains(npos, pos, dim);
+      }
+    }
+  });
+
+  /*
+    Class: EventTunnel.Plot.EdgeTypes
+
+    This class contains a list of <Graph.Adjacence> built-in types. 
+    Edge types implemented are 'none', 'line' and 'arrow'.
+  
+    You can add your custom edge types, customizing your visualization to the extreme.
+  
+    Example:
+  
+    (start code js)
+      EventTunnel.Plot.EdgeTypes.implement({
+        'mySpecialType': {
+          'render': function(adj, canvas) {
+            //print your custom edge to canvas
+          },
+          //optional
+          'contains': function(adj, pos) {
+            //return true if pos is inside the arc or false otherwise
+          }
+        }
+      });
+    (end code)
+  
+  */
+  EventTunnel.Plot.EdgeTypes = new Class({
+    'none': $.empty,
+    'line': {
+      'render': function(adj, canvas) {
+        var from = adj.nodeFrom.pos.getc(true),
+            to = adj.nodeTo.pos.getc(true);
+        this.edgeHelper.line.render(from, to, canvas);
+      },
+      'contains': function(adj, pos) {
+        var from = adj.nodeFrom.pos.getc(true),
+            to = adj.nodeTo.pos.getc(true);
+        return this.edgeHelper.line.contains(from, to, pos, this.edge.epsilon);
+      }
+    },
+    'retweet': {
+      'render': function(adj, canvas) {
+        var from = adj.nodeFrom.pos.getc(true),
+            to = adj.nodeTo.pos.getc(true),
+            color = adj.nodeTo.getData('color'),
+            newColor = this.colorHelper.avgColor(color, 0xbbbbbb);
+
+        this.colorHelper.setColor(newColor, 'strokeStyle', canvas);
+        this.edgeHelper.line.render(from, to, canvas);
+      },
+      'contains': function(adj, pos) {
+        var from = adj.nodeFrom.pos.getc(true),
+            to = adj.nodeTo.pos.getc(true);
+        return this.edgeHelper.line.contains(from, to, pos, this.edge.epsilon);
+      }
+    },
+    'arrow': {
+      'render': function(adj, canvas) {
+        var from = adj.nodeFrom.pos.getc(true),
+            to = adj.nodeTo.pos.getc(true),
+            dim = adj.getData('dim'),
+            direction = adj.data.$direction,
+            inv = (direction && direction.length>1 && direction[0] != adj.nodeFrom.id);
+        this.edgeHelper.arrow.render(from, to, dim, inv, canvas);
+      },
+      'contains': function(adj, pos) {
+        var from = adj.nodeFrom.pos.getc(true),
+            to = adj.nodeTo.pos.getc(true);
+        return this.edgeHelper.arrow.contains(from, to, pos, this.edge.epsilon);
+      }
+    }
+  });
+
+})($jit.EventTunnel);
 
 
 /*
@@ -16233,7 +17580,7 @@ $jit.Hypertree = new Class( {
     }
 
     this.graphOptions = {
-      'complex': false,
+      'klass': Polar,
       'Node': {
         'selected': false,
         'exist': true,
@@ -16725,7 +18072,7 @@ $jit.Hypertree.$extend = true;
         var width = node.getData('width'),
             height = node.getData('height'),
             npos = node.pos.getc().$scale(node.scale);
-        return this.nodeHelper.square.contains(npos, pos, width, height);
+        return this.nodeHelper.rectangle.contains(npos, pos, width, height);
       }
     },
     'triangle': {
