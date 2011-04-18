@@ -1,8 +1,9 @@
 /*	Styles by Felix
 */
 
-$left-width: 6;
-$right-width: 17;
+$left-width: 4;
+$center-width: 12;
+$right-width: 6;
 
 body{
 }
@@ -22,7 +23,7 @@ header{
 	}
 	h3{
 		@include prepend(1);
-		@include column($right-width, true);
+		@include column($center-width, true);
 		font-size: 14px;
 		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
 	}
@@ -58,7 +59,6 @@ header{
 		
 		li{
 			list-style: none;
-			padding-left: 1em;
 			position:relative;
 			
 			span.delete-keyword{
@@ -96,7 +96,6 @@ header{
 		
 		#add-keyword{
 			margin: 1*$v 0;
-			padding-left: 1em;
 			@include user-select-none;
 			text-decoration: underline;
 			
@@ -124,37 +123,12 @@ header{
 			}
 		}
 		
-	}
-	
-	#details-container{
-		ol{
-			margin: 1*$v 0;
-			list-style: none;
-			li{
-				margin: 0.5*$v 0;
-				padding: 0.5*$v 1*$v;
-				img{
-					float: left;
-				}
-				
-				p{
-					margin-left: 60px;
-					span.username{
-						padding-right: 3px;
-						font-weight: bold;
-					}
-				}
-				&:hover{
-					background: #eee;
-				}
-			}
-		}
 	}	
 }
 
-#right-container{
+#center-container{
 	@include prepend(1);
-	@include column($right-width, true);
+	@include column($center-width);
 	
 	#overview-container{
 		position: relative;
@@ -209,7 +183,35 @@ header{
 }
 
 
-
+#right-container{
+	@include prepend(1);
+	@include column($right-width, true);
+	
+	#details-container{
+		ol{
+			margin: 1*$v 0;
+			list-style: none;
+			li{
+				margin: 0.5*$v 0;
+				padding: 0.5*$v 1*$v;
+				img{
+					float: left;
+				}
+				
+				p{
+					margin-left: 60px;
+					span.username{
+						padding-right: 3px;
+						font-weight: bold;
+					}
+				}
+				&:hover{
+					background: #eee;
+				}
+			}
+		}
+	}
+}
 
 
 footer{
