@@ -15,44 +15,65 @@
         <key id="q" type="xs:string" paramType="query" required="true"/>
       </inputs>
       <execute><![CDATA[
-        var parents;
+        var parents = {}, allids = [];
         var type;
-        var toget, oldtoget, results = <results><results></results></results>;
+        var toget = [], results = <results><results></results></results>;
+
+        // Store in array to facilitate sorting
+        var tweets = [];
+        var aTweet;
 
         var query = null;
         // use 'trim_user' later with my own open data table
 
         query = y.query("use 'http://www.datatables.org/twitter/twitter.search.xml';" +
-        "use 'http://www.datatables.org/twitter/twitter.status.xml';" + 
-        "select * from twitter.status where id in (select id_str from twitter.search where q=@q);",{q:q});
+          "use 'http://www.datatables.org/twitter/twitter.status.xml';" +
+          "select * from twitter.status where id in (select id_str from twitter.search where q=@q);",{q:q});
+
+        // Loop through to find the reply ids
+        for each(var stat in query.results.status) {
+          aTweet = wrapTweet(stat);
+          if (stat.in_reply_to_status_id.toString()) {
+            aTweet.parent = <parent>{stat.in_reply_to_status_id.toString()}</parent>;
+            toget.push(stat.in_reply_to_status_id.toString());
+            aTweet.type = "reply";
+          }
+          // Test for retweets?
+
+          // Push it to a list of tweets
+          tweets[stat.id.toString()] = aTweet;
+          allids.push(stat.id.toString());
+        }
 
         // loop through and get every relevant node in conversation thread
-        do {
+        while(toget.length > 0) {
+          query = y.query(
+            "use 'http://www.datatables.org/twitter/twitter.status.xml';" +
+            "select * from twitter.status where id in (@ids);",{ids: toget});
+
           toget = [];
 
-          // Add reply all ids
+          // Add reply to ids
           for each(var stat in query.results.status) {
-            if (stat.in_reply_to_status_id) {
-              toget.push(stat.in_reply_to_status_id.text());
+            aTweet = wrapTweet(stat);
+            // not sure whether this is needed
+            if (stat.in_reply_to_status_id.toString()) {
+              aTweet.parent = <parent>{stat.in_reply_to_status_id.toString()}</parent>;
+              toget.push(stat.in_reply_to_status_id.toString());
+              aTweet.type = "reply";
             }
-          }
 
-          results.results += query.results;
-
-          // batch request
-          if (toget.length > 0) {
-            query = y.query(
-              "use 'http://www.datatables.org/twitter/twitter.status.xml';" +
-              "select * from twitter.status where id in (@ids);",{ids: toget});
+            // Push it to list of tweets
+            tweets[stat.id.toString()] = aTweet;
+            allids.push(stat.id.toString());
           }
-          // repeat check, I know, ugly.
-        } while(toget.length > 0);
+        }
 
         // loop through to get all the retweets
+        /*
         if (stat.retweet_count > 0) {
         }
 
-        /*
         query = y.query("select * from twitter.status where id=@id;",{id:id});
         */
 
@@ -60,7 +81,18 @@
 
         // store an array of ids. sort the ids. then insert in order into an xmllist
 
+        allids.sort();
+        var i;
+        for (i = 0; i < allids.length; i++) {
+          results.results.tweet += tweets[allids[i]];
+        }
+
         response.object = results;
+
+        function wrapTweet(s) {
+          var tweetObj = <tweet><id>{s.id.toString()}</id><data>{s.*}</data><parent></parent><type></type></tweet>;
+          return tweetObj;
+        }
         ]]></execute>
     </select>
   </bindings>
