@@ -16,11 +16,12 @@
       </inputs>
       <execute><![CDATA[
         var parents = {}, allids = [];
+        var children = {};
         var type;
         var toget = [], results = <results><results></results></results>;
 
         // Store in array to facilitate sorting
-        var tweets = [];
+        var tweets = {};
         var aTweet;
 
         var query = null;
@@ -30,20 +31,33 @@
           "use 'http://www.datatables.org/twitter/twitter.status.xml';" +
           "select * from twitter.status where id in (select id_str from twitter.search where q=@q);",{q:q});
 
+        var relatedId, aId;
         // Loop through to find the reply ids
         for each(var stat in query.results.status) {
           aTweet = wrapTweet(stat);
-          if (stat.in_reply_to_status_id.toString()) {
-            aTweet.parent = <parent>{stat.in_reply_to_status_id.toString()}</parent>;
-            toget.push(stat.in_reply_to_status_id.toString());
+          aId = stat.id.toString();
+          if (relatedId = stat.in_reply_to_status_id.toString()) {
+            aTweet.parent = <parent>{relatedId}</parent>;
             aTweet.type = "reply";
+
+            // If not already retrieved, add to toget
+            if (allids.indexOf(relatedId) == -1) {
+              toget.push(relatedId);
+            }
+
+            // Initialize array
+            children[relatedId] || (children[relatedId] = []);
+            children[relatedId].push(aId);
           }
           // Test for retweets?
 
           // Push it to a list of tweets
-          tweets[stat.id.toString()] = aTweet;
-          allids.push(stat.id.toString());
+          tweets[aId] = aTweet;
+          allids.push(aId);
         }
+
+        // Add this to the list of results
+        // results.results += query.results;
 
         // loop through and get every relevant node in conversation thread
         while(toget.length > 0) {
@@ -56,16 +70,24 @@
           // Add reply to ids
           for each(var stat in query.results.status) {
             aTweet = wrapTweet(stat);
+            aId = stat.id.toString();
             // not sure whether this is needed
-            if (stat.in_reply_to_status_id.toString()) {
-              aTweet.parent = <parent>{stat.in_reply_to_status_id.toString()}</parent>;
-              toget.push(stat.in_reply_to_status_id.toString());
+            if (relatedId = stat.in_reply_to_status_id.toString()) {
+              aTweet.parent = <parent>{relatedId}</parent>;
               aTweet.type = "reply";
+              // If not already retrieved, add to toget
+              if (allids.indexOf(relatedId) == -1) {
+                toget.push(relatedId);
+              }
+
+              // Initialize array
+              children[relatedId] || (children[relatedId] = []);
+              children[relatedId].push(aId);
             }
 
             // Push it to list of tweets
-            tweets[stat.id.toString()] = aTweet;
-            allids.push(stat.id.toString());
+            tweets[aId] = aTweet;
+            allids.push(aId);
           }
         }
 
@@ -84,13 +106,15 @@
         allids.sort();
         var i;
         for (i = 0; i < allids.length; i++) {
+          // add children info
+          children[allids[i]] && (tweets[allids[i]].children = <children>{children[allids[i]]}</children>);
           results.results.tweet += tweets[allids[i]];
         }
 
         response.object = results;
 
         function wrapTweet(s) {
-          var tweetObj = <tweet><id>{s.id.toString()}</id><data>{s.*}</data><parent></parent><type></type></tweet>;
+          var tweetObj = <tweet><id>{s.id.toString()}</id><data>{s.*}</data><parent></parent><children></children><type></type></tweet>;
           return tweetObj;
         }
         ]]></execute>
