@@ -17,6 +17,7 @@
       <execute><![CDATA[
         var parents;
         var type;
+        var toget, oldtoget, results = <results><results></results></results>;
 
         var query = null;
         // use 'trim_user' later with my own open data table
@@ -25,12 +26,30 @@
         "use 'http://www.datatables.org/twitter/twitter.status.xml';" + 
         "select * from twitter.status where id in (select id_str from twitter.search where q=@q);",{q:q});
 
-        // loop through and get every relevant node
-        for each(var res in query.results.status) {
-          y.log(res);
+        // loop through and get every relevant node in conversation thread
+        do {
+          toget = [];
+
+          // Add reply all ids
+          for each(var stat in query.results.status) {
+            if (stat.in_reply_to_status_id) {
+              toget.push(stat.in_reply_to_status_id.text());
+            }
+          }
+
+          results.results += query.results;
 
           // batch request
+          if (toget.length > 0) {
+            query = y.query(
+              "use 'http://www.datatables.org/twitter/twitter.status.xml';" +
+              "select * from twitter.status where id in (@ids);",{ids: toget});
+          }
+          // repeat check, I know, ugly.
+        } while(toget.length > 0);
 
+        // loop through to get all the retweets
+        if (stat.retweet_count > 0) {
         }
 
         /*
@@ -39,7 +58,9 @@
 
         // sort before returning
 
-        response.object = query.results;
+        // store an array of ids. sort the ids. then insert in order into an xmllist
+
+        response.object = results;
         ]]></execute>
     </select>
   </bindings>
