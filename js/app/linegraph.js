@@ -2,8 +2,13 @@ $(function(){
 	
 	window.LineGraphView = Backbone.View.extend({
 		
-		initialize: function(){
+		el: $("#overview-container"),
+		
+		initialize: function(op){
+			this.app = op.app;
 			this.initHighcharts();
+			
+			this.app.bind("tt-option-interval-change", this.changeInterval);
 		},
 		
 		initHighcharts: function(){
@@ -151,7 +156,7 @@ $(function(){
 			});
 
 			// create a detail chart referenced by a global variable
-			detailChart = new Highcharts.Chart({
+			this.detailChart = new Highcharts.Chart({
 				chart: {
 					marginBottom: 100,
 					renderTo: 'detail-container',
@@ -217,7 +222,7 @@ $(function(){
 		// helper function for initHighcharts
 		createMaster: function(){
 			var that = this;
-			var masterChart = new Highcharts.Chart({
+			this.masterChart = new Highcharts.Chart({
 				chart: {
 					renderTo: 'master-container',
 					reflow: false,
@@ -229,45 +234,13 @@ $(function(){
 						// listen to the selection event on the master chart to update the 
 						// extremes of the detail chart
 						selection: function(event) {
-							var extremesObject = event.xAxis[0],
-								min = extremesObject.min,
-								max = extremesObject.max,
-								detailData = [],
-								xAxis = this.xAxis[0];
-
-							console.log(min);
-							console.log(max);
-
-							// reverse engineer the last part of the data
-							jQuery.each(this.series[0].data, function(i, point) {
-								if (point.x > min && point.x < max) {
-									detailData.push({
-										x: point.x,
-										y: point.y
-									});
-								}
-							});
-
-							// move the plot bands to reflect the new detail span
-							xAxis.removePlotBand('mask-before');
-							xAxis.addPlotBand({
-								id: 'mask-before',
-								from: Date.UTC(2006, 0, 1),
-								to: min,
-								color: 'rgba(0, 0, 0, 0.5)'
-							});
-
-							xAxis.removePlotBand('mask-after');
-							xAxis.addPlotBand({
-								id: 'mask-after',
-								from: max,
-								to: Date.UTC(2008, 11, 31),
-								color: 'rgba(0, 0, 0, 0.5)'
-							});
-
-
-							detailChart.series[0].setData(detailData);
-
+							
+							var extremesObject = event.xAxis[0];
+							that.app.option.viewMin = extremesObject.min;
+							that.app.option.viewMax = extremesObject.max;
+							
+							that.app.trigger("tt-option-interval-change");
+							
 							return false;
 						}
 					}
@@ -351,7 +324,49 @@ $(function(){
 			});
 		},
 		
-		
+		changeInterval: function(context){
+			
+			console.log("line graph changing interval")
+			
+			// "this" is the app. so get the original app
+			var that = this.LineGraph;
+			
+			console.log(that);
+			
+			var detailData = []
+			var xAxis = that.masterChart.xAxis[0];
+			
+			// reverse engineer the last part of the data
+			jQuery.each(that.masterChart.series[0].data, function(i, point) {
+				if (point.x > that.app.option.viewMin && point.x < that.app.option.viewMax) {
+					detailData.push({
+						x: point.x,
+						y: point.y
+					});
+				}
+			});
+
+			// move the plot bands to reflect the new detail span
+			xAxis.removePlotBand('mask-before');
+			xAxis.addPlotBand({
+				id: 'mask-before',
+				from: Date.UTC(2006, 0, 1),
+				to: that.app.option.viewMin,
+				color: 'rgba(0, 0, 0, 0.5)'
+			});
+
+			xAxis.removePlotBand('mask-after');
+			xAxis.addPlotBand({
+				id: 'mask-after',
+				from: that.app.option.viewMax,
+				to: Date.UTC(2008, 11, 31),
+				color: 'rgba(0, 0, 0, 0.5)'
+			});
+			
+			console.log(detailData);
+			that.detailChart.series[0].setData(detailData);
+			
+		}
 		
 	});
 	

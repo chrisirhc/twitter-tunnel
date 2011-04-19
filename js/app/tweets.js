@@ -70,6 +70,23 @@ $(function(){
 			//var root = findRoot(startNode);
 			// console.log(root);
 			
+			// not working
+			var bfs = function(root){
+				var queue = [ root ];
+				var results = [];
+				while (queue.length != 0){
+					var node = queue.splice(0,1)[0].get("id"); // actually dequeue
+					console.log(node);
+					results.push( node ); // actually enqueue
+					var newNodes = that.filter(function(t){ return t.get("parent") ==  node });
+					console.log(newNodes);
+					queue.push(  );
+				}
+				return _.flatten(results);
+			}
+			
+			// var results = bfs(root);
+			// console.log(results);
 			
 		}
 		
@@ -163,6 +180,7 @@ $(function(){
 			
 			// end: move to getJSON callback
 			
+			// tweetCollection.findSubgraph( tweetCollection.at(6) );
 			
 			
 		}
@@ -300,6 +318,7 @@ $(function(){
 				// Tell TunnelView to load the tweets
 			}
 		}
+		
 	});
 	
 	

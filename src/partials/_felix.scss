@@ -45,6 +45,15 @@ header{
 		text-transform: uppercase;
 		border-bottom: 1px solid #ddd;
 		outline-bottom: 1px solid #fff;
+		
+		span{
+			font-weight: normal;
+			
+			&:hover{
+				text-decoration: underline;
+				cursor: pointer;
+			}
+		}
 	}
 	
 	@include clearfix;

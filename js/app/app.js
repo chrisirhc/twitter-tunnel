@@ -5,13 +5,26 @@ $(function(){
 
 	window.AppView = Backbone.View.extend({
 	
-		el: $('body'),
-	
+		el: $('#container'),
+		
+		events: {
+			// listen to change of viewMin and viewMax
+			// change views involved
+		},
+		
 		// initialize all views, models and collection
 		initialize: function(){
-			this.KeywordsCollection = new KeywordCollectionView({app: this});
-			this.TwitterTunnelVis = new TwitterTunnelVisView({app: this});
-			this.LineGraph = new LineGraphView({app: this});
+			var that = this;
+			this.option = {
+				viewMin: 0,
+				viewMax: 0
+			};
+			
+			this.KeywordsCollection = new KeywordCollectionView({app: that});
+			this.TwitterTunnelVis = new TwitterTunnelVisView({app: that});
+			this.LineGraph = new LineGraphView({app: that});
+			this.Details = new DetailsView({app: that});
+			
 		}
 	
 	});

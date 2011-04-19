@@ -14,8 +14,16 @@ $(function(){
 			"click #tunnel-button-backward": "rewind"
 		},
 		
-		initialize: function(){
+		initialize: function(op){
+			_.bindAll(this, "refresh", "changeInterval");
+			this.app = op.app;
 			this.initJIT();
+			
+			this.app.bind("tt-option-interval-change", this.changeInterval);
+			
+			// should be init from keyword collection
+			this.app.option.viewMin = this.rgraph.config.nearTime;
+			this.app.option.viewMax = this.rgraph.config.farTime;
 		},
 		
 		initJIT: function(){
@@ -350,15 +358,30 @@ $(function(){
 		},
 		
 		fastforward: function(){
-			var nearTime = this.rgraph.config.nearTime + 1000;
-	    	var farTime = this.rgraph.config.farTime + 1000;
-	    	this.rgraph.fx.animateTime(nearTime, farTime, {modes:['polar'], duration:1000});
+			var step = 1000;
+			this.app.option.viewMin += step;
+	    	this.app.option.viewMax += step;
+			console.log(this.app.option.viewMin);
+			this.app.trigger("tt-option-interval-change");
 		},
 		
 		rewind: function(){
-			var nearTime = this.rgraph.config.nearTime - 1000;
-		    var farTime = this.rgraph.config.farTime - 1000;
-		    this.rgraph.fx.animateTime(nearTime, farTime, {modes:['polar'], duration:1000});
+			var step = 1000;
+			this.app.option.viewMin -= step;
+	    	this.app.option.viewMax -= step;
+			console.log(this.app.option.viewMin);
+			this.app.trigger("tt-option-interval-change");
+		},
+		
+		changeInterval: function(){
+			console.log("twitter-tunnel changing interval");
+			var that = this;
+			this.rgraph.fx.animateTime(that.app.option.viewMin, that.app.option.viewMax, {modes:['polar'], duration:500});
+		},
+		
+		refresh: function(){
+			console.log("refresh");
+			this.rgraph.refresh();
 		}
 		
 		
