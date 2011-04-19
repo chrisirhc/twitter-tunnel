@@ -1,11 +1,11 @@
 $(function(){
 	
 	/*	TwitterTunnelView
-		Has the JIT and directly controls it
+		Has the main infovis (TwitterTunnel) and directly controls it
 	
 	*/
 	
-	window.TwitterTunnelView = Backbone.View.extend({
+	window.TwitterTunnelVisView = Backbone.View.extend({
 		
 		el: $('#tunnel-container'),
 		
@@ -363,7 +363,5 @@ $(function(){
 		
 		
 	});
-	
-	window.TwitterTunnel = new TwitterTunnelView;
 	
 });

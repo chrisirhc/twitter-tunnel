@@ -21,17 +21,57 @@ $(function(){
 		
 	})
 	
-	/*	TweetList Collection
+	/*	Tweets Collection
 		Store list of Tweet
 		
 		Properties:
 		keyword:	(string) search term for this tweet list
 	*/
 	
-	window.TweetList = Backbone.Collection.extend({
+	window.TweetCollection = Backbone.Collection.extend({
 		
 		model: Tweet,
-		localStorage: new Store("tweets-"+this.cid)
+		localStorage: new Store("tweets-"+this.cid),
+		
+		comparator: function(tweet){
+			return tweet.get("id");
+		},
+		
+		findSubgraph: function(id){
+			var that = this;
+			
+			var reverseBFS = function(tobj){
+				var recurThis = arguments.callee;
+				if (tobj){
+					var parentId = tobj.toJSON().parent;
+					parentNodes = that.filter(function(t){ return t.get("id") == parentId });
+					// console.log("parentNodes");
+					// console.log(parentNodes);
+					var parentOfParentNodes = _.map(parentNodes, function(t){
+						// console.log(t);
+						return recurThis(t);
+					});
+					return _.flatten([tobj,parentOfParentNodes]);
+				}
+			}
+			
+			console.log(reverseBFS(id));
+			
+			var findRoot = function(id){
+				rootID = id;
+				while (rootID.toJSON().parent != null){
+					rootID = that.filter(function(t){
+						return rootID.get("parent") == t.get("id") 
+					})[0]; // assume only one parent per node
+				}
+				return rootID;
+			}
+			
+			//var root = findRoot(startNode);
+			// console.log(root);
+			
+			
+		}
 		
 	})
 	
@@ -56,8 +96,8 @@ $(function(){
 			if (!this.get("keyword")){
 				throw "cannot initialize: empty keyword";
 			} else {
-				var tweets = new TweetList;
-				tweets.keyword = this.get("keyword")
+				var tweets = new TweetCollection;
+				tweets.keyword = this.get("keyword");
 				this.set({tweets: tweets});
 				// show loading notification
 				this.fetchTweets();
@@ -77,48 +117,68 @@ $(function(){
 			// getJSON some URL
 			var json = [
 				{
-					"id": 1352453845,
+					"id": 1,
 					"username": "coolguy",
 					"content": "something",
 					"date": 1299995252,
 					"parent": null
 				},
 				{
-					"id": 135304853049683,
+					"id": 2,
 					"username": "someone",
 					"content": "blah",
 					"date": 1299996521,
-					"parent": 1352453845
+					"parent": 1
+				},
+				{
+					"id": 3,
+					"parent": 1
+				},
+				{
+					"id": 4,
+					"parent": 3
+				},
+				{
+					"id": 5,
+					"parent": 4
+				},
+				{
+					"id": 6,
+					"parent": 3
+				},
+				{
+					"id": 7,
+					"parent": null
 				}
 			];
 			
 			// move to getJSON callback
-			var tweetList = this.get("tweets");
+			var tweetCollection = this.get("tweets");
 			_.map(json, function(t){
 				var tweet = new Tweet(t);
-				tweetList.add(tweet);
-				console.log(tweet.toJSON());
+				tweetCollection.add(tweet);
+				// console.log(tweet.toJSON());
 			});
 			// hide loading notification
 			
 			// end: move to getJSON callback
+			
+			
+			
 		}
 		
 	});
 	
 	
-	/*	Keywords Collection
+	/*	Keyword Collection
 		Store list of `keyword` models
 		Presistent Data through localStorage
 	*/
 	
-	window.KeywordList = Backbone.Collection.extend({
+	window.KeywordCollection = Backbone.Collection.extend({
 		model: Keyword,
 		localStorage: new Store("keywords")
 	});
-	
-	
-	window.Keywords = new KeywordList;
 	
 	/*	Keyword View
 		View for single keyword. Handles interaction of one keyword
@@ -171,7 +231,7 @@ $(function(){
 		
 	});
 	
-	window.KeywordsView = Backbone.View.extend({
+	window.KeywordCollectionView = Backbone.View.extend({
 		
 		el: $('#keyword-container'),
 		
@@ -182,15 +242,18 @@ $(function(){
 		},
 		
 		initialize: function(){
+			this.Keywords = new KeywordCollection;
+			
 			_.bindAll(this, 'addOne', 'addAll', 'render');
 			this.input = this.$('#keyword-input-text');
 			
-			Keywords.bind('add', this.addOne);
-			Keywords.bind('refresh', this.addAll);
-			Keywords.bind('all', this.render);
+			this.Keywords.bind('add', this.addOne);
+			this.Keywords.bind('refresh', this.addAll);
+			this.Keywords.bind('all', this.render);
 			
 			// comment out the below line to turn off persistant storage
-			Keywords.fetch();
+			this.Keywords.fetch();
+			
 		},
 		
 		showInputBox: function(){
@@ -215,7 +278,7 @@ $(function(){
 		
 		// based on addOne. render all keyword models to view.
 		addAll: function() {
-	    	Keywords.each(this.addOne);
+	    	this.Keywords.each(this.addOne);
 	    },
 		
 		// default attribute values for keyword
@@ -229,16 +292,16 @@ $(function(){
 		addKeyword: function(e){
 			if (e.keyCode != 13) return;
 			console.log('adding keyword');
-			Keywords.create(this.newAttributes());
-			this.hideInputBox();
-			
-			// Tell LineChartView to load the new tweets data
-			
-			// Tell TunnelView to load the tweets
-			
+			if(this.Keywords.create(this.newAttributes())){
+				this.hideInputBox();
+				
+				// Tell LineChartView to load the new tweets data
+				
+				// Tell TunnelView to load the tweets
+			}
 		}
 	});
 	
-	window.KeywordListView = new KeywordsView;
+	
 	
 });

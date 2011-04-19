@@ -352,8 +352,7 @@ $(function(){
 		},
 		
 		
+		
 	});
-	
-	window.LineGraph = new LineGraphView;
 	
 })
