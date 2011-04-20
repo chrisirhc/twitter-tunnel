@@ -15,10 +15,16 @@
         <key id="q" type="xs:string" paramType="query" required="true"/>
       </inputs>
       <execute><![CDATA[
+        var consumer_key='xxxxxxxxxxxxxxxxxxxxxx';
+        var consumer_secret='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+        var oauth_token='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+        var oauth_token_secret='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+
         var parents = {}, allids = [];
         var children = {};
         var type;
         var toget = [], results = <results><results></results></results>;
+        var retweetget = [];
 
         // Store in array to facilitate sorting
         var tweets = {};
@@ -31,9 +37,32 @@
           "use 'http://www.datatables.org/twitter/twitter.status.xml';" +
           "select * from twitter.status where id in (select id_str from twitter.search where q=@q);",{q:q});
 
-        var relatedId, aId;
         // Loop through to find the reply ids
+
+        var relatedId, aId;
         for each(var stat in query.results.status) {
+
+          // If it's a retweeted status, work on the original status
+          // this is because the retweet cannot have replies (assumption)
+          if (stat.retweeted_status.length() > 0 && stat.retweeted_status != "") {
+            aId = stat.id.toString();
+            relatedId = stat.retweeted_status.id.toString();
+
+            aTweet = wrapTweet(stat);
+            aTweet.parent = relatedId;
+            aTweet.type = "retweet";
+
+            children[relatedId] || (children[relatedId] = []);
+            children[relatedId].push(aId);
+
+            // Push it to list of tweets
+            tweets[aId] = aTweet;
+            allids.push(aId);
+
+            // Process the retweeted status after this
+            stat = stat.retweeted_status;
+          }
+
           aTweet = wrapTweet(stat);
           aId = stat.id.toString();
           if (relatedId = stat.in_reply_to_status_id.toString()) {
@@ -49,7 +78,14 @@
             children[relatedId] || (children[relatedId] = []);
             children[relatedId].push(aId);
           }
-          // Test for retweets?
+
+          // Has this been retweeted?
+          if (stat.retweet_count > 0 &&
+              retweetget.indexOf(aId) == -1) {
+            retweetget.push(aId);
+          }
+
+          // No need to check if this a retweet?
 
           // Push it to a list of tweets
           tweets[aId] = aTweet;
@@ -85,6 +121,11 @@
               children[relatedId].push(aId);
             }
 
+            // Has this been retweeted?
+            if (stat.retweet_count > 0 &&
+                retweetget.indexOf(aId) == -1) {
+              retweetget.push(aId);
+            }
             // Push it to list of tweets
             tweets[aId] = aTweet;
             allids.push(aId);
@@ -92,16 +133,36 @@
         }
 
         // loop through to get all the retweets
-        /*
-        if (stat.retweet_count > 0) {
-        }
+        if (retweetget.length > 0) {
+          query = y.query(
+              "use 'http://www.datatables.org/twitter/twitter.status.xml';" +
+              "select * from twitter.statuses.retweets where id in (@ids)" +
+              " and oauth_token=@oauth_token and oauth_token_secret=@oauth_token_secret" +
+              " and oauth_consumer_key=@oauth_consumer_key and oauth_consumer_secret=@oauth_consumer_secret;",
+              {ids: retweetget, oauth_token: oauth_token, oauth_token_secret: oauth_token_secret,
+              oauth_consumer_key: consumer_key, oauth_consumer_secret: consumer_secret});
+          for each(var stat in query.results.status) {
+            aTweet = wrapTweet(stat);
+            aId = stat.id.toString();
+            relatedId = stat.retweeted_status.id.toString();
 
-        query = y.query("select * from twitter.status where id=@id;",{id:id});
-        */
+            aTweet.parent = <parent>{relatedId}</parent>;
+            aTweet.type = "retweet";
+
+            // Initialize array
+            children[relatedId] || (children[relatedId] = []);
+            children[relatedId].push(aId);
+
+            // Push it to list of tweets
+            tweets[aId] = aTweet;
+            allids.push(aId);
+          }
+        }
 
         // sort before returning
 
         // store an array of ids. sort the ids. then insert in order into an xmllist
+        y.log(allids);
 
         allids.sort();
         var i;
