@@ -9,16 +9,14 @@ $(function(){
 		el: $("#details-container"),
 		
 		events: {
-			"click #tweets-details li": "refreshTwitterTunnel",
+			"click #tweets-details li": "refreshInterval",
 		},
 		
 		initialize: function(){
 			
 		},
 		
-		refreshTwitterTunnel: function(){
-			
-		},
+		
 		
 	});
 });

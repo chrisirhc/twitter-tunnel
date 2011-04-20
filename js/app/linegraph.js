@@ -5,6 +5,8 @@ $(function(){
 		el: $("#overview-container"),
 		
 		initialize: function(op){
+			_.bindAll(this, "changeInterval");
+			
 			this.app = op.app;
 			this.initHighcharts();
 			
@@ -240,7 +242,6 @@ $(function(){
 							that.app.option.viewMax = extremesObject.max;
 							
 							that.app.trigger("tt-option-interval-change");
-							
 							return false;
 						}
 					}
@@ -326,10 +327,9 @@ $(function(){
 		
 		changeInterval: function(context){
 			
-			console.log("line graph changing interval")
+			console.log("line graph changing interval");
 			
-			// "this" is the app. so get the original app
-			var that = this.LineGraph;
+			var that = this;
 			
 			console.log(that);
 			

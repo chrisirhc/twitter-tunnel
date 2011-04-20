@@ -45,10 +45,7 @@ $(function(){
 				if (tobj){
 					var parentId = tobj.toJSON().parent;
 					parentNodes = that.filter(function(t){ return t.get("id") == parentId });
-					// console.log("parentNodes");
-					// console.log(parentNodes);
 					var parentOfParentNodes = _.map(parentNodes, function(t){
-						// console.log(t);
 						return recurThis(t);
 					});
 					return _.flatten([tobj,parentOfParentNodes]);
@@ -168,6 +165,8 @@ $(function(){
 					"parent": null
 				}
 			];
+			
+			
 			
 			// move to getJSON callback
 			var tweetCollection = this.get("tweets");
