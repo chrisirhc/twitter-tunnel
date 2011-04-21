@@ -3170,6 +3170,16 @@ var Canvas;
       this.plot(base);
     },
 
+    'setInterval' : function(newInterval, base){
+      this.config.levelDistance = newInterval;
+      this.rings = this.resetRings();
+      this.plot(base);
+    },
+
+    'getInterval' : function(newInterval, base){
+        return this.config.levelDistance;
+    },
+
     'plot': function(base) {
       base.clear();
       var canvas = base.canvas,
@@ -3186,9 +3196,8 @@ var Canvas;
     'animate' : function(base, opt) {
       this.augmentRings();
 
-
       for(var i = 0; i < this.rings.length; i++) {
-         this.rings[i].compute('end');
+         this.rings[i].compute('endRadius');
       }
       var that = this;
       this.animation.setOptions($.extend(opt, {
@@ -3211,7 +3220,11 @@ var Canvas;
       var nearTime = this.viz.config.nearTime;
       var farTime = this.viz.config.farTime;
       var timeInterval = this.config.levelDistance;
-      var curTime = nearTime - timeInterval;
+      var dist = this.viz.config.distanceFromCamera;
+      var focalLen = this.viz.config.focalLength;
+      var projectionPlane = nearTime + (dist - focalLen);
+      var curTime = projectionPlane;
+
       while(curTime > farTime) {
         var ring = new Canvas.Background.Ring(this.viz, {time: curTime});
         rings.push(ring);
@@ -3221,6 +3234,8 @@ var Canvas;
     },
     augmentRings: function() {
       var nearTime = this.viz.config.nearTime;
+      var focalLen = this.viz.config.focalLength;
+      var dist = this.viz.config.distanceFromCamera;
       var farTime = this.viz.config.farTime;
       var timeInterval = this.config.levelDistance;
       var firstRing = this.rings[0];
@@ -3230,9 +3245,8 @@ var Canvas;
 
       // Add rings to end
       var nextRingTime = this.rings[last].time - timeInterval;
-      while(nextRingTime > farTime) {
-        options = {time: nextRingTime};
-        options = $.merge(firstRing.getState(), options);
+      while(nextRingTime >= farTime) {
+        options = {time: nextRingTime, state: firstRing.getState()};
 
         newRing = new Canvas.Background.Ring(this.viz, options);
         this.rings.push(newRing);
@@ -3240,10 +3254,10 @@ var Canvas;
       }
 
       // Add rings to the beginning.
+      var projectionPlane = nearTime + (dist - focalLen);
       var prevRingTime = this.rings[0].time + timeInterval;
-      while(prevRingTime < nearTime) {
-        options = {time: prevRingTime};
-        options = $.merge(firstRing.getState(), options);
+      while(prevRingTime <= projectionPlane) {
+        options = {time: prevRingTime, state: firstRing.getState()};
 
         newRing = new Canvas.Background.Ring(this.viz, options);
         this.rings.unshift(newRing);
@@ -3280,81 +3294,56 @@ var Canvas;
     'initialize' : function(viz, options) {
       this.viz = viz;
       this.time = options.time ? options.time : ((new Date()).getTime() / 1000);
+      this.state = options.state ? options.state : this.getUpdatedState();
       // start and end keep track of start state and end states of an animation.
-      this.start = {
-        'nearTime': this.viz.config.nearTime,
-        'farTime': this.viz.config.farTime,
-        'scale' : this.viz.config.constantS,
-        'radius' : this.viz.config.constantR
-      };
-      this.end = {
-        'nearTime': this.viz.config.nearTime,
-        'farTime': this.viz.config.farTime,
-        'scale' : this.viz.config.constantS,
-        'radius' : this.viz.config.constantR
-      };
+      // They keep track of the radius.
+      this.startRadius = this.calculateDistanceRadius(this.time);
+      this.endRadius = this.calculateDistanceRadius(this.time);
       // current keeps track of the current state.
-      this.current = {
-        'nearTime': this.viz.config.nearTime,
-        'farTime': this.viz.config.farTime,
-        'scale' : this.viz.config.constantS,
-        'radius' : this.viz.config.constantR
-      };
-      var states = ['current', 'start', 'end'];
-      for(var i in states){
-        var state = states[i];
-        if(options[state]) {
-          this.copyProperties(this[state], options[state]);
-        }
-      }
-    },
-    'copyProperties': function(copyTo, copyFrom) {
-       for(var prop in copyFrom) {
-         copyTo[prop] = copyFrom[prop];
-       }
+      this.currentRadius = this.calculateDistanceRadius(this.time);
     },
     'getState': function() {
-      return{
-        'end': this.end,
-        'start': this.start,
-        'current': this.current
+      return this.state;
+    },
+    'getUpdatedState' : function() {
+       return {
+        nearTime: this.viz.config.nearTime,
+        farTime: this.viz.config.farTime,
+        f : this.viz.config.focalLength,
+        radius : this.viz.config.constantR,
+        dist: this.viz.config.distanceFromCamera
       }
     },
     // computers 'start', 'end', or 'current'
+    // Calculates a new radius value based on the current values of nearTime, farTime etc. in EventTunnel
     'compute' : function(property) {
-      this[property] = {
-        'nearTime': this.viz.config.nearTime,
-        'farTime': this.viz.config.farTime,
-        'scale' : this.viz.config.constantS,
-        'radius' : this.viz.config.constantR
-      };
+      this.state = this.getUpdatedState();
+      this[property] = this.calculateDistanceRadius(this.time);
     },
     'calculateDistanceRadius': function(curTime){
-      var nearTime = this.current.nearTime;
-      var scale = this.current.scale;
-      var r = this.current.radius;
-      return r / (nearTime - curTime) * scale;
+      var nearTime = this.state.nearTime;
+      var f = this.state.f;
+      var r =  this.state.radius;
+      var dist = this.state.dist;
+      var timeDiff = nearTime - curTime + dist;
+      if(timeDiff < 0) timeDiff = f / 5;
+      return r / timeDiff * f;
     },
     'animate': function(delta) {
-      this.current.nearTime = this.findDelta(delta, 'nearTime');
-      this.current.farTime = this.findDelta(delta, 'farTime');
-      this.current.radius = this.findDelta(delta, 'radius');
-      this.current.scale = this.findDelta(delta, 'scale');
+      this.currentRadius = this.findDelta(delta);
 
       if(delta >= 1) {
-        for(var prop in this.current) {
-          this.start[prop] = this.current[prop];
-          this.end[prop] = this.current[prop];
-        }
+        this.startRadius = this.currentRadius;
+        this.endRadius = this.currentRadius;
       }
 
     },
-    'findDelta': function(delta, prop) {
-        return (this.end[prop] - this.start[prop]) * delta + this.start[prop];
+    'findDelta': function(delta) {
+        return (this.endRadius - this.startRadius) * delta + this.startRadius;
     },
     'draw': function(ctx) {
 
-      var rho = this.calculateDistanceRadius(this.time);
+      var rho = this.currentRadius;
       if(rho < 0) {
         return;
       }
@@ -16820,6 +16809,9 @@ $jit.EventTunnel = new Class( {
       Loader, Extras, Layouts.Tunnel
   ],
 
+  minRingRadius: 25,
+  maxRingRadius: 300,
+
   initialize: function(controller){
     var $EventTunnel = $jit.EventTunnel;
 
@@ -16832,13 +16824,15 @@ $jit.EventTunnel = new Class( {
       // Far time = 5 hours ago.
       farTime:  (new Date()).getTime() / 1000 - 5 * 60 * 60,
       // Constant used to calculate distance.
-      constantR: 100,
-      constantS: 8000
+      constantR: 600,
+      focalLength: 8000,
+      distanceFromCamera: 0
     };
 
     this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge",
         "Fx", "Controller", "Tips", "NodeStyles", "Events", "Navigation", "Label"), config, controller);
 
+    this.computeFocalLengthAndDistance();
     var canvasConfig = this.config;
     if(canvasConfig.useCanvas) {
       this.canvas = canvasConfig.useCanvas;
@@ -16877,6 +16871,17 @@ $jit.EventTunnel = new Class( {
   'getCanvas': function() {
     return this.canvas;
   },
+
+  'setCircleInterval' : function(newInterval) {
+     var circles = this.canvas.circles;
+    var base = this.canvas.circlesCanvas
+    circles.setInterval(newInterval, base);
+  },
+
+  'getCircleInterval' : function() {
+    var circles = this.canvas.circles;
+    return circles.getInterval();
+  },
   /* 
   
     createLevelDistanceFunc 
@@ -16887,14 +16892,27 @@ $jit.EventTunnel = new Class( {
 
    */
   createLevelDistanceFunc: function(){
-    var nt = this.config.nearTime;
-    var s = this.config.constantS;
-    var r = this.config.constantR;
+    var that = this;
     return function(elem){
+      var nt = that.config.nearTime;
+      var f = that.config.focalLength;
+      var r = that.config.constantR;
+      var dist = that.config.distanceFromCamera;
       // TODO change this to the time of the root ?
-      elem.name = (nt - elem.data.created_at.unix_timestamp);
-      return r / (nt - elem.data.created_at.unix_timestamp) * s;
+      var timeDiff = nt - elem.data.created_at.unix_timestamp + dist;
+      if(timeDiff <= 0) timeDiff = f / 5;
+      elem.name = timeDiff;
+      return r / timeDiff * f;
     };
+  },
+
+  computeFocalLengthAndDistance: function() {
+    var radius = this.config.constantR;
+    var span = this.config.nearTime - this.config.farTime;
+    var dist = (this.minRingRadius * span) / (this.maxRingRadius - this.minRingRadius);
+    var focalLen = (dist * this.maxRingRadius) / radius;
+    this.config.distanceFromCamera = dist;
+    this.config.focalLength = focalLen;
   },
 
   /* 
@@ -17067,6 +17085,7 @@ $jit.EventTunnel.$extend = true;
     animateTime: function(nearTime, farTime, opt, versor) {
       this.viz.config.farTime = farTime;
       this.viz.config.nearTime = nearTime;
+      this.viz.computeFocalLengthAndDistance();
       this.viz.compute('end');
       var circles = this.viz.canvas.circles;
       opt = $.merge({clearCanvas: true},opt);
