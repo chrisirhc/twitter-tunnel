@@ -55,7 +55,7 @@ $(function(){
 			   // Set the nearTime as the most recent tweet so that we can see
 			   // something
 			   nearTime: 1303282433,
-			   farTime:  1303006711,
+			   farTime:  1303244603,
 			   //Add navigation capabilities:
 			   //zooming by scrolling and panning.
 			   Navigation: {
@@ -146,7 +146,7 @@ $(function(){
 		},
 		
 		fastforward: function(){
-			var step = 1000;
+			var step = 5000;
 			this.app.option.viewMin += step;
 	    	this.app.option.viewMax += step;
 			console.log(this.app.option.viewMin);
@@ -154,7 +154,7 @@ $(function(){
 		},
 		
 		rewind: function(){
-			var step = 1000;
+			var step = 5000;
 			this.app.option.viewMin -= step;
 	    	this.app.option.viewMax -= step;
 			console.log(this.app.option.viewMin);
