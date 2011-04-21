@@ -16,6 +16,10 @@ $(function(){
 			
 		},
 		
+		refreshInterval: function(){
+			
+		},
+		
 		
 		
 	});

@@ -366,7 +366,28 @@ $(function(){
 			console.log(detailData);
 			that.detailChart.series[0].setData(detailData);
 			
-		}
+		},
+		
+		
+		// helper function for grouping a list specify by the interval and the starting value
+		bucketList: function(list,interval,start){
+			list = _.sortBy(list, function(num){ return num });
+			var newList = [];
+			var temp = [];
+			var curBucketMax = start + interval;
+			for (item in list){
+				if (list[item]>curBucketMax){
+					newList.push(temp);
+					temp = [];
+					curBucketMax += interval;
+				}
+				temp.push( list[item] );
+			}
+			if (temp.length!=0){
+				newList.push(temp);
+			}
+			return newList;
+		},
 		
 	});
 	
