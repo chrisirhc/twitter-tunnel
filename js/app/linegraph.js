@@ -8,7 +8,9 @@ $(function(){
 			'click #overview-button-6-hour': 'changeIntervalSixHours',
 			'click #overview-button-24-hour': 'changeIntervalOneDays',
 			'click #overview-button-3-day': 'changeIntervalThreeDays',
-			'click #overview-button-all': 'changeIntervalAll'
+			'click #overview-button-all': 'changeIntervalAll',
+			'click #overview-button-forward': 'changeIntervalForward',
+			'click #overview-button-backward': 'changeIntervalBackward'
 		},
 		
 		initialize: function(op){
@@ -266,6 +268,20 @@ $(function(){
 			});
 			that.detailChart.series[0].setData(detailData);
 			
+			// change button state
+			if (that.app.option.viewMax < that.app.option.dataMax){
+				that.changeButtonState({ forward: true, backward: null});
+			}
+			else {
+				that.changeButtonState({ forward: false, backward: null});
+			}
+			
+			if (that.app.option.viewMin > that.app.option.dataMin){
+				that.changeButtonState({ forward: null, backward: true});
+			}
+			else {
+				that.changeButtonState({ forward: null, backward: false});
+			}
 		},
 		
 		
@@ -349,6 +365,30 @@ $(function(){
 			this.app.option.dataMin = this.masterStart;
 			this.app.option.dataMax = this.masterEnd;
 			
+		},
+		
+		changeIntervalForward: function(){
+			this.app.TwitterTunnelVis.fastforward();
+		},
+		
+		changeIntervalBackward: function(){
+			this.app.TwitterTunnelVis.rewind();
+		},
+		
+		changeButtonState: function(state){
+			var that = this;
+			if (state.forward == true){
+				$('#overview-button-forward').removeClass('disabled');
+			}
+			else if (state.forward == false){
+				$('#overview-button-forward').addClass('disabled');
+			}
+			if (state.backward == true){
+				$('#overview-button-backward').removeClass('disabled');
+			}
+			else if (state.backward == false){
+				$('#overview-button-backward').addClass('disabled');
+			}
 		}
 		
 	});

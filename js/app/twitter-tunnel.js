@@ -196,7 +196,6 @@ $(function(){
 				that.changeButtonState({ forward: null, backward: true});
 			}
 			else {
-				console.log("disable backward button");
 				that.changeButtonState({ forward: null, backward: false});
 			}
 			
