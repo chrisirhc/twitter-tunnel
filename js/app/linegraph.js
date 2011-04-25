@@ -28,14 +28,16 @@ $(function(){
 				7,56,15,2,10,34,64,24,6,4,8,57,5,34,5,6,
 			];
 			
-			this.masterStart = Date.UTC(2006, 0, 01, 0, 0, 0);
-			this.masterEnd = Date.UTC(2006, 0, 03, 12, 0, 0);
-			this.detailStart = Date.UTC(2006, 0, 02, 0, 0, 0);
+			this.initData();
 			
-			// for debug only
+			// this.masterStart = Date.UTC(2006, 0, 01, 0, 0, 0);
+			// this.masterEnd = Date.UTC(2006, 0, 03, 12, 0, 0);
+			
+			// for debug only. should get from tweetscollection
 			this.app.option.viewMin = this.detailStart;
 			this.app.option.viewMax = this.masterEnd;
 			
+			// controls the zooming of the master graph
 			this.pointInterval = 1 * 3600 * 1000; // hourly
 
 			// create master and in its callback, create the detail chart
@@ -228,9 +230,10 @@ $(function(){
 		
 		changeInterval: function(){
 			
-			console.log("line graph changing interval");
-			
 			var that = this;
+			
+			console.log("line graph changing interval");
+			console.log(that.app.option.viewMin);
 			
 			var detailData = []
 			var xAxis = that.masterChart.xAxis[0];
@@ -267,13 +270,13 @@ $(function(){
 		
 		
 		// helper function for grouping a list specify by the interval and the starting value
+		// the list has to be sorted
 		bucketList: function(list,interval,start){
-			list = _.sortBy(list, function(num){ return num });
 			var newList = [];
 			var temp = [];
 			var curBucketMax = start + interval;
 			for (item in list){
-				if (list[item]>curBucketMax){
+				while (list[item].data.created_at.unix_timestamp>curBucketMax){
 					newList.push(temp);
 					temp = [];
 					curBucketMax += interval;
@@ -286,7 +289,6 @@ $(function(){
 			return newList;
 		},
 		
-		
 		changeIntervalSixHours: function(){
 			var that = this;
 			var newInterval = 6 * 3600 * 1000
@@ -297,16 +299,22 @@ $(function(){
 		
 		changeIntervalOneDays: function(){
 			var that = this;
-			var newInterval = 24 * 3600 * 1000
-			that.app.option.viewMax = that.app.option.viewMin + newInterval;
+			var newInterval = that.app.option.viewMin + 24 * 3600 * 1000
+			that.app.option.viewMax = 
+				newInterval<that.app.option.viewMax?
+					newInterval:
+					that.masterEnd;
 			
 			that.app.trigger("tt-option-interval-change");
 		},
 		
 		changeIntervalThreeDays: function(){
 			var that = this;
-			var newInterval = 3 * 24 * 3600 * 1000
-			that.app.option.viewMax = that.app.option.viewMin + newInterval;
+			var newInterval = that.app.option.viewMin + 3 * 24 * 3600 * 1000
+			that.app.option.viewMax = 
+				newInterval<that.app.option.viewMax?
+					newInterval:
+					that.masterEnd;
 			
 			that.app.trigger("tt-option-interval-change");
 		},
@@ -315,10 +323,23 @@ $(function(){
 			var that = this;
 			that.app.option.viewMin = that.masterStart;
 			that.app.option.viewMax = that.masterEnd;
-			
 			that.app.trigger("tt-option-interval-change");
 		},
 		
+		// to preprocess data for linegraph
+		initData: function(){
+			// sort by timestamp
+			// using sample data. should get from tweetcollection
+			this.data = _.sortBy( _.tail(window.sampledatajson), 
+				function(i) { return i.data.created_at.unix_timestamp });
+			this.masterStart = this.data[0].
+				data.created_at.unix_timestamp * 1000; // convert to ms
+			this.masterEnd = this.
+				data[ this.data.length-1 ].data.created_at.unix_timestamp * 1000; // convert to ms
+			this.detailStart = this.masterEnd - 6 * 3600 * 1000;
+			this.data = this.bucketList( this.data, 3600, this.masterStart / 1000 );
+			this.data = _.map( this.data, function(i){ return i.length } )
+		}
 		
 	});
 	

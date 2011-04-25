@@ -19,17 +19,19 @@ $(function(){
 			this.app = op.app;
 			this.initJIT();
 			
-			this.app.bind("tt-option-interval-change", this.changeInterval);
+			// this.app.bind("tt-option-interval-change", this.changeInterval);
 			
 			// should be init from keyword collection
-			this.app.option.viewMin = this.rgraph.config.nearTime;
-			this.app.option.viewMax = this.rgraph.config.farTime;
+			// this.app.option.viewMin = this.rgraph.config.nearTime;
+			// this.app.option.viewMax = this.rgraph.config.farTime;
 		},
 		
 		initJIT: function(){
-			    //init data
-      var json = window.sampledatajson;
-			    //end
+			var that = this;
+			
+			//init data
+      		var json = window.sampledatajson;
+			//end
 			
 			var nodeColor = "#2278a7";
 			var edgeColor = nodeColor;
@@ -59,9 +61,8 @@ $(function(){
 			   //Add navigation capabilities:
 			   //zooming by scrolling and panning.
 			   Navigation: {
-			     enable: true,
-			     panning: false,
-			     zooming: 10
+			     enable: false,
+			     panning: false
 			   },
 
 			   //Set Node and Edge styles.
@@ -149,7 +150,6 @@ $(function(){
 			var step = 5000;
 			this.app.option.viewMin += step;
 	    	this.app.option.viewMax += step;
-			console.log(this.app.option.viewMin);
 			this.app.trigger("tt-option-interval-change");
 		},
 		
@@ -157,14 +157,16 @@ $(function(){
 			var step = 5000;
 			this.app.option.viewMin -= step;
 	    	this.app.option.viewMax -= step;
-			console.log(this.app.option.viewMin);
 			this.app.trigger("tt-option-interval-change");
 		},
 		
 		changeInterval: function(){
-			console.log("twitter-tunnel changing interval");
 			var that = this;
-			this.rgraph.fx.animateTime(that.app.option.viewMin, that.app.option.viewMax, {modes:['polar'], duration:500});
+			
+			console.log("twitter-tunnel changing interval");
+			console.log(that.app.option.viewMin/1000);
+			
+			this.rgraph.fx.animateTime(that.app.option.viewMin/1000, that.app.option.viewMax/100, {modes:['polar'], duration:500});
 		},
 		
 		refresh: function(){
