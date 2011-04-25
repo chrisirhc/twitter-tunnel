@@ -172,6 +172,26 @@ header{
 				font-size: 10px;
 			}
 		}
+		
+		#overview{
+			
+			position: relative;
+			
+			#overview-master-container{
+				position:absolute;
+				top: 0;
+				height: 80px;
+				width: 100%;
+			}
+		
+			#overview-detail-container{
+				position:absolute;
+				top: 80px;
+				height: 80px;
+				width: 100%;
+			}
+			
+		}
 	}
 	
 	#overview{
