@@ -38,11 +38,10 @@ $(function(){
 			this.app.option.viewMax = this.masterEnd;
 			
 			// controls the zooming of the master graph
-			this.pointInterval = 1 * 3600 * 1000; // hourly
-
+			this.pointInterval = 0.5 * 3600 * 1000; // hourly
+			
 			// create master and in its callback, create the detail chart
 			this.createMaster();
-			
 		},
 		
 		// helper function for initHighcharts
@@ -64,7 +63,7 @@ $(function(){
 					renderTo: 'overview-detail-container',
 					zoomType: 'x',
 					reflow: false,
-					backgroundColor: '#ccc',
+					backgroundColor: 'transparent',
 					
 				},
 				credits: {
@@ -119,6 +118,7 @@ $(function(){
 				}
 
 			});
+			
 		},
 		
 		// helper function for initHighcharts
@@ -291,38 +291,42 @@ $(function(){
 		
 		changeIntervalSixHours: function(){
 			var that = this;
-			var newInterval = 6 * 3600 * 1000
-			that.app.option.viewMax = that.app.option.viewMin + newInterval;
+			var newMax = that.app.option.viewMin + 6 * 3600 * 1000
+			that.app.option.viewMax = 
+				newMax<=that.app.option.dataMax? // masterEnd should get from tweetcollection
+					newMax:
+					that.app.option.dataMax;
 			
 			that.app.trigger("tt-option-interval-change");
 		},
 		
 		changeIntervalOneDays: function(){
 			var that = this;
-			var newInterval = that.app.option.viewMin + 24 * 3600 * 1000
+			var newMax = that.app.option.viewMin + 24 * 3600 * 1000
+			console.log(newMax);
 			that.app.option.viewMax = 
-				newInterval<that.app.option.viewMax?
-					newInterval:
-					that.masterEnd;
+				newMax<=that.app.option.dataMax? // masterEnd should get from tweetcollection
+					newMax:
+					that.app.option.dataMax;;
 			
 			that.app.trigger("tt-option-interval-change");
 		},
 		
 		changeIntervalThreeDays: function(){
 			var that = this;
-			var newInterval = that.app.option.viewMin + 3 * 24 * 3600 * 1000
+			var newMax = that.app.option.viewMin + 3 * 24 * 3600 * 1000
 			that.app.option.viewMax = 
-				newInterval<that.app.option.viewMax?
-					newInterval:
-					that.masterEnd;
+				newMax<=that.app.option.dataMax? // masterEnd should get from tweetcollection
+					newMax:
+					that.app.option.dataMax;;
 			
 			that.app.trigger("tt-option-interval-change");
 		},
 		
 		changeIntervalAll: function(){
 			var that = this;
-			that.app.option.viewMin = that.masterStart;
-			that.app.option.viewMax = that.masterEnd;
+			that.app.option.viewMin = that.app.option.dataMin;
+			that.app.option.viewMax = that.app.option.dataMax;
 			that.app.trigger("tt-option-interval-change");
 		},
 		
@@ -336,9 +340,15 @@ $(function(){
 				data.created_at.unix_timestamp * 1000; // convert to ms
 			this.masterEnd = this.
 				data[ this.data.length-1 ].data.created_at.unix_timestamp * 1000; // convert to ms
-			this.detailStart = this.masterEnd - 6 * 3600 * 1000;
-			this.data = this.bucketList( this.data, 3600, this.masterStart / 1000 );
-			this.data = _.map( this.data, function(i){ return i.length } )
+			this.detailStart = this.masterEnd - 6 * 3600 * 1000; // hardcoded to display last 6 hours of tweet
+			this.data = this.bucketList( this.data, 0.5 * 3600, this.masterStart / 1000 );
+			this.data = _.map( this.data, function(i){ return i.length } );
+			
+			// for testing only. should be saved by tweetcollection
+			// save global latest and oldest timestamp
+			this.app.option.dataMin = this.masterStart;
+			this.app.option.dataMax = this.masterEnd;
+			
 		}
 		
 	});

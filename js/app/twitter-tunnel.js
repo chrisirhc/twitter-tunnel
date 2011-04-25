@@ -15,15 +15,11 @@ $(function(){
 		},
 		
 		initialize: function(op){
-			_.bindAll(this, "refresh", "changeInterval");
+			_.bindAll(this, "refresh", "changeInterval", "changeButtonState");
 			this.app = op.app;
 			this.initJIT();
 			
-			// this.app.bind("tt-option-interval-change", this.changeInterval);
-			
-			// should be init from keyword collection
-			// this.app.option.viewMin = this.rgraph.config.nearTime;
-			// this.app.option.viewMax = this.rgraph.config.farTime;
+			this.app.bind("tt-option-interval-change", this.changeInterval);
 		},
 		
 		initJIT: function(){
@@ -56,8 +52,8 @@ $(function(){
 			   backgroundColor: bgcolor,
 			   // Set the nearTime as the most recent tweet so that we can see
 			   // something
-			   nearTime: 1303282433,
-			   farTime:  1303244603,
+			   nearTime: that.app.option.viewMax / 1000,
+			   farTime:  that.app.option.viewMin / 1000,
 			   //Add navigation capabilities:
 			   //zooming by scrolling and panning.
 			   Navigation: {
@@ -147,31 +143,88 @@ $(function(){
 		},
 		
 		fastforward: function(){
-			var step = 5000;
-			this.app.option.viewMin += step;
-	    	this.app.option.viewMax += step;
-			this.app.trigger("tt-option-interval-change");
+			var that = this;
+			
+			var step = 30 * 60 * 1000; // half an hour
+			
+			var newMin = that.app.option.viewMin + step;	
+	    	var newMax = that.app.option.viewMax + step;
+			if (newMax<=that.app.option.dataMax){
+				that.app.option.viewMin = newMin;
+				that.app.option.viewMax = newMax;
+			}
+			else{
+				that.app.option.viewMin += that.app.option.dataMax - that.app.option.viewMax;
+				that.app.option.viewMax = that.app.option.dataMax;
+			}
+			that.app.trigger("tt-option-interval-change");
 		},
 		
 		rewind: function(){
-			var step = 5000;
-			this.app.option.viewMin -= step;
-	    	this.app.option.viewMax -= step;
-			this.app.trigger("tt-option-interval-change");
+			var that = this;
+			
+			var step = 30 * 60 * 1000; // half an hour
+			
+			var newMin = that.app.option.viewMin - step;	
+	    	var newMax = that.app.option.viewMax - step;
+			if (newMin>=that.app.option.dataMin){
+				that.app.option.viewMin = newMin;
+				that.app.option.viewMax = newMax;
+			}
+			else{
+				that.app.option.viewMax -= that.app.option.viewMin - that.app.option.dataMin;
+				that.app.option.viewMin = that.app.option.dataMin;
+			}
+			that.app.trigger("tt-option-interval-change");
 		},
 		
 		changeInterval: function(){
 			var that = this;
 			
 			console.log("twitter-tunnel changing interval");
-			console.log(that.app.option.viewMin/1000);
+			console.log(that.app.option.viewMin / 1000);
 			
-			this.rgraph.fx.animateTime(that.app.option.viewMin/1000, that.app.option.viewMax/100, {modes:['polar'], duration:500});
+			// change button state
+			if (that.app.option.viewMax < that.app.option.dataMax){
+				that.changeButtonState({ forward: true, backward: null});
+			}
+			else {
+				that.changeButtonState({ forward: false, backward: null});
+			}
+			
+			if (that.app.option.viewMin > that.app.option.dataMin){
+				that.changeButtonState({ forward: null, backward: true});
+			}
+			else {
+				console.log("disable backward button");
+				that.changeButtonState({ forward: null, backward: false});
+			}
+			
+			// actually change the view of twitter tunnel
+			var newNearTime = that.app.option.viewMax / 1000;
+			var newFarTime = that.app.option.viewMin / 1000
+			this.rgraph.fx.animateTime(newNearTime, newFarTime, {modes:['polar'], duration: 500 } );
 		},
 		
 		refresh: function(){
 			console.log("refresh");
 			this.rgraph.refresh();
+		},
+		
+		changeButtonState: function(state){
+			var that = this;
+			if (state.forward == true){
+				$('#tunnel-button-forward').removeClass('disabled');
+			}
+			else if (state.forward == false){
+				$('#tunnel-button-forward').addClass('disabled');
+			}
+			if (state.backward == true){
+				$('#tunnel-button-backward').removeClass('disabled');
+			}
+			else if (state.backward == false){
+				$('#tunnel-button-backward').addClass('disabled');
+			}
 		}
 		
 		

@@ -59,4 +59,9 @@
 		box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
 	}
 	
+	&.disabled, &.disabled:active{
+		background: #eee;
+		color: #999;
+	}
+	
 }

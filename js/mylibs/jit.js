@@ -3170,13 +3170,13 @@ var Canvas;
       this.plot(base);
     },
 
-    'setInterval' : function(newInterval, base){
+    'setTimeStep' : function(newInterval, base){
       this.config.levelDistance = newInterval;
       this.rings = this.resetRings();
       this.plot(base);
     },
 
-    'getInterval' : function(newInterval, base){
+    'getTimeStep' : function(newInterval, base){
         return this.config.levelDistance;
     },
 
@@ -16872,15 +16872,38 @@ $jit.EventTunnel = new Class( {
     return this.canvas;
   },
 
-  'setCircleInterval' : function(newInterval) {
+  /**
+   * Set the time interval represented by the space between the circles.
+   * @param newInterval The interval between the circles in seconds.
+   */
+  'setTimeStep' : function(newInterval) {
      var circles = this.canvas.circles;
     var base = this.canvas.circlesCanvas
-    circles.setInterval(newInterval, base);
+    circles.setTimeStep(newInterval, base);
   },
 
-  'getCircleInterval' : function() {
+  'getTimeStep' : function() {
     var circles = this.canvas.circles;
-    return circles.getInterval();
+    return circles.getTimeStep();
+  },
+
+  /**
+   * Returns the time corresponding to the x,y position on the canvas.
+   * @param x The x position inside the canvas where the top left corner is 0,0.
+   * @param y The y position inside the canvas where the top left corner is 0,0.
+   */
+  'getTimeAtPosition': function(x, y) {
+    var canvas = this.canvas.circlesCanvas.canvas;
+    var centerX = canvas.width / 2;
+    var centerY = canvas.height / 2;
+    var position = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+    var radius = this.config.constantR;
+    var dist = this.config.distanceFromCamera;
+    var nearTime = this.config.nearTime;
+    var focalL = this.config.focalLength;
+
+    var time = nearTime + dist - focalL * radius / position;
+    return time;
   },
   /* 
   
@@ -16989,54 +17012,20 @@ $jit.EventTunnel = new Class( {
    id - A <Graph.Node> id.
    opt - (optional|object) An object containing some extra properties described below
    hideLabels - (boolean) Default's *true*. Hide labels when performing the animation.
-
-   Example:
-
-   (start code js)
-     rgraph.onClick('someid');
-     //or also...
-     rgraph.onClick('someid', {
-      hideLabels: false
-     });
-    (end code)
-    
   */
   onClick: function(id, opt){
-    if (this.root != id && !this.busy) {
-      this.busy = true;
-      this.root = id;
-      var that = this;
-      this.controller.onBeforeCompute(this.graph.getNode(id));
-      var obj = this.getNodeAndParentAngle(id);
+    var canvas = this.canvas.circlesCanvas.canvas;
+    var canvasX = canvas.offsetLeft;
+    var canvasY = canvas.offsetTop;
+    var x = opt.x - canvasX;
+    var y = opt.y - canvasY;
+    var computedTime = this.getTimeAtPosition(x,y);
 
-      // second constraint
-      this.tagChildren(obj.parent, id);
-      this.parent = obj.parent;
-      this.compute('end');
+    console.log("id:" + id);
+    console.log("timestamp: " + opt.time);
+    console.log("computed Time: " + computedTime);
+    console.log("");
 
-      // first constraint
-      var thetaDiff = obj.theta - obj.parent.endPos.theta;
-      this.graph.eachNode(function(elem){
-        elem.endPos.set(elem.endPos.getp().add($P(thetaDiff, 0)));
-      });
-
-      var mode = this.config.interpolation;
-      opt = $.merge( {
-        onComplete: $.empty
-      }, opt || {});
-
-      this.fx.animate($.merge( {
-        hideLabels: true,
-        modes: [
-          mode
-        ]
-      }, opt, {
-        onComplete: function(){
-          that.busy = false;
-          opt.onComplete();
-        }
-      }));
-    }
   }
 });
 
@@ -17091,6 +17080,126 @@ $jit.EventTunnel.$extend = true;
       opt = $.merge({clearCanvas: true},opt);
       this.animate(opt, versor);
       circles.animate(this.viz.canvas.circlesCanvas, opt);
+    },
+
+    animate: function(opt, versor) {
+      opt = $.merge(this.viz.config, opt || {});
+      var that = this,
+          viz = this.viz,
+          graph  = viz.graph,
+          interp = this.Interpolator,
+          animation =  opt.type === 'nodefx'? this.nodeFxAnimation : this.animation;
+      //prepare graph values
+      var m = this.prepare(opt.modes);
+
+      //animate
+      if(opt.hideLabels) this.labels.hideLabels(true);
+      animation.setOptions($.extend(opt, {
+        $animating: false,
+        compute: function(delta) {
+          graph.eachNode(function(node) {
+            node.$animating = true;
+            for(var p in m) {
+              interp[p](node, m[p], delta, versor);
+            }
+            var newPosC = node.pos.getc();
+            var newPosP = node.pos.getp();
+            var rho = newPosP.rho;
+            var nodeVisible = Math.abs(newPosC.x)<= viz.maxRingRadius && Math.abs(newPosC.y) <= viz.maxRingRadius
+                && rho >= viz.minRingRadius;
+            if(!nodeVisible) {
+              // Object has moved outside of scope.
+              // So make invisible.
+              if(node.data.$alpha != 0 && rho != 0) {
+                  that.animateAlpha(node, 0);
+//                node.data.$alpha = 0;
+              } else if(rho == 0) {
+                // The root faux node.
+                node.data.$alpha = 0;
+                node.faux = true;
+              }
+            } else if(node.data.$alpha != 1){
+              // if node is inside range, make sure it is visible.
+//              node.data.$alpha = 1;
+              that.animateAlpha(node, 1);
+            }
+          });
+          that.plot(opt, this.$animating, delta);
+          this.$animating = true;
+        },
+
+        complete: function() {
+          graph.eachNode(function(node) {
+            node.$animating = false;
+          });
+          if(opt.hideLabels) that.labels.hideLabels(false);
+          that.plot(opt);
+          var finishPlotting;
+          var startTime = (new Date()).getTime();
+          finishPlotting = setInterval(function(){
+            if((new Date()).getTime() - startTime >= 500){
+              clearInterval(finishPlotting);
+            }
+            that.plot(opt);
+          }, 33);
+          opt.onComplete();
+          opt.onAfterCompute();
+        }
+      })).start();
+    },
+
+    animateAlpha: function(node, alphaVal) {
+      opt = {duration: 500, $animating: false, clearCanvas: true};
+      var that = this;
+      var alphaAnim = new Animation;
+      node.setData('alpha', alphaVal, 'end');
+      alphaAnim.setOptions({
+        duration: 500,
+        clearCanvas: false,
+        compute: function(delta) {
+          that.Interpolator.number(node, 'alpha', delta, 'getData', 'setData');
+        }
+      }).start();
+    },
+
+    plotLine: function(adj, canvas, animating) {
+      var f = adj.getData('type'),
+          ctxObj = this.edge.CanvasStyles;
+      if(f != 'none') {
+        var width = adj.getData('lineWidth'),
+            color = adj.getData('color'),
+            ctx = canvas.getCtx(),
+            nodeFrom = adj.nodeFrom,
+            nodeTo = adj.nodeTo;
+
+        ctx.save();
+        ctx.lineWidth = width;
+        ctx.fillStyle = ctx.strokeStyle = color;
+
+        var min = Math.min(nodeFrom.getData('alpha'),nodeTo.getData('alpha'));
+        var max = Math.max(nodeFrom.getData('alpha'),nodeTo.getData('alpha'));
+        ctx.globalAlpha = 1;
+
+        if(max < 1 || min < 1) {
+          var avg = (max + min) / 2;
+          ctx.globalAlpha = avg * avg;
+        }
+
+        // Look to see if any of the nodes are positioned at 0,0.
+        // If so, we're dealing with the root node, don't draw a line.
+        var nodeFromRho = nodeFrom.pos.getp().rho;
+        var nodeToRho = nodeTo.pos.getp().rho;
+        if(nodeFromRho == 0 || nodeToRho == 0) {
+          ctx.globalAlpha = 0;
+        }
+
+        for(var s in ctxObj) {
+          ctx[s] = adj.getCanvasStyle(s);
+        }
+
+        this.edgeTypes[f].render.call(this, adj, canvas, animating);
+        ctx.restore();
+      }
     }
 
   });

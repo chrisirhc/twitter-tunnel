@@ -9,14 +9,14 @@ $(function(){
 		el: $("#details-container"),
 		
 		events: {
-			"click #tweets-details li": "refreshInterval",
+			"click #tweets-details li": "changeInterval",
 		},
 		
 		initialize: function(){
 			
 		},
 		
-		refreshInterval: function(){
+		changeInterval: function(){
 			
 		},
 		

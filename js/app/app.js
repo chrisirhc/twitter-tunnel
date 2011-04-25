@@ -21,8 +21,8 @@ $(function(){
 			};
 			
 			this.KeywordsCollection = new KeywordCollectionView({app: that});
-			this.TwitterTunnelVis = new TwitterTunnelVisView({app: that});
 			this.LineGraph = new LineGraphView({app: that});
+			this.TwitterTunnelVis = new TwitterTunnelVisView({app: that});
 			this.Details = new DetailsView({app: that});
 			
 		}
