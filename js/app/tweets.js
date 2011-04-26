@@ -19,7 +19,7 @@ $(function(){
 			// validate parent id too?
 		}
 		
-	})
+	});
 	
 	/*	Tweets Collection
 		Store list of Tweet
@@ -52,7 +52,6 @@ $(function(){
 				}
 			}
 			
-			console.log(reverseBFS(id));
 			
 			var findRoot = function(id){
 				rootID = id;
@@ -87,7 +86,7 @@ $(function(){
 			
 		}
 		
-	})
+	});
 	
 	
 	/*  Keyword Model
@@ -128,60 +127,45 @@ $(function(){
 		},
 		
 		fetchTweets: function() {
-			// getJSON some URL
-			var json = [
-				{
-					"id": 1,
-					"username": "coolguy",
-					"content": "something",
-					"date": 1299995252,
-					"parent": null
-				},
-				{
-					"id": 2,
-					"username": "someone",
-					"content": "blah",
-					"date": 1299996521,
-					"parent": 1
-				},
-				{
-					"id": 3,
-					"parent": 1
-				},
-				{
-					"id": 4,
-					"parent": 3
-				},
-				{
-					"id": 5,
-					"parent": 4
-				},
-				{
-					"id": 6,
-					"parent": 3
-				},
-				{
-					"id": 7,
-					"parent": null
-				}
-			];
-			
-			
-			
-			// move to getJSON callback
+			addTweets = _.bind(this.addTweets, this);
+			$.getJSON("https://query.yahooapis.com/v1/public/yql?callback=?", {
+				q: 'use "http://www.prism.gatech.edu/~kchua6/twitter.conversation.xml";' +
+					'select * from twitter.conversation where q="' + this.get("keyword") + '"',
+			format: 'json'
+			}, addTweets);
+		},
+
+		addTweets: function (data) {
 			var tweetCollection = this.get("tweets");
-			_.map(json, function(t){
-				var tweet = new Tweet(t);
-				tweetCollection.add(tweet);
 				// console.log(tweet.toJSON());
+			var data = data.query.results.results.results.tweet;
+			_.each(data, function (el) {
+				var tempDate = el.data.created_at;
+				el.data.created_at = {
+					datetime_gmt: tempDate,
+					unix_timestamp: (new Date(tempDate).getTime() / 1000)
+				};
+
+				// TODO CHECK THIS
+				// adjacencies property used for the JIT visualization
+				el.adjacencies = [];
+				if (el.children !== null) {
+					el.children = el.children.split(",");
+					// *Copy* it over to adjacencies
+					el.adjacencies = el.children.slice();
+				} else {
+					el.children = [];
+				}
+				if (el.parent !== null) {
+					el.adjacencies.push(el.parent);
+				} else {
+					el.adjacencies.push("0");
+				}
+				el.name = el.id;
 			});
 			// hide loading notification
-			
-			// end: move to getJSON callback
-			
-			// tweetCollection.findSubgraph( tweetCollection.at(6) );
-			
-			
+			// Format the YQL data (get the tweet data)
+			tweetCollection.add(data);
 		}
 		
 	});
