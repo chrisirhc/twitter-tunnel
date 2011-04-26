@@ -19,12 +19,11 @@ $(function(){
 				viewMin: 0,
 				viewMax: 0
 			};
-			
-			this.KeywordsCollection = new KeywordCollectionView({app: that});
-			this.LineGraph = new LineGraphView({app: that});
-			this.TwitterTunnelVis = new TwitterTunnelVisView({app: that});
-			this.Details = new DetailsView({app: that});
-			
+			window.Keywords = new KeywordCollection;
+			this.KeywordsCollection = new KeywordCollectionView({app: that, model: Keywords});
+			this.LineGraph = new LineGraphView({app: that, model: Keywords});
+			this.TwitterTunnelVis = new TwitterTunnelVisView({app: that, model: Keywords});
+			this.Details = new DetailsView({app: that, model: Keywords});
 		}
 	
 	});

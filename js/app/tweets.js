@@ -259,17 +259,15 @@ $(function(){
 		},
 		
 		initialize: function(){
-			this.Keywords = new KeywordCollection;
-			
 			_.bindAll(this, 'addOne', 'addAll', 'render');
 			this.input = this.$('#keyword-input-text');
 			
-			this.Keywords.bind('add', this.addOne);
-			this.Keywords.bind('refresh', this.addAll);
-			this.Keywords.bind('all', this.render);
+			this.model.bind('add', this.addOne);
+			this.model.bind('refresh', this.addAll);
+			this.model.bind('all', this.render);
 			
 			// comment out the below line to turn off persistant storage
-			this.Keywords.fetch();
+			this.model.fetch();
 			
 		},
 		
@@ -295,7 +293,7 @@ $(function(){
 		
 		// based on addOne. render all keyword models to view.
 		addAll: function() {
-	    	this.Keywords.each(this.addOne);
+	    	this.model.each(this.addOne);
 	    },
 		
 		// default attribute values for keyword
@@ -309,7 +307,7 @@ $(function(){
 		addKeyword: function(e){
 			if (e.keyCode != 13) return;
 			console.log('adding keyword');
-			if(this.Keywords.create(this.newAttributes())){
+			if(this.model.create(this.newAttributes())){
 				this.hideInputBox();
 				
 				// Tell LineChartView to load the new tweets data
