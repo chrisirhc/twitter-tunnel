@@ -15,18 +15,38 @@ $(function(){
 		},
 		
 		initialize: function(op){
-			_.bindAll(this, "refresh", "changeInterval", "changeButtonState");
+			_.bindAll(this, "refresh", "changeInterval", "changeButtonState", "changeInterval", "contentChange");
 			this.app = op.app;
 			this.initJIT();
 			
 			this.app.bind("tt-option-interval-change", this.changeInterval);
+
+			this.model.bind('change:active', this.contentChange);
+		},
+
+		contentChange: function (model) {
+			var data = model.get('tweets').toJSON();
+			if(model.get('active') === true) {
+				for (var i=0; i < data.length; i++) {
+					// Process the data before passing it to JIT
+					delete data[i].children;
+					delete data[i].parent;
+				}
+				this.rgraph.op.sum(data, {type: 'fade:con'});
+			}
 		},
 		
 		initJIT: function(){
 			var that = this;
 			
 			//init data
-      		var json = window.sampledatajson;
+			var json = [{
+				id: "0",
+				name: "Faux Node",
+				data: {
+					"$alpha": 0
+				}
+			}];
 			//end
 			
 			var nodeColor = "#2278a7";
