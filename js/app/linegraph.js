@@ -23,10 +23,19 @@ $(function(){
 		},
 
 		contentChange: function (model) {
-			if(model.get('active') === true) {
-				this.initData(model);
-				this.initHighcharts();
+			var allTweets = [];
+			this.model.each(function (keyword) {
+				if(keyword.get("active") === true) {
+					allTweets = allTweets.concat(keyword.get("tweets").toJSON());
+				}
+			});
+			if (allTweets.length) {
+				allTweets = _.sortBy(allTweets, function(i) { return i.data.created_at.unix_timestamp });
+				this.initData(allTweets);
+			} else {
+				this.data = [];
 			}
+			this.initHighcharts();
 		},
 		
 		initHighcharts: function(){
@@ -345,10 +354,10 @@ $(function(){
 		},
 		
 		// to preprocess data for linegraph
-		initData: function(model){
+		initData: function(data){
 			// sort by timestamp
 			// using sample data. should get from tweetcollection
-			this.data = model.get('tweets').toJSON();
+			this.data = data;
 			this.masterStart = this.data[0].
 				data.created_at.unix_timestamp * 1000; // convert to ms
 			this.masterEnd = this.
