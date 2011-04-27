@@ -31,7 +31,6 @@ $(function(){
 	window.TweetCollection = Backbone.Collection.extend({
 		
 		model: Tweet,
-		localStorage: new Store("tweets-"+this.cid),
 		
 		comparator: function(tweet){
 			return tweet.get("id");
@@ -108,12 +107,14 @@ $(function(){
 		initialize: function(){
 			if (!this.get("keyword")){
 				throw "cannot initialize: empty keyword";
-			} else {
+			} else if (this.get("tweets") === undefined) {
 				var tweets = new TweetCollection;
 				tweets.keyword = this.get("keyword");
 				this.set({tweets: tweets});
 				// show loading notification
 				this.fetchTweets();
+			} else {
+				this.set({tweets: new TweetCollection(this.get("tweets"))});
 			}
 		},
 		
@@ -174,6 +175,7 @@ $(function(){
 			// hide loading notification
 			// Format the YQL data (get the tweet data)
 			tweetCollection.add(data);
+			this.save();
 			this.trigger("change:active", this);
 		}
 		
