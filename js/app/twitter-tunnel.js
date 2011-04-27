@@ -30,6 +30,7 @@ $(function(){
 			if(model.get('active') === true) {
 				for (var i=0; i < data.length; i++) {
 					// Process the data before passing it to JIT
+					data[i].data.type = data[i].type;
 					delete data[i].children;
 					delete data[i].parent;
 				}
@@ -107,10 +108,10 @@ $(function(){
 			 },
 
 			 onBeforePlotNode: function(node) {
-			   if (node.data.type == "reply") {
-			     node.data.$type = "reply";
-			   } else {
+			   if (node.data.type == "retweet") {
 			     node.data.$type = "retweet";
+			   } else {
+			     node.data.$type = "reply";
 			   }
 			   node.data.$lineWidth = lineWidth;
 			 },
