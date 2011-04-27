@@ -7,6 +7,7 @@ $(function(){
 		template: _.template('<img src="<%= data.user.profile_image_url %>"/><p><span class="username"><%= data.user.name %></span> <%= data.text %></p>'),
 		initialize: function () {
 			this.model.bind('change:selected', this.render);
+			this.model.detailView = this;
 		},
 		render: function () {
 			$(this.el).html(this.template(this.model.toJSON()));
@@ -38,6 +39,9 @@ $(function(){
 				});
 			} else {
 				// Remove the nodes
+				model.get('tweets').each(function (tweet) {
+					tweet.detailView.remove();
+				});
 			}
 		},
 		

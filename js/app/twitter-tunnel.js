@@ -37,6 +37,10 @@ $(function(){
 				this.app.option.viewMax = data[data.length-1].data.created_at.unix_timestamp * 1000;
 				this.changeInterval();
 				this.rgraph.op.sum(data, {type: 'fade:con'});
+			} else {
+				// Remove the nodes
+				var list = _.pluck(data, 'id');
+				this.rgraph.op.removeNode(list.reverse(), {type: 'fade:con'});
 			}
 		},
 		
