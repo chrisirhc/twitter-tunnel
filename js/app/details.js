@@ -23,7 +23,9 @@ $(function(){
 		el: $("#details-container"),
 		
 		events: {
-			"click #tweets-details li": "changeInterval",
+			"click ol>li": "changeInterval",
+			"mouseover ol>li": "addHoverClass",
+			"mouseout ol>li": "removeHoverClass",
 		},
 		
 		initialize: function(){
@@ -49,6 +51,13 @@ $(function(){
 			
 		},
 		
+		addHoverClass: function(){
+			this.$("ol>li").addClass('hover');
+		},
+		
+		removeHoverClass: function(){
+			$("#tweets-details li").removeClass('hover');
+		}
 		
 		
 	});

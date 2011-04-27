@@ -204,7 +204,9 @@ $(function(){
 		
 		events: {
 			"click" : "toggleActive",
-			"click span.delete-keyword" : "deleteKeyword"
+			"click span.delete-keyword" : "deleteKeyword",
+			"mouseover" : "addHoverClass",
+			"mouseout" : "removeHoverClass"
 		},
 		
 		initialize: function(){
@@ -235,6 +237,14 @@ $(function(){
 		remove: function(){
 			// tell tunnelView to remove related nodes
 			$(this.el).slideUp('fast');
+		},
+		
+		addHoverClass: function(){
+			$(this.el).addClass('hover');
+		},
+		
+		removeHoverClass: function(){
+			$(this.el).removeClass('hover');
 		}
 		
 	});

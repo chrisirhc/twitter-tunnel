@@ -533,7 +533,7 @@ header h3 {
   color: #d32564;
 }
 /* line 90, ../src/partials/_felix.scss */
-#left-container #keyword-container li.keywords:hover {
+#left-container #keyword-container li.keywords:hover, #left-container #keyword-container li.keywords.hover {
   /* REMOVE for production */
   color: white;
   background: #d32564;

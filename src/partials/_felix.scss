@@ -87,7 +87,7 @@ header{
 			/* REMOVE for production */
 			color: #d32564;
 			
-			&:hover{
+			&:hover, &.hover{
 				/* REMOVE for production */
 				color: white;
 				background: #d32564;
