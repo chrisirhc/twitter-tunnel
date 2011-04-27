@@ -307,7 +307,7 @@ $(function(){
 			var that = this;
 			var newMax = that.app.option.viewMin + 6 * 3600 * 1000
 			that.app.option.viewMax = 
-				newMax<=that.app.option.dataMax? // masterEnd should get from tweetcollection
+				newMax<=that.app.option.dataMax? // dataMax should get from tweetcollection
 					newMax:
 					that.app.option.dataMax;
 			
@@ -319,9 +319,9 @@ $(function(){
 			var newMax = that.app.option.viewMin + 24 * 3600 * 1000
 			console.log(newMax);
 			that.app.option.viewMax = 
-				newMax<=that.app.option.dataMax? // masterEnd should get from tweetcollection
+				newMax<=that.app.option.dataMax? // dataMax should get from tweetcollection
 					newMax:
-					that.app.option.dataMax;;
+					that.app.option.dataMax;
 			
 			that.app.trigger("tt-option-interval-change");
 		},
@@ -330,9 +330,9 @@ $(function(){
 			var that = this;
 			var newMax = that.app.option.viewMin + 3 * 24 * 3600 * 1000
 			that.app.option.viewMax = 
-				newMax<=that.app.option.dataMax? // masterEnd should get from tweetcollection
+				newMax<=that.app.option.dataMax? // dataMax should get from tweetcollection
 					newMax:
-					that.app.option.dataMax;;
+					that.app.option.dataMax;
 			
 			that.app.trigger("tt-option-interval-change");
 		},

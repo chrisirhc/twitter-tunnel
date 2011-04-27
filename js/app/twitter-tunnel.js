@@ -82,8 +82,8 @@ $(function(){
 			   // something
 			   nearTime: that.app.option.viewMax / 1000,
 			   farTime:  that.app.option.viewMin / 1000,
-			   //Add navigation capabilities:
-			   //zooming by scrolling and panning.
+			   
+			   // disabled navigation: zomming and panning
 			   Navigation: {
 			     enable: false,
 			     panning: false
