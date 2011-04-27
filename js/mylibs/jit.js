@@ -16809,9 +16809,6 @@ $jit.EventTunnel = new Class( {
       Loader, Extras, Layouts.Tunnel
   ],
 
-  minRingRadius: 25,
-  maxRingRadius: 300,
-
   initialize: function(controller){
     var $EventTunnel = $jit.EventTunnel;
 
@@ -16826,7 +16823,9 @@ $jit.EventTunnel = new Class( {
       // Constant used to calculate distance.
       constantR: 600,
       focalLength: 8000,
-      distanceFromCamera: 0
+      distanceFromCamera: 0,
+      minRingRadius: 25,
+      maxRingRadius: 300
     };
 
     this.controller = this.config = $.merge(Options("Canvas", "Node", "Edge",
@@ -16932,8 +16931,8 @@ $jit.EventTunnel = new Class( {
   computeFocalLengthAndDistance: function() {
     var radius = this.config.constantR;
     var span = this.config.nearTime - this.config.farTime;
-    var dist = (this.minRingRadius * span) / (this.maxRingRadius - this.minRingRadius);
-    var focalLen = (dist * this.maxRingRadius) / radius;
+    var dist = (this.config.minRingRadius * span) / (this.config.maxRingRadius - this.config.minRingRadius);
+    var focalLen = (dist * this.config.maxRingRadius) / radius;
     this.config.distanceFromCamera = dist;
     this.config.focalLength = focalLen;
   },
@@ -17105,8 +17104,8 @@ $jit.EventTunnel.$extend = true;
             var newPosC = node.pos.getc();
             var newPosP = node.pos.getp();
             var rho = newPosP.rho;
-            var nodeVisible = Math.abs(newPosC.x)<= viz.maxRingRadius && Math.abs(newPosC.y) <= viz.maxRingRadius
-                && rho >= viz.minRingRadius;
+            var nodeVisible = Math.abs(newPosC.x)<= viz.config.maxRingRadius && Math.abs(newPosC.y) <= viz.config.maxRingRadius
+                && rho >= viz.config.minRingRadius;
             if(!nodeVisible) {
               // Object has moved outside of scope.
               // So make invisible.

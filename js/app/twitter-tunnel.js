@@ -91,6 +91,8 @@ $(function(){
 			   // something
 			   nearTime: that.app.option.viewMax / 1000,
 			   farTime:  that.app.option.viewMin / 1000,
+				 maxRingRadius: 200,
+				 minRingRadius: 25,
 			   //Add navigation capabilities:
 			   //zooming by scrolling and panning.
 			   Navigation: {
