@@ -184,7 +184,7 @@ $(function(){
 		fastforward: function(){
 			var that = this;
 			
-			var step = 30 * 60 * 1000; // half an hour
+			var step = (that.app.option.viewMax - that.app.option.viewMin) * 0.5;
 			
 			var newMin = that.app.option.viewMin + step;	
 	    	var newMax = that.app.option.viewMax + step;
@@ -202,7 +202,7 @@ $(function(){
 		rewind: function(){
 			var that = this;
 			
-			var step = 30 * 60 * 1000; // half an hour
+			var step = (that.app.option.viewMax - that.app.option.viewMin) * 0.5;
 			
 			var newMin = that.app.option.viewMin - step;	
 	    	var newMax = that.app.option.viewMax - step;
