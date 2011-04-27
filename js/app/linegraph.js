@@ -14,24 +14,22 @@ $(function(){
 		},
 		
 		initialize: function(op){
-			_.bindAll(this, "changeInterval");
+			_.bindAll(this, "changeInterval", "contentChange");
 			
 			this.app = op.app;
-			this.initHighcharts();
-			
 			this.app.bind("tt-option-interval-change", this.changeInterval);
+
+			this.model.bind('change:active', this.contentChange);
+		},
+
+		contentChange: function (model) {
+			if(model.get('active') === true) {
+				this.initData(model);
+				this.initHighcharts();
+			}
 		},
 		
 		initHighcharts: function(){
-			this.data = [
-				0,0,0,4,7,135,35,32,24,12,3,4,
-				7,56,15,2,10,34,64,24,6,4,8,57,5,34,5,6,
-				7,3,46,56,45,24,65,79,1,2,3,4,5,53,23,3,76,
-				7,56,15,2,10,34,64,24,6,4,8,57,5,34,5,6,
-			];
-			
-			this.initData();
-			
 			// this.masterStart = Date.UTC(2006, 0, 01, 0, 0, 0);
 			// this.masterEnd = Date.UTC(2006, 0, 03, 12, 0, 0);
 			
@@ -347,11 +345,10 @@ $(function(){
 		},
 		
 		// to preprocess data for linegraph
-		initData: function(){
+		initData: function(model){
 			// sort by timestamp
 			// using sample data. should get from tweetcollection
-			this.data = _.sortBy( _.tail(window.sampledatajson), 
-				function(i) { return i.data.created_at.unix_timestamp });
+			this.data = model.get('tweets').toJSON();
 			this.masterStart = this.data[0].
 				data.created_at.unix_timestamp * 1000; // convert to ms
 			this.masterEnd = this.
