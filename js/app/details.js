@@ -33,7 +33,6 @@ $(function(){
 		contentChange: function (model) {
 			if(model.get('active') === true) {
 				model.get('tweets').each(function (tweet) {
-					console.log(tweet);
 					var tweetView = new TweetDetail({model: tweet});
 					this.$("#tweets-details").append(tweetView.render().el);
 				});

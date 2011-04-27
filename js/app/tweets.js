@@ -214,12 +214,6 @@ $(function(){
 		},
 		
 		toggleActive: function(){
-			if (this.model.get('active')){
-				// tell tunnelView to hide relate nodes
-			}
-			else{
-				// tell tunnelView to show relate nodes
-			}
 			this.model.toggle();
 			$(this.el).toggleClass('disabled');
 		},
