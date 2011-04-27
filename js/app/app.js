@@ -16,8 +16,8 @@ $(function(){
 		initialize: function(){
 			var that = this;
 			this.option = {
-				viewMin: 0,
-				viewMax: 0
+				viewMin: 1303260833000,
+				viewMax: 1303282433000
 			};
 			window.Keywords = new KeywordCollection;
 			this.KeywordsCollection = new KeywordCollectionView({app: that, model: Keywords});

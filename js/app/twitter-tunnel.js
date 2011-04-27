@@ -18,9 +18,6 @@ $(function(){
 			_.bindAll(this, "refresh", "changeInterval", "changeButtonState", "changeInterval", "contentChange");
 			this.app = op.app;
 
-			// TODO fix this explicit pile of steamy shit
-			this.app.option.viewMin = 1303260833000;
-			this.app.option.viewMax = 1303282433000;
 			this.initJIT();
 			
 			this.app.bind("tt-option-interval-change", this.changeInterval);
