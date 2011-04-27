@@ -800,18 +800,19 @@ header h3 {
 /* line 246, ../src/partials/_felix.scss */
 #right-container #details-container ol li p {
   margin-left: 60px;
+  word-wrap: break-word;
 }
-/* line 248, ../src/partials/_felix.scss */
+/* line 249, ../src/partials/_felix.scss */
 #right-container #details-container ol li p span.username {
   padding-right: 3px;
   font-weight: bold;
 }
-/* line 253, ../src/partials/_felix.scss */
+/* line 254, ../src/partials/_felix.scss */
 #right-container #details-container ol li:hover {
   background: #eee;
 }
 
-/* line 262, ../src/partials/_felix.scss */
+/* line 263, ../src/partials/_felix.scss */
 footer {
   display: inline;
   float: left;
