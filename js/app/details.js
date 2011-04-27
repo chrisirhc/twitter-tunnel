@@ -34,13 +34,13 @@ $(function(){
 		contentChange: function (model) {
 			if(model.get('active') === true) {
 				model.get('tweets').each(function (tweet) {
-					var tweetView = new TweetDetail({model: tweet});
+					var tweetView = tweet.detailView || new TweetDetail({model: tweet});
 					this.$("#tweets-details").append(tweetView.render().el);
 				});
 			} else {
 				// Remove the nodes
 				model.get('tweets').each(function (tweet) {
-					tweet.detailView.remove();
+					tweet.detailView && tweet.detailView.remove();
 				});
 			}
 		},

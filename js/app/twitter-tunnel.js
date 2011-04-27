@@ -28,20 +28,28 @@ $(function(){
 		contentChange: function (model) {
 			var data = model.get('tweets').toJSON();
 			if(model.get('active') === true) {
-				for (var i=0; i < data.length; i++) {
-					// Process the data before passing it to JIT
-					data[i].data.type = data[i].type;
-					delete data[i].children;
-					delete data[i].parent;
+				if (data.length) {
+					for (var i=0; i < data.length; i++) {
+						// Process the data before passing it to JIT
+						data[i].data.type = data[i].type;
+						delete data[i].children;
+						delete data[i].parent;
+					}
+
+					// For now, just show everything?
+					this.app.option.viewMin = data[0].data.created_at.unix_timestamp * 1000;
+					this.app.option.viewMax = data[data.length-1].data.created_at.unix_timestamp * 1000;
+					this.changeInterval();
+					this.rgraph.op.sum(data, {type: 'fade:con'});
+
+					model.insertedOnJIT = true;
+					// Bind select methods
 				}
-				this.app.option.viewMin = data[0].data.created_at.unix_timestamp * 1000;
-				this.app.option.viewMax = data[data.length-1].data.created_at.unix_timestamp * 1000;
-				this.changeInterval();
-				this.rgraph.op.sum(data, {type: 'fade:con'});
-			} else {
+			} else if (model.insertedOnJIT) {
 				// Remove the nodes
 				var list = _.pluck(data, 'id');
 				this.rgraph.op.removeNode(list.reverse(), {type: 'fade:con'});
+				model.insertedOnJIT = false;
 			}
 		},
 		

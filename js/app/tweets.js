@@ -138,6 +138,8 @@ $(function(){
 		addTweets: function (data) {
 			var tweetCollection = this.get("tweets");
 				// console.log(tweet.toJSON());
+			if (data.query.count == 0)
+				return;
 			var data = data.query.results.results.results.tweet;
 			_.each(data, function (el) {
 				var tempDate = el.data.created_at;
