@@ -23,8 +23,10 @@ $(function(){
 			this.initJIT();
 			
 			this.app.bind("tt-option-interval-change", this.changeInterval);
-
 			this.model.bind('change:active', this.contentChange);
+
+			// Look through collection once initialized
+			this.model.each(this.contentChange);
 		},
 
 		contentChange: function (model) {
@@ -50,7 +52,7 @@ $(function(){
 			} else if (model.insertedOnJIT) {
 				// Remove the nodes
 				var list = _.pluck(data, 'id');
-				this.rgraph.op.removeNode(list.reverse(), {type: 'fade:con'});
+				this.rgraph.op.removeNode(list.reverse(), {type: 'fade:con', duration: 100});
 				model.insertedOnJIT = false;
 			}
 		},

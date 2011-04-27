@@ -24,9 +24,12 @@ $(function(){
 			this.model.bind('change:active', this.contentChange);
 			
 			this._lineCounter = 0;
+
+			// On initalization look at all the data available
+			this.contentChange();
 		},
 
-		contentChange: function (model) {
+		contentChange: function () {
 			var allTweets = [];
 			this.model.each(function (keyword) {
 				if(keyword.get("active") === true) {
@@ -36,12 +39,10 @@ $(function(){
 			if (allTweets.length) {
 				allTweets = _.sortBy(allTweets, function(i) { return i.data.created_at.unix_timestamp });
 				this.initData(allTweets);
+				this.initHighcharts();
 			} else {
 				this.data = [];
 			}
-			this.initHighcharts();
-			
-			// this.addSingleLine({pos:1303199716400, id:'cursor-'+this._lineCounter});
 		},
 		
 		initHighcharts: function(){
