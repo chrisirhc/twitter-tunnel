@@ -166,6 +166,7 @@ $(function(){
 			// hide loading notification
 			// Format the YQL data (get the tweet data)
 			tweetCollection.add(data);
+			this.trigger("change:active", this);
 		}
 		
 	});
@@ -201,6 +202,10 @@ $(function(){
 		initialize: function(){
 			_.bindAll(this, 'render');
 			this.model.view = this;
+
+			if (!this.model.get('active')) {
+				$(this.el).addClass('disabled');
+			}
 		},
 		
 		render: function(){

@@ -17,6 +17,10 @@ $(function(){
 		initialize: function(op){
 			_.bindAll(this, "refresh", "changeInterval", "changeButtonState", "changeInterval", "contentChange");
 			this.app = op.app;
+
+			// TODO fix this explicit pile of steamy shit
+			this.app.option.viewMin = 1303260833000;
+			this.app.option.viewMax = 1303282433000;
 			this.initJIT();
 			
 			this.app.bind("tt-option-interval-change", this.changeInterval);
@@ -32,6 +36,9 @@ $(function(){
 					delete data[i].children;
 					delete data[i].parent;
 				}
+				this.app.option.viewMin = data[0].data.created_at.unix_timestamp * 1000;
+				this.app.option.viewMax = data[data.length-1].data.created_at.unix_timestamp * 1000;
+				this.changeInterval();
 				this.rgraph.op.sum(data, {type: 'fade:con'});
 			}
 		},
