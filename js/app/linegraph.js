@@ -42,15 +42,15 @@ $(function(){
 			// this.masterStart = Date.UTC(2006, 0, 01, 0, 0, 0);
 			// this.masterEnd = Date.UTC(2006, 0, 03, 12, 0, 0);
 			
-			// for debug only. should get from tweetscollection
-			this.app.option.viewMin = this.detailStart;
-			this.app.option.viewMax = this.masterEnd;
-			
 			// controls the zooming of the master graph
 			this.pointInterval = 0.5 * 3600 * 1000; // hourly
 			
 			// create master and in its callback, create the detail chart
 			this.createMaster();
+			
+			// for debug only. should get from tweetscollection
+			this.app.option.viewMin = this.detailStart;
+			this.app.option.viewMax = this.masterEnd;
 		},
 		
 		// helper function for initHighcharts
@@ -326,7 +326,6 @@ $(function(){
 		changeIntervalOneDays: function(){
 			var that = this;
 			var newMax = that.app.option.viewMin + 24 * 3600 * 1000
-			console.log(newMax);
 			that.app.option.viewMax = 
 				newMax<=that.app.option.dataMax? // dataMax should get from tweetcollection
 					newMax:
@@ -362,7 +361,8 @@ $(function(){
 				data.created_at.unix_timestamp * 1000; // convert to ms
 			this.masterEnd = this.
 				data[ this.data.length-1 ].data.created_at.unix_timestamp * 1000; // convert to ms
-			this.detailStart = this.masterEnd - 6 * 3600 * 1000; // hardcoded to display last 6 hours of tweet
+			var initialRange = (this.masterEnd - this.masterStart) * 0.2;
+			this.detailStart = this.masterEnd - initialRange; // hardcoded to display last 6 hours of tweet
 			this.data = this.bucketList( this.data, 0.5 * 3600, this.masterStart / 1000 );
 			this.data = _.map( this.data, function(i){ return i.length } );
 			
