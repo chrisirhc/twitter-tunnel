@@ -31,6 +31,7 @@ $(function(){
 		initialize: function(){
       _.bindAll(this, "contentChange");
 		  this.model.bind("change:active", this.contentChange);
+			this.model.each(this.contentChange);
 		},
 
 		contentChange: function (model) {
