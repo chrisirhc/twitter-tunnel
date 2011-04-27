@@ -158,6 +158,7 @@ header{
 	
 	#overview-container{
 		position: relative;
+		margin-top: 1*$v;
 		
 		#overview-controller{
 			position: absolute;
@@ -176,6 +177,9 @@ header{
 		#overview{
 			
 			position: relative;
+			@include user-select-none;
+			padding: 1*$v 0;
+			height: 10*$v;
 			
 			#overview-master-container{
 				position:absolute;
@@ -194,14 +198,9 @@ header{
 		}
 	}
 	
-	#overview{
-		@include user-select-none;
-		padding: 1*$v 0;
-		height: 10*$v;
-	}
-	
 	#tunnel-container{
 		position: relative;
+		margin-bottom: 1*$v;
 		
 		#tunnel-controller{
 			position: absolute;
@@ -222,7 +221,6 @@ header{
 		    width:100%;
 		    height:30*$v;
 		}
-		
 	}
 	
 }
@@ -232,6 +230,9 @@ header{
 	@include column($right-width, true);
 	
 	#details-container{
+		overflow-y: scroll;
+		height: 43*$v;
+		
 		ol{
 			margin: 1*$v 0;
 			list-style: none;

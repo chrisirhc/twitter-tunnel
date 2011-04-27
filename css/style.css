@@ -621,14 +621,15 @@ header h3 {
 /* line 159, ../src/partials/_felix.scss */
 #center-container #overview-container {
   position: relative;
+  margin-top: 18px;
 }
-/* line 162, ../src/partials/_felix.scss */
+/* line 163, ../src/partials/_felix.scss */
 #center-container #overview-container #overview-controller {
   position: absolute;
   right: 0px;
   top: -5px;
 }
-/* line 167, ../src/partials/_felix.scss */
+/* line 168, ../src/partials/_felix.scss */
 #center-container #overview-container #overview-controller p {
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -676,26 +677,9 @@ header h3 {
   background: #eee;
   color: #999;
 }
-/* line 176, ../src/partials/_felix.scss */
+/* line 177, ../src/partials/_felix.scss */
 #center-container #overview-container #overview {
   position: relative;
-}
-/* line 180, ../src/partials/_felix.scss */
-#center-container #overview-container #overview #overview-master-container {
-  position: absolute;
-  top: 0;
-  height: 80px;
-  width: 100%;
-}
-/* line 187, ../src/partials/_felix.scss */
-#center-container #overview-container #overview #overview-detail-container {
-  position: absolute;
-  top: 80px;
-  height: 80px;
-  width: 100%;
-}
-/* line 197, ../src/partials/_felix.scss */
-#center-container #overview {
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
@@ -704,17 +688,32 @@ header h3 {
   padding: 18px 0;
   height: 180px;
 }
-/* line 203, ../src/partials/_felix.scss */
+/* line 184, ../src/partials/_felix.scss */
+#center-container #overview-container #overview #overview-master-container {
+  position: absolute;
+  top: 0;
+  height: 80px;
+  width: 100%;
+}
+/* line 191, ../src/partials/_felix.scss */
+#center-container #overview-container #overview #overview-detail-container {
+  position: absolute;
+  top: 80px;
+  height: 80px;
+  width: 100%;
+}
+/* line 201, ../src/partials/_felix.scss */
 #center-container #tunnel-container {
   position: relative;
+  margin-bottom: 18px;
 }
-/* line 206, ../src/partials/_felix.scss */
+/* line 205, ../src/partials/_felix.scss */
 #center-container #tunnel-container #tunnel-controller {
   position: absolute;
   right: 0px;
   top: -5px;
 }
-/* line 212, ../src/partials/_felix.scss */
+/* line 211, ../src/partials/_felix.scss */
 #center-container #tunnel-container #tunnel-controller p {
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -762,13 +761,13 @@ header h3 {
   background: #eee;
   color: #999;
 }
-/* line 221, ../src/partials/_felix.scss */
+/* line 220, ../src/partials/_felix.scss */
 #center-container #tunnel-container #infovis {
   width: 100%;
   height: 540px;
 }
 
-/* line 231, ../src/partials/_felix.scss */
+/* line 229, ../src/partials/_felix.scss */
 #right-container {
   display: inline;
   float: left;
@@ -779,35 +778,40 @@ header h3 {
 * html #right-container {
   overflow-x: hidden;
 }
-/* line 235, ../src/partials/_felix.scss */
+/* line 232, ../src/partials/_felix.scss */
+#right-container #details-container {
+  overflow-y: scroll;
+  height: 774px;
+}
+/* line 236, ../src/partials/_felix.scss */
 #right-container #details-container ol {
   margin: 18px 0;
   list-style: none;
 }
-/* line 238, ../src/partials/_felix.scss */
+/* line 239, ../src/partials/_felix.scss */
 #right-container #details-container ol li {
   margin: 9px 0;
   padding: 9px 18px;
 }
-/* line 241, ../src/partials/_felix.scss */
+/* line 242, ../src/partials/_felix.scss */
 #right-container #details-container ol li img {
   float: left;
 }
-/* line 245, ../src/partials/_felix.scss */
+/* line 246, ../src/partials/_felix.scss */
 #right-container #details-container ol li p {
   margin-left: 60px;
 }
-/* line 247, ../src/partials/_felix.scss */
+/* line 248, ../src/partials/_felix.scss */
 #right-container #details-container ol li p span.username {
   padding-right: 3px;
   font-weight: bold;
 }
-/* line 252, ../src/partials/_felix.scss */
+/* line 253, ../src/partials/_felix.scss */
 #right-container #details-container ol li:hover {
   background: #eee;
 }
 
-/* line 261, ../src/partials/_felix.scss */
+/* line 262, ../src/partials/_felix.scss */
 footer {
   display: inline;
   float: left;
