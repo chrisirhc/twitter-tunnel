@@ -128,6 +128,12 @@ $(function(){
 		
 		fetchTweets: function() {
 			addTweets = _.bind(this.addTweets, this);
+			// Local debugging
+			/*
+			$.getJSON("js/app/sampledata-mathias.json", addTweets);
+
+			// Swap out the below getJSON call with above when debugging
+			*/
 			$.getJSON("https://query.yahooapis.com/v1/public/yql?callback=?", {
 				q: 'use "http://www.prism.gatech.edu/~kchua6/twitter.conversation.xml";' +
 					'select * from twitter.conversation where q="' + this.get("keyword") + '"',
