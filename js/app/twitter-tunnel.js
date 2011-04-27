@@ -11,7 +11,9 @@ $(function(){
 		
 		events: {
 			"click #tunnel-button-forward": "fastforward",
-			"click #tunnel-button-backward": "rewind"
+			"click #tunnel-button-backward": "rewind",
+			"mousemove #infovis" : "getTimeFromCursor",
+			"mouseout #infovis": "removeCursorLine"
 		},
 		
 		initialize: function(op){
@@ -145,8 +147,8 @@ $(function(){
 			 onCreateLabel: function(domElement, node){
 			   domElement.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 			   domElement.onclick = function(){
-			     rgraph.onClick(node.id);
-			     ;  }
+	          rgraph.onClick(node.id, {x: domElement.offsetLeft, y: domElement.offsetTop, time: node.data.created_at.unix_timestamp});
+	          ;  }
 			 },
 			 //Change some label dom properties.
 			 //This method is called each time a label is plotted.
@@ -263,6 +265,24 @@ $(function(){
 			else if (state.backward == false){
 				$('#tunnel-button-backward').addClass('disabled');
 			}
+		},
+		
+		getTimeFromCursor: function(e){
+			
+			var domElement = $('#infovis');
+			
+			var canvas = this.rgraph.canvas.circlesCanvas.canvas;
+		    var canvasX = canvas.offsetLeft;
+		    var canvasY = canvas.offsetTop;
+		    var x = e.offsetX - canvasX;
+		    var y = e.offsetY - canvasY;
+		    var computedTime = this.rgraph.getTimeAtPosition(x,y);
+			
+			this.app.trigger("tt-cursor-position-change", {pos: computedTime*1000, id: 'line-cursor', replace: true});
+		},
+		
+		removeCursorLine: function(){
+			this.app.trigger("tt-cursor-out", 'line-cursor');
 		}
 		
 		

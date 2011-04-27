@@ -14,12 +14,16 @@ $(function(){
 		},
 		
 		initialize: function(op){
-			_.bindAll(this, "changeInterval", "contentChange");
+			_.bindAll(this, "changeInterval", "contentChange", "addSingleLine", "removeSingleLine");
 			
 			this.app = op.app;
 			this.app.bind("tt-option-interval-change", this.changeInterval);
+			this.app.bind("tt-cursor-position-change", this.addSingleLine);
+			this.app.bind("tt-cursor-out", this.removeSingleLine);
 
 			this.model.bind('change:active', this.contentChange);
+			
+			this._lineCounter = 0;
 		},
 
 		contentChange: function (model) {
@@ -36,6 +40,8 @@ $(function(){
 				this.data = [];
 			}
 			this.initHighcharts();
+			
+			// this.addSingleLine({pos:1303199716400, id:'cursor-'+this._lineCounter});
 		},
 		
 		initHighcharts: function(){
@@ -395,6 +401,30 @@ $(function(){
 			else if (state.backward == false){
 				$('#overview-button-backward').addClass('disabled');
 			}
+		},
+		
+		addSingleLine: function(obj){
+			var pos = obj.pos;
+			var id = obj.id;
+			var xAxis = this.masterChart.xAxis[0];
+			var thickness = (this.masterEnd - this.masterStart) / 447; // 447 is the width of the line graph
+			
+			if (obj.replace === true){
+				this.removeSingleLine(id);
+			}
+			
+			xAxis.addPlotBand({
+				id: id,
+				from: pos,
+				to: pos + thickness,
+				color: 'rgba(0, 0, 0, 0.9)'
+			});
+			this._lineCounter++;
+		},
+		
+		removeSingleLine: function(id){
+			var xAxis = this.masterChart.xAxis[0];
+			xAxis.removePlotBand(id);
 		}
 		
 	});
