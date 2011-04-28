@@ -69,6 +69,7 @@ $(function(){
 			if(model.get('active') === true) {
 				model.get('tweets').each(function (tweet) {
 					var tweetView = tweet.detailView || new TweetDetail({model: tweet});
+					tweetView.delegateEvents();
 					tweetView.color = model.get('color');
 					this.$("#tweets-details").append(tweetView.render().el);
 				});
