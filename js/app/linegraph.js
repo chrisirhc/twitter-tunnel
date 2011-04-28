@@ -435,16 +435,16 @@ $(function(){
 			var times = _.map(times, function(i){ return i*1000 });
 			var times = _.sortBy(times, function(i){ return i });
 			_.map(times, function(i){
-                that.addSingleLine({ pos: i, id: 'ring-'+(i+''), color: "rgba(0,0,0,0.1)"});
-			});
+                that.addSingleLine({ pos: i, id: 'ring-line', color: "rgba(0,0,0,0.1)"});
+			})
 			this.ringTimes = times;
 		},
 		
 		removeRingLines: function(){
 			var that = this;
-			_.map(this.ringTimes, function(i){
-				that.removeSingleLine('ring-'+(i+''));
-			});
+			for (var i=0; i<999; i++){
+				that.removeSingleLine('ring-line');
+			}
 		},
 		
 		updateRingLines: function(){
