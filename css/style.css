@@ -729,6 +729,8 @@ header h3 {
 }
 #right-container #details-container ol li img {
   float: left;
+  height: 48px;
+  width: 48px;
 }
 #right-container #details-container ol li p {
   margin-left: 60px;
