@@ -12,6 +12,8 @@ $(function(){
 		events: {
 			"click #tunnel-button-forward": "fastforward",
 			"click #tunnel-button-backward": "rewind",
+			"click #tunnel-button-halve-ring": "halveRing",
+			"click #tunnel-button-double-ring": "doubleRing",
 			"mousemove #infovis" : "getTimeFromCursor",
 			"mouseout #infovis": "removeCursorLine"
 		},
@@ -205,6 +207,9 @@ $(function(){
 			
 			// store a reference of rgraph for other functions to use
 			this.rgraph = rgraph;
+			
+			// set initial timeStep and store to that.app
+			that.app.option.timeStep = this.rgraph.getTimeStep();
 		},
 		
 		fastforward: function(){
@@ -241,6 +246,30 @@ $(function(){
 				that.app.option.viewMin = that.app.option.dataMin;
 			}
 			that.app.trigger("tt-option-interval-change");
+		},
+		
+		doubleRing: function(){
+			var that = this;
+			
+			var currentTimeStep = that.app.option.timeStep;
+			var newTimeStep = currentTimeStep / 2;
+			
+			that.rgraph.setTimeStep(newTimeStep);
+			that.app.option.timeStep = newTimeStep;
+			
+			that.app.trigger("tt-option-timestep-change");
+		},
+		
+		halveRing: function(){
+			var that = this;
+			
+			var currentTimeStep = that.app.option.timeStep;
+			var newTimeStep = currentTimeStep * 2;
+			
+			that.rgraph.setTimeStep(newTimeStep);
+			that.app.option.timeStep = newTimeStep;
+			
+			that.app.trigger("tt-option-timestep-change");
 		},
 		
 		changeInterval: function(){
