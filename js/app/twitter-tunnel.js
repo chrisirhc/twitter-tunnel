@@ -44,7 +44,7 @@ $(function(){
 					// this.app.option.viewMin = data[0].data.created_at.unix_timestamp * 1000;
 					// this.app.option.viewMax = data[data.length-1].data.created_at.unix_timestamp * 1000;
 					this.changeInterval();
-					this.rgraph.op.sum(data, {type: 'fade:con'});
+					this.rgraph.op.sum(data, {type: 'replot'});
 
 					model.insertedOnJIT = true;
 					// Bind select methods
@@ -52,7 +52,7 @@ $(function(){
 			} else if (model.insertedOnJIT) {
 				// Remove the nodes
 				var list = _.pluck(data, 'id');
-				this.rgraph.op.removeNode(list.reverse(), {type: 'fade:con', duration: 100});
+				this.rgraph.op.removeNode(list.reverse(), {type: 'nothing'});
 				model.insertedOnJIT = false;
 			}
 		},
