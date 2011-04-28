@@ -14,8 +14,12 @@ $(function(){
 			"click #tunnel-button-backward": "rewind",
 			"click #tunnel-button-halve-ring": "halveRing",
 			"click #tunnel-button-double-ring": "doubleRing",
+			
 			"mousemove #infovis" : "getTimeFromCursor",
-			"mouseout #infovis": "removeCursorLine"
+			"mouseout #infovis": "removeCursorLine",
+			
+			"mouseover #tunnel-time-label" : "showRingIntervalLabel",
+			"mouseout #tunnel-time-label": "hideRingIntervalLabel"
 		},
 		
 		initialize: function(op){
@@ -259,6 +263,7 @@ $(function(){
 			
 			that.app.trigger("tt-option-timestep-change");
 			that.app.trigger("tt-oncomplete");
+			this.updateRingIntervalLabel();
 		},
 		
 		halveRing: function(){
@@ -272,6 +277,8 @@ $(function(){
 			
 			that.app.trigger("tt-option-timestep-change");
 			that.app.trigger("tt-oncomplete");
+			
+			this.updateRingIntervalLabel();
 		},
 		
 		changeInterval: function(){
@@ -300,6 +307,7 @@ $(function(){
 			var newFarTime = that.app.option.viewMin / 1000
 			this.rgraph.fx.animateTime(newNearTime, newFarTime, {modes:['polar'], duration: 500 } );
 			this.updateTimeLabel();
+			this.updateRingIntervalLabel();
 		},
 		
 		refresh: function(){
@@ -375,6 +383,21 @@ $(function(){
 			$("span#end-time").text(endTimeString);
 		},
 		
+		updateRingIntervalLabel: function(){
+			
+			var that = this;
+			var timeStep = that.app.option.timeStep;
+			$("#tunnel-ring-interval").text(timeStep/60+' Minutes');
+			
+		},
+		
+		showRingIntervalLabel: function(){
+			$("#tunnel-ring-interval-container").removeClass("hidden");
+		},
+		
+		hideRingIntervalLabel: function(){
+			$("#tunnel-ring-interval-container").addClass("hidden");
+		}
 		
 	});
 	
