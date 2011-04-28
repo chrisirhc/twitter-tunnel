@@ -193,9 +193,22 @@ header{
 		margin-bottom: 1*$v;
 		
 		#tunnel-time-label{
+			font-size: 10px;
 			position: absolute;
 			left: 55px;
 			top: 0px;
+		}
+		
+		#tunnel-ring-interval-container{
+			font-size: 10px;
+			position: absolute;
+			left: 55px;
+			top: 20px;
+			z-index: 999;
+			background: rgba(0,0,0,0.5);
+			color: white;
+			padding: 0 5px;
+			@include border-radius(3px);
 		}
 		
 		#tunnel-controller{
