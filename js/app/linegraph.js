@@ -414,12 +414,14 @@ $(function(){
 				this.removeSingleLine(id);
 			}
 			
-			xAxis.addPlotBand({
-				id: id,
-				from: pos,
-				to: pos + thickness,
-				color: 'rgba(0, 0, 0, 0.9)'
-			});
+			if (pos>=this.app.option.viewMin){
+				xAxis.addPlotBand({
+					id: id,
+					from: pos,
+					to: pos + thickness,
+					color: 'rgba(255, 0, 0, 0.75)'
+				});
+			}
 			this._lineCounter++;
 		},
 		
