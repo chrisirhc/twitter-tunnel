@@ -12,12 +12,15 @@ $(function(){
 		},
 		initialize: function () {
 			_.bindAll(this, "render");
+			// clear hover setting
+			this.model.set({hovered: false});
 			this.model.bind('change:hovered', this.render);
 			this.model.bind('change:selected', this.render);
 			this.model.detailView = this;
 		},
 		render: function () {
-			$(this.el).html(this.template(this.model.toJSON()));
+			$(this.el).html(this.template(this.model.toJSON()))
+			.addClass("color-" + this.color);
 			if(this.model.get("hovered") === true) {
 				$(this.el).addClass("hovered");
 			} else {
@@ -66,6 +69,7 @@ $(function(){
 			if(model.get('active') === true) {
 				model.get('tweets').each(function (tweet) {
 					var tweetView = tweet.detailView || new TweetDetail({model: tweet});
+					tweetView.color = model.get('color');
 					this.$("#tweets-details").append(tweetView.render().el);
 				});
 			} else {
