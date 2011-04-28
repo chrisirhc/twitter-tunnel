@@ -407,25 +407,29 @@ $(function(){
 			var pos = obj.pos;
 			var id = obj.id;
 			var color = obj.color;
-			var xAxis = this.masterChart.xAxis[0];
+			if (this.masterChart){
+				var xAxis = this.masterChart.xAxis[0];
 			
-			if (obj.replace === true){
-				this.removeSingleLine(id);
-			}
+				if (obj.replace === true){
+					this.removeSingleLine(id);
+				}
 			
-			if (pos>=this.app.option.viewMin){
-				xAxis.addPlotLine({
-					id: id,
-					value: pos,
-					width: 1,
-					color: color
-				});
+				if (pos>=this.app.option.viewMin){
+					xAxis.addPlotLine({
+						id: id,
+						value: pos,
+						width: 1,
+						color: color
+					});
+				}
 			}
 		},
 		
 		removeSingleLine: function(id){
-			var xAxis = this.masterChart.xAxis[0];
-			xAxis.removePlotLine(id);
+			if (this.masterChart){
+				var xAxis = this.masterChart.xAxis[0];
+				xAxis.removePlotLine(id);
+			}
 		},
 		
 		addRingLines: function(){
