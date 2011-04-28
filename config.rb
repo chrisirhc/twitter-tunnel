@@ -10,3 +10,6 @@ relative_assets = true
 
 # Uncomment the following line to get a compacted css file 
 # output_style = :compressed
+
+line_comments = false
+
