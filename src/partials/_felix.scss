@@ -8,6 +8,14 @@ $right-width: 6;
 $center-width-collapsed-left: 17;
 $center-width-collapsed-right: 19;
 
+$goodRed: #e44241;
+$goodYellow: #d9bf5d;
+$goodPink: #d98493;
+$goodGreen: #65a85b;
+$goodBlue: #3b5379;
+$goodOrange: #e98e4f;
+$goodPurple: #aa4768;
+
 body{
 }
 
@@ -84,15 +92,7 @@ header{
 		
 		li.keywords{
 
-			margin: 1px;
-			
-			$goodRed: #e44241;
-			$goodYellow: #d9bf5d;
-			$goodPink: #d98493;
-			$goodGreen: #65a85b;
-			$goodBlue: #3b5379;
-			$goodOrange: #e98e4f;
-			$goodPurple: #aa4768;
+			border: 1px solid white;
 			
 			&.color-0 {
 				@include keyword-style($goodPurple);
@@ -121,8 +121,6 @@ header{
 			&.color-6 {
 				@include keyword-style($goodOrange);
 			}
-			
-			
 			
 		}
 		
@@ -287,8 +285,35 @@ header{
 						font-weight: bold;
 					}
 				}
-				&:hover{
-					background: #eee;
+
+				border: 1px solid white;
+
+				&.color-0 {
+					@include keyword-style($goodPurple);
+				}
+
+				&.color-1 {
+					@include keyword-style($goodRed);
+				}
+
+				&.color-2 {
+					@include keyword-style($goodYellow);
+				}
+
+				&.color-3 {
+					@include keyword-style($goodPink);
+				}
+
+				&.color-4 {
+					@include keyword-style($goodGreen);
+				}
+
+				&.color-5 {
+					@include keyword-style($goodBlue);
+				}
+
+				&.color-6 {
+					@include keyword-style($goodOrange);
 				}
 			}
 		}

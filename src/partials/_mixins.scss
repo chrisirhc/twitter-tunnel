@@ -68,16 +68,14 @@
 
 @mixin keyword-style($color){
 	color: $color;
-	&.hovered {
-		border: 1px solid $color;
-		// Check whether this is right
-		margin: 0px;
-		color: black;
-		background: #eee;
-	}
 	&.selected {
 		color: white;
 		background: $color;
 		cursor: pointer;
+	}
+	&.hovered {
+		border: 1px solid $color;
+		color: black;
+		background: #eee;
 	}
 }
