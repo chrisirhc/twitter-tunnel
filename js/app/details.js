@@ -11,12 +11,21 @@ $(function(){
 			"click": "onClick"
 		},
 		initialize: function () {
-			_.bindAll(this, "render");
+			_.bindAll(this, "render", "changeInterval");
 			// clear hover setting
 			this.model.set({hovered: false});
 			this.model.bind('change:hovered', this.render);
 			this.model.bind('change:selected', this.render);
 			this.model.detailView = this;
+			this.options.app.bind("tt-option-interval-change", this.changeInterval);
+		},
+		changeInterval: function () {
+			if(this.model.get("data").created_at.unix_timestamp*1000 < this.options.app.option.viewMin ||
+				 this.model.get("data").created_at.unix_timestamp*1000 > this.options.app.option.viewMax ) {
+				$(this.el).fadeOut();
+			} else {
+				$(this.el).fadeIn();
+			}
 		},
 		render: function () {
 			$(this.el).html(this.template(this.model.toJSON()))
@@ -67,12 +76,12 @@ $(function(){
 
 		contentChange: function (model) {
 			if(model.get('active') === true) {
-				model.get('tweets').each(function (tweet) {
-					var tweetView = tweet.detailView || new TweetDetail({model: tweet});
+				model.get('tweets').each(_.bind(function (tweet) {
+					var tweetView = tweet.detailView || new TweetDetail({app: this.options.app, model: tweet});
 					tweetView.delegateEvents();
 					tweetView.color = model.get('color');
 					this.$("#tweets-details").append(tweetView.render().el);
-				});
+				}, this));
 			} else {
 				// Remove the nodes
 				model.get('tweets').each(function (tweet) {
