@@ -526,28 +526,86 @@ header h3 {
 #left-container #keyword-container li span.delete-keyword:hover {
   text-decoration: underline;
 }
-/* line 85, ../src/partials/_felix.scss */
-#left-container #keyword-container li.keywords {
-  /* REMOVE for production */
-  color: #d32564;
+/* line 95, ../src/partials/_felix.scss */
+#left-container #keyword-container li.keywords:nth-child(7n) {
+  color: #aa4768;
 }
-/* line 89, ../src/partials/_felix.scss */
-#left-container #keyword-container li.keywords:hover, #left-container #keyword-container li.keywords.hover {
-  /* REMOVE for production */
+/* line 71, ../src/partials/_mixins.scss */
+#left-container #keyword-container li.keywords:nth-child(7n):hover, #left-container #keyword-container li.keywords:nth-child(7n).hover {
   color: white;
-  background: #d32564;
+  background: #aa4768;
   cursor: pointer;
 }
-/* line 98, ../src/partials/_felix.scss */
+/* line 99, ../src/partials/_felix.scss */
+#left-container #keyword-container li.keywords:nth-child(7n+1) {
+  color: #e44241;
+}
+/* line 71, ../src/partials/_mixins.scss */
+#left-container #keyword-container li.keywords:nth-child(7n+1):hover, #left-container #keyword-container li.keywords:nth-child(7n+1).hover {
+  color: white;
+  background: #e44241;
+  cursor: pointer;
+}
+/* line 103, ../src/partials/_felix.scss */
+#left-container #keyword-container li.keywords:nth-child(7n+2) {
+  color: #d9bf5d;
+}
+/* line 71, ../src/partials/_mixins.scss */
+#left-container #keyword-container li.keywords:nth-child(7n+2):hover, #left-container #keyword-container li.keywords:nth-child(7n+2).hover {
+  color: white;
+  background: #d9bf5d;
+  cursor: pointer;
+}
+/* line 107, ../src/partials/_felix.scss */
+#left-container #keyword-container li.keywords:nth-child(7n+3) {
+  color: #d98493;
+}
+/* line 71, ../src/partials/_mixins.scss */
+#left-container #keyword-container li.keywords:nth-child(7n+3):hover, #left-container #keyword-container li.keywords:nth-child(7n+3).hover {
+  color: white;
+  background: #d98493;
+  cursor: pointer;
+}
+/* line 111, ../src/partials/_felix.scss */
+#left-container #keyword-container li.keywords:nth-child(7n+4) {
+  color: #65a85b;
+}
+/* line 71, ../src/partials/_mixins.scss */
+#left-container #keyword-container li.keywords:nth-child(7n+4):hover, #left-container #keyword-container li.keywords:nth-child(7n+4).hover {
+  color: white;
+  background: #65a85b;
+  cursor: pointer;
+}
+/* line 115, ../src/partials/_felix.scss */
+#left-container #keyword-container li.keywords:nth-child(7n+5) {
+  color: #3b5379;
+}
+/* line 71, ../src/partials/_mixins.scss */
+#left-container #keyword-container li.keywords:nth-child(7n+5):hover, #left-container #keyword-container li.keywords:nth-child(7n+5).hover {
+  color: white;
+  background: #3b5379;
+  cursor: pointer;
+}
+/* line 119, ../src/partials/_felix.scss */
+#left-container #keyword-container li.keywords:nth-child(7n+6) {
+  color: #e98e4f;
+}
+/* line 71, ../src/partials/_mixins.scss */
+#left-container #keyword-container li.keywords:nth-child(7n+6):hover, #left-container #keyword-container li.keywords:nth-child(7n+6).hover {
+  color: white;
+  background: #e98e4f;
+  cursor: pointer;
+}
+/* line 127, ../src/partials/_felix.scss */
 #left-container #keyword-container li.keywords.disabled {
   text-decoration: line-through;
   color: #ddd;
 }
-/* line 102, ../src/partials/_felix.scss */
+/* line 131, ../src/partials/_felix.scss */
 #left-container #keyword-container li.keywords.disabled:hover {
   background: #bbb;
 }
-/* line 108, ../src/partials/_felix.scss */
+/* line 137, ../src/partials/_felix.scss */
 #left-container #keyword-container #add-keyword {
   margin: 18px 0;
   -webkit-user-select: none;
@@ -557,31 +615,31 @@ header h3 {
   user-select: none;
   text-decoration: underline;
 }
-/* line 113, ../src/partials/_felix.scss */
+/* line 142, ../src/partials/_felix.scss */
 #left-container #keyword-container #add-keyword:hover {
   color: white;
   background: #333;
   cursor: pointer;
 }
-/* line 120, ../src/partials/_felix.scss */
+/* line 149, ../src/partials/_felix.scss */
 #left-container #keyword-container #add-keyword-container {
   display: none;
   margin: 18px 0;
 }
-/* line 124, ../src/partials/_felix.scss */
+/* line 153, ../src/partials/_felix.scss */
 #left-container #keyword-container #add-keyword-container input {
   min-height: 1.5em;
   border: 1px solid #bbb;
   width: 100%;
   background-color: #fff;
 }
-/* line 131, ../src/partials/_felix.scss */
+/* line 160, ../src/partials/_felix.scss */
 #left-container #keyword-container #add-keyword-container span {
   min-height: 1.5em;
   padding: 0 5px;
 }
 
-/* line 143, ../src/partials/_felix.scss */
+/* line 172, ../src/partials/_felix.scss */
 #center-container.normal {
   display: inline;
   float: left;
@@ -593,7 +651,7 @@ header h3 {
 * html #center-container.normal {
   overflow-x: hidden;
 }
-/* line 148, ../src/partials/_felix.scss */
+/* line 177, ../src/partials/_felix.scss */
 #center-container.collapsed-left {
   display: inline;
   float: left;
@@ -605,7 +663,7 @@ header h3 {
 * html #center-container.collapsed-left {
   overflow-x: hidden;
 }
-/* line 153, ../src/partials/_felix.scss */
+/* line 182, ../src/partials/_felix.scss */
 #center-container.collapsed-right {
   display: inline;
   float: left;
@@ -617,18 +675,18 @@ header h3 {
 * html #center-container.collapsed-right {
   overflow-x: hidden;
 }
-/* line 158, ../src/partials/_felix.scss */
+/* line 187, ../src/partials/_felix.scss */
 #center-container #overview-container {
   position: relative;
   margin-top: 18px;
 }
-/* line 162, ../src/partials/_felix.scss */
+/* line 191, ../src/partials/_felix.scss */
 #center-container #overview-container #overview-controller {
   position: absolute;
   right: 0px;
   top: -5px;
 }
-/* line 167, ../src/partials/_felix.scss */
+/* line 196, ../src/partials/_felix.scss */
 #center-container #overview-container #overview-controller p {
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -676,7 +734,7 @@ header h3 {
   background: #eee;
   color: #999;
 }
-/* line 176, ../src/partials/_felix.scss */
+/* line 205, ../src/partials/_felix.scss */
 #center-container #overview-container #overview {
   position: relative;
   -webkit-user-select: none;
@@ -687,32 +745,32 @@ header h3 {
   padding: 18px 0;
   height: 180px;
 }
-/* line 183, ../src/partials/_felix.scss */
+/* line 212, ../src/partials/_felix.scss */
 #center-container #overview-container #overview #overview-master-container {
   position: absolute;
   top: 0;
   height: 80px;
   width: 100%;
 }
-/* line 190, ../src/partials/_felix.scss */
+/* line 219, ../src/partials/_felix.scss */
 #center-container #overview-container #overview #overview-detail-container {
   position: absolute;
   top: 80px;
   height: 80px;
   width: 100%;
 }
-/* line 200, ../src/partials/_felix.scss */
+/* line 229, ../src/partials/_felix.scss */
 #center-container #tunnel-container {
   position: relative;
   margin-bottom: 18px;
 }
-/* line 204, ../src/partials/_felix.scss */
+/* line 233, ../src/partials/_felix.scss */
 #center-container #tunnel-container #tunnel-controller {
   position: absolute;
   right: 0px;
   top: -5px;
 }
-/* line 210, ../src/partials/_felix.scss */
+/* line 239, ../src/partials/_felix.scss */
 #center-container #tunnel-container #tunnel-controller p {
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -760,13 +818,13 @@ header h3 {
   background: #eee;
   color: #999;
 }
-/* line 219, ../src/partials/_felix.scss */
+/* line 248, ../src/partials/_felix.scss */
 #center-container #tunnel-container #infovis {
   width: 100%;
   height: 540px;
 }
 
-/* line 228, ../src/partials/_felix.scss */
+/* line 257, ../src/partials/_felix.scss */
 #right-container {
   display: inline;
   float: left;
@@ -777,38 +835,38 @@ header h3 {
 * html #right-container {
   overflow-x: hidden;
 }
-/* line 232, ../src/partials/_felix.scss */
+/* line 261, ../src/partials/_felix.scss */
 #right-container #details-container ol {
   margin: 18px 0;
   list-style: none;
   overflow-y: scroll;
   height: 738px;
 }
-/* line 238, ../src/partials/_felix.scss */
+/* line 267, ../src/partials/_felix.scss */
 #right-container #details-container ol li {
   margin: 9px 0;
   padding: 9px 18px;
 }
-/* line 241, ../src/partials/_felix.scss */
+/* line 270, ../src/partials/_felix.scss */
 #right-container #details-container ol li img {
   float: left;
 }
-/* line 245, ../src/partials/_felix.scss */
+/* line 274, ../src/partials/_felix.scss */
 #right-container #details-container ol li p {
   margin-left: 60px;
   word-wrap: break-word;
 }
-/* line 248, ../src/partials/_felix.scss */
+/* line 277, ../src/partials/_felix.scss */
 #right-container #details-container ol li p span.username {
   padding-right: 3px;
   font-weight: bold;
 }
-/* line 253, ../src/partials/_felix.scss */
+/* line 282, ../src/partials/_felix.scss */
 #right-container #details-container ol li:hover {
   background: #eee;
 }
 
-/* line 262, ../src/partials/_felix.scss */
+/* line 291, ../src/partials/_felix.scss */
 footer {
   display: inline;
   float: left;

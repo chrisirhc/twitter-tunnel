@@ -65,3 +65,12 @@
 	}
 	
 }
+
+@mixin keyword-style($color){
+	color: $color;
+	&:hover, &.hover{
+		color: white;
+		background: $color;
+		cursor: pointer;
+	}
+}
