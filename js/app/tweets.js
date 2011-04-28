@@ -111,10 +111,10 @@ $(function(){
 				var tweets = new TweetCollection;
 				tweets.keyword = this.get("keyword");
 				this.set({tweets: tweets});
-				// show loading notification
 				this.fetchTweets();
 			} else {
 				this.set({tweets: new TweetCollection(this.get("tweets"))});
+				this.set({"loaded": true});
 			}
 		},
 		
@@ -176,6 +176,7 @@ $(function(){
 			// Format the YQL data (get the tweet data)
 			tweetCollection.add(data);
 			this.save();
+			this.set({"loaded": true});
 			this.trigger("change:active", this);
 		}
 		
@@ -202,7 +203,7 @@ $(function(){
 		tagName: "li",
 		className: "keywords",
 		
-		template: _.template("<%= keyword %><span class='delete-keyword'>x</span>"),
+		template: _.template('<%= keyword %><span class="delete-keyword"><img src="img/loading.gif"/></span>'),
 		
 		events: {
 			"click" : "toggleActive",
@@ -212,7 +213,7 @@ $(function(){
 		},
 		
 		initialize: function(){
-			_.bindAll(this, 'render', 'onHoverChange', 'onSelectionChange');
+			_.bindAll(this, 'render', 'onHoverChange', 'onSelectionChange', 'finishLoading');
 			this.model.view = this;
 
 			if (!this.model.get('active')) {
@@ -223,6 +224,13 @@ $(function(){
 			this.model.get('tweets').bind('change:selected', this.onSelectionChange);
 
 			this.model.get('tweets').any(this.onSelectionChange);
+			this.model.bind('change:loaded', this.finishLoading);
+		},
+
+		finishLoading: function (model) {
+			if (model.get("loaded") === true) {
+				this.$(".delete-keyword").html("x");
+			}
 		},
 
 		onHoverChange: function (tweet) {
@@ -246,6 +254,8 @@ $(function(){
 		render: function(){
 			$(this.el).html(this.template(this.model.toJSON()))
 			.addClass("color-" + this.model.get("color"));
+			// Just in case the model loads faster...
+			this.finishLoading(this.model);
 			return this;
 		},
 		
