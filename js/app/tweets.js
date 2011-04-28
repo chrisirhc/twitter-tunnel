@@ -237,6 +237,8 @@ $(function(){
 			} else {
 				$(this.el).removeClass('selected');
 			}
+			// Persist the selection
+			this.model.save();
 		},
 		
 		render: function(){
