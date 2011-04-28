@@ -538,6 +538,9 @@ header h3 {
   min-height: 1.5em;
   padding: 0 5px;
 }
+#left-container #legend-container div {
+  vertical-align: top;
+}
 
 #center-container.normal {
   display: inline;
@@ -744,6 +747,7 @@ header h3 {
 #right-container #details-container ol li {
   margin: 9px 0;
   padding: 9px 18px;
+  min-height: 54px;
   border: 1px solid white;
 }
 #right-container #details-container ol li img {

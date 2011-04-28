@@ -126,6 +126,15 @@ header{
 		}
 		
 	}	
+	
+	#legend-container{
+		
+		div {
+			vertical-align: top;
+		}
+		
+	}
+	
 }
 
 
@@ -250,6 +259,7 @@ header{
 			li{
 				margin: 0.5*$v 0;
 				padding: 0.5*$v 1*$v;
+				min-height: 3*$v;
 				img{
 					float: left;
 					height: 48px;
