@@ -94,7 +94,6 @@ $(function(){
 
 		scrollTo: function (model) {
 			if (model.get("selected") === true) {
-				console.log($(model.detailView.el).position().top);
 				var tweetDetailsBox = this.$("#tweets-details");
 				tweetDetailsBox.scrollTop(tweetDetailsBox.scrollTop() + $(model.detailView.el).position().top);
 			}
