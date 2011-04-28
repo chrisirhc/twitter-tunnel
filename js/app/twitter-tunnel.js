@@ -258,6 +258,7 @@ $(function(){
 			that.app.option.timeStep = newTimeStep;
 			
 			that.app.trigger("tt-option-timestep-change");
+			that.app.trigger("tt-oncomplete");
 		},
 		
 		halveRing: function(){
@@ -270,6 +271,7 @@ $(function(){
 			that.app.option.timeStep = newTimeStep;
 			
 			that.app.trigger("tt-option-timestep-change");
+			that.app.trigger("tt-oncomplete");
 		},
 		
 		changeInterval: function(){
