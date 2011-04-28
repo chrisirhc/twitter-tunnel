@@ -35,6 +35,7 @@ $(function(){
 				if (data.length) {
 					for (var i=0; i < data.length; i++) {
 						// Process the data before passing it to JIT
+						data[i].data.keyword = model.get('keyword');
 						data[i].data.type = data[i].type;
 						delete data[i].children;
 						delete data[i].parent;
@@ -169,7 +170,15 @@ $(function(){
 			onComplete: function(){
 				that.app.trigger("tt-oncomplete");
 			},
-			
+			 Events: {
+				 enable: true,
+				 onMouseEnter: function(node) {
+					 that.model.get(node.data.keyword).get("tweets").get(node.id).set({"hovered": true});
+				 },
+				 onMouseLeave: function(node) {
+					 that.model.get(node.data.keyword).get("tweets").get(node.id).set({"hovered": false});
+				 }
+			 }
 			});
 			//load JSON data
 			rgraph.loadJSON(json);

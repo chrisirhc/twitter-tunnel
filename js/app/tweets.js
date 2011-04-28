@@ -331,6 +331,7 @@ $(function(){
 		newAttributes: function(){
 			this.currentColor = (this.currentColor + 1) % this.numberOfColors;
 			return {
+				id: this.input.val(),
 				keyword: this.input.val(),
 				active: true,
 				color: this.currentColor
@@ -339,13 +340,11 @@ $(function(){
 		
 		addKeyword: function(e){
 			if (e.keyCode != 13) return;
-			console.log('adding keyword');
-			if(this.model.create(this.newAttributes())){
-				this.hideInputBox();
-				
-				// Tell LineChartView to load the new tweets data
-				
-				// Tell TunnelView to load the tweets
+			// Check whether this is already in
+			if (!this.model.get(this.input.val())) {
+				if(this.model.create(this.newAttributes())) {
+					this.hideInputBox();
+				}
 			}
 		}
 		
