@@ -54,6 +54,7 @@ $(function(){
 				// Remove the nodes
 				var list = _.pluck(data, 'id');
 				this.rgraph.op.removeNode(list.reverse(), {type: 'nothing'});
+				this.rgraph.refresh();
 				model.insertedOnJIT = false;
 			}
 		},
