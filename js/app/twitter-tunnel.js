@@ -284,16 +284,12 @@ $(function(){
 		},
 		
 		getTimeFromCursor: function(e){
+			var infovisOffset = $('#infovis').offset();
 			
-			var domElement = $('#infovis');
-			
-			var canvas = this.rgraph.canvas.circlesCanvas.canvas;
-		    var canvasX = canvas.offsetLeft;
-		    var canvasY = canvas.offsetTop;
-		    var x = e.offsetX - canvasX;
-		    var y = e.offsetY - canvasY;
-		    var computedTime = this.rgraph.getTimeAtPosition(x,y);
-			
+			var x = e.pageX - infovisOffset.left;
+			var y = e.pageY - infovisOffset.top;
+			var computedTime = this.rgraph.getTimeAtPosition(x,y);
+
 			this.app.trigger("tt-cursor-position-change", {pos: computedTime*1000, id: 'line-cursor', replace: true, color: "rgba(255,0,0,0.75)"});
 		},
 		
