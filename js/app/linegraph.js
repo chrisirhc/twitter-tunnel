@@ -439,7 +439,9 @@ $(function(){
 			var times = _.map(times, function(i){ return i*1000 });
 			var times = _.sortBy(times, function(i){ return i });
 			_.map(times, function(i){
-                that.addSingleLine({ pos: i, id: 'ring-line', color: "rgba(0,0,0,0.1)"});
+				// hardcode to force the lines to fit the viewMin and viewMax
+				if (i>=that.app.option.viewMin && i<=that.app.option.viewMax)
+                	that.addSingleLine({ pos: i, id: 'ring-line', color: "rgba(0,0,0,0.1)"});
 			})
 			this.ringTimes = times;
 		},
