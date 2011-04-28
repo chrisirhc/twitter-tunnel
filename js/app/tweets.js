@@ -207,16 +207,35 @@ $(function(){
 		events: {
 			"click" : "toggleActive",
 			"click span.delete-keyword" : "deleteKeyword",
-			"mouseover" : "addHoverClass",
-			"mouseout" : "removeHoverClass"
+			"mouseenter" : "onStartHover",
+			"mouseleave" : "onEndHover"
 		},
 		
 		initialize: function(){
-			_.bindAll(this, 'render');
+			_.bindAll(this, 'render', 'onHoverChange', 'onSelectionChange');
 			this.model.view = this;
 
 			if (!this.model.get('active')) {
 				$(this.el).addClass('disabled');
+			}
+
+			this.model.get('tweets').bind('change:hovered', this.onHoverChange);
+			this.model.get('tweets').bind('change:selected', this.onSelectionChange);
+		},
+
+		onHoverChange: function (tweet) {
+			if (tweet.get('hovered') === true) {
+				$(this.el).addClass('hovered');
+			} else {
+				$(this.el).removeClass('hovered');
+			}
+		},
+
+		onSelectionChange: function (tweet) {
+			if (tweet.get('selected') === true) {
+				$(this.el).addClass('selected');
+			} else {
+				$(this.el).removeClass('selected');
 			}
 		},
 		
@@ -241,12 +260,12 @@ $(function(){
 			$(this.el).slideUp('fast');
 		},
 		
-		addHoverClass: function(){
-			$(this.el).addClass('hover');
+		onStartHover: function(){
+			this.model.get('tweets').each(function(tweet) { tweet.set({hovered: true}); });
 		},
 		
-		removeHoverClass: function(){
-			$(this.el).removeClass('hover');
+		onEndHover: function(){
+			this.model.get('tweets').each(function(tweet) { tweet.set({hovered: false}); });
 		}
 		
 	});

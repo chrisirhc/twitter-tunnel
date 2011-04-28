@@ -5,13 +5,43 @@ $(function(){
 	window.TweetDetail = Backbone.View.extend({
 		tagName: "li",
 		template: _.template('<img src="<%= data.user.profile_image_url %>"/><p><span class="username"><%= data.user.name %></span> <%= data.text %></p>'),
+		events: {
+			"mouseenter": "onStartHover",
+			"mouseleave": "onEndHover",
+			"click": "onClick"
+		},
 		initialize: function () {
+			_.bindAll(this, "render");
+			this.model.bind('change:hovered', this.render);
 			this.model.bind('change:selected', this.render);
 			this.model.detailView = this;
 		},
 		render: function () {
 			$(this.el).html(this.template(this.model.toJSON()));
+			if(this.model.get("hovered") === true) {
+				$(this.el).addClass("hovered");
+			} else {
+				$(this.el).removeClass("hovered");
+			}
+			if(this.model.get("selected") === true) {
+				$(this.el).addClass("selected");
+			} else {
+				$(this.el).removeClass("selected");
+			}
 			return this;
+		},
+
+		onClick: function() {
+			// toggle selected
+			this.model.set({selected: !this.model.get("selected")});
+		},
+
+		onStartHover: function(){
+			this.model.set({hovered: true});
+		},
+
+		onEndHover: function(){
+			this.model.set({hovered: false});
 		}
 	});
 	
@@ -24,8 +54,6 @@ $(function(){
 		
 		events: {
 			"click ol>li": "changeInterval",
-			"mouseover ol>li": "addHoverClass",
-			"mouseout ol>li": "removeHoverClass",
 		},
 		
 		initialize: function(){
@@ -51,14 +79,6 @@ $(function(){
 		changeInterval: function(){
 			
 		},
-		
-		addHoverClass: function(){
-			this.$("ol>li").addClass('hover');
-		},
-		
-		removeHoverClass: function(){
-			$("#tweets-details li").removeClass('hover');
-		}
 		
 		
 	});
