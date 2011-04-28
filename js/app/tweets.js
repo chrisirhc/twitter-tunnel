@@ -309,7 +309,10 @@ $(function(){
 			
 			// comment out the below line to turn off persistant storage
 			this.model.fetch();
-			
+
+			if (this.model.length > 0) {
+				this.currentColor = this.model.length - 1;
+			}
 		},
 		
 		showInputBox: function(){
