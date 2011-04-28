@@ -314,7 +314,9 @@ $(function(){
 										"0"+(startTime.getMinutes()+''):
 										startTime.getMinutes());
 			
-			var endTimeString = 	endTime.getHours() + ":"
+			var endTimeString = 	month[ endTime.getMonth() ] + " "
+									+ endTime.getDate() + " "
+									+ endTime.getHours() + ":"
 									+ (endTime.getMinutes()<10?
 										"0"+(endTime.getMinutes()+''):
 										endTime.getMinutes());

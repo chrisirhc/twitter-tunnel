@@ -22,8 +22,6 @@ $(function(){
 			this.app.bind("tt-cursor-out", this.removeSingleLine);
 
 			this.model.bind('change:active', this.contentChange);
-			
-			this._lineCounter = 0;
 
 			// On initalization look at all the data available
 			this.contentChange();
@@ -240,7 +238,7 @@ $(function(){
 				}
 
 			}, function(masterChart) {
-				that.createDetail(masterChart)
+				that.createDetail(masterChart);
 			});
 		},
 		
@@ -407,27 +405,27 @@ $(function(){
 		addSingleLine: function(obj){
 			var pos = obj.pos;
 			var id = obj.id;
+			var color = obj.color;
 			var xAxis = this.masterChart.xAxis[0];
-			var thickness = (this.masterEnd - this.masterStart) / 447; // 447 is the width of the line graph
 			
 			if (obj.replace === true){
 				this.removeSingleLine(id);
 			}
 			
 			if (pos>=this.app.option.viewMin){
-				xAxis.addPlotBand({
+				xAxis.addPlotLine({
 					id: id,
-					from: pos,
-					to: pos + thickness,
+					value: pos,
+					width: 1,
 					color: 'rgba(255, 0, 0, 0.75)'
 				});
 			}
-			this._lineCounter++;
 		},
 		
 		removeSingleLine: function(id){
 			var xAxis = this.masterChart.xAxis[0];
-			xAxis.removePlotBand(id);
+			xAxis.removePlotLine(id);
+		},
 		}
 		
 	});
