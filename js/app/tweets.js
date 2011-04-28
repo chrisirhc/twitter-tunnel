@@ -221,6 +221,8 @@ $(function(){
 
 			this.model.get('tweets').bind('change:hovered', this.onHoverChange);
 			this.model.get('tweets').bind('change:selected', this.onSelectionChange);
+
+			this.model.get('tweets').any(this.onSelectionChange);
 		},
 
 		onHoverChange: function (tweet) {
@@ -234,7 +236,7 @@ $(function(){
 		onSelectionChange: function (tweet) {
 			if (tweet.get('selected') === true) {
 				$(this.el).addClass('selected');
-			} else {
+			} else if (!this.model.get('tweets').any(function (i) { return i.get("selected") === true;})) {
 				$(this.el).removeClass('selected');
 			}
 			// Persist the selection
