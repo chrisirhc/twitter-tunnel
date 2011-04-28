@@ -438,14 +438,13 @@ th {
 */
 /* line 14, ../src/partials/_felix.scss */
 header {
-  margin-top: 18px;
   padding-top: 26px;
   padding-bottom: 8px;
   line-height: 1.5em;
   overflow: hidden;
   *zoom: 1;
 }
-/* line 22, ../src/partials/_felix.scss */
+/* line 21, ../src/partials/_felix.scss */
 header h1 {
   display: inline;
   float: left;
@@ -458,7 +457,7 @@ header h1 {
 * html header h1 {
   overflow-x: hidden;
 }
-/* line 27, ../src/partials/_felix.scss */
+/* line 26, ../src/partials/_felix.scss */
 header h3 {
   padding-left: 40px;
   display: inline;
@@ -473,13 +472,13 @@ header h3 {
   overflow-x: hidden;
 }
 
-/* line 38, ../src/partials/_felix.scss */
+/* line 37, ../src/partials/_felix.scss */
 #main {
   padding-top: 18px;
   overflow: hidden;
   *zoom: 1;
 }
-/* line 42, ../src/partials/_felix.scss */
+/* line 41, ../src/partials/_felix.scss */
 #main h4 {
   font-size: 12px;
   font-weight: bold;
@@ -487,17 +486,17 @@ header h3 {
   border-bottom: 1px solid #ddd;
   outline-bottom: 1px solid #fff;
 }
-/* line 49, ../src/partials/_felix.scss */
+/* line 48, ../src/partials/_felix.scss */
 #main h4 span {
   font-weight: normal;
 }
-/* line 52, ../src/partials/_felix.scss */
+/* line 51, ../src/partials/_felix.scss */
 #main h4 span:hover {
   text-decoration: underline;
   cursor: pointer;
 }
 
-/* line 63, ../src/partials/_felix.scss */
+/* line 62, ../src/partials/_felix.scss */
 #left-container {
   display: inline;
   float: left;
@@ -509,46 +508,46 @@ header h3 {
 * html #left-container {
   overflow-x: hidden;
 }
-/* line 68, ../src/partials/_felix.scss */
+/* line 67, ../src/partials/_felix.scss */
 #left-container #keyword-container ul {
   margin: 18px 0;
 }
-/* line 72, ../src/partials/_felix.scss */
+/* line 71, ../src/partials/_felix.scss */
 #left-container #keyword-container li {
   list-style: none;
   position: relative;
 }
-/* line 76, ../src/partials/_felix.scss */
+/* line 75, ../src/partials/_felix.scss */
 #left-container #keyword-container li span.delete-keyword {
   position: absolute;
   right: 1em;
 }
-/* line 80, ../src/partials/_felix.scss */
+/* line 79, ../src/partials/_felix.scss */
 #left-container #keyword-container li span.delete-keyword:hover {
   text-decoration: underline;
 }
-/* line 86, ../src/partials/_felix.scss */
+/* line 85, ../src/partials/_felix.scss */
 #left-container #keyword-container li.keywords {
   /* REMOVE for production */
   color: #d32564;
 }
-/* line 90, ../src/partials/_felix.scss */
+/* line 89, ../src/partials/_felix.scss */
 #left-container #keyword-container li.keywords:hover, #left-container #keyword-container li.keywords.hover {
   /* REMOVE for production */
   color: white;
   background: #d32564;
   cursor: pointer;
 }
-/* line 99, ../src/partials/_felix.scss */
+/* line 98, ../src/partials/_felix.scss */
 #left-container #keyword-container li.keywords.disabled {
   text-decoration: line-through;
   color: #ddd;
 }
-/* line 103, ../src/partials/_felix.scss */
+/* line 102, ../src/partials/_felix.scss */
 #left-container #keyword-container li.keywords.disabled:hover {
   background: #bbb;
 }
-/* line 109, ../src/partials/_felix.scss */
+/* line 108, ../src/partials/_felix.scss */
 #left-container #keyword-container #add-keyword {
   margin: 18px 0;
   -webkit-user-select: none;
@@ -558,31 +557,31 @@ header h3 {
   user-select: none;
   text-decoration: underline;
 }
-/* line 114, ../src/partials/_felix.scss */
+/* line 113, ../src/partials/_felix.scss */
 #left-container #keyword-container #add-keyword:hover {
   color: white;
   background: #333;
   cursor: pointer;
 }
-/* line 121, ../src/partials/_felix.scss */
+/* line 120, ../src/partials/_felix.scss */
 #left-container #keyword-container #add-keyword-container {
   display: none;
   margin: 18px 0;
 }
-/* line 125, ../src/partials/_felix.scss */
+/* line 124, ../src/partials/_felix.scss */
 #left-container #keyword-container #add-keyword-container input {
   min-height: 1.5em;
   border: 1px solid #bbb;
   width: 100%;
   background-color: #fff;
 }
-/* line 132, ../src/partials/_felix.scss */
+/* line 131, ../src/partials/_felix.scss */
 #left-container #keyword-container #add-keyword-container span {
   min-height: 1.5em;
   padding: 0 5px;
 }
 
-/* line 144, ../src/partials/_felix.scss */
+/* line 143, ../src/partials/_felix.scss */
 #center-container.normal {
   display: inline;
   float: left;
@@ -594,7 +593,7 @@ header h3 {
 * html #center-container.normal {
   overflow-x: hidden;
 }
-/* line 149, ../src/partials/_felix.scss */
+/* line 148, ../src/partials/_felix.scss */
 #center-container.collapsed-left {
   display: inline;
   float: left;
@@ -606,7 +605,7 @@ header h3 {
 * html #center-container.collapsed-left {
   overflow-x: hidden;
 }
-/* line 154, ../src/partials/_felix.scss */
+/* line 153, ../src/partials/_felix.scss */
 #center-container.collapsed-right {
   display: inline;
   float: left;
@@ -618,18 +617,18 @@ header h3 {
 * html #center-container.collapsed-right {
   overflow-x: hidden;
 }
-/* line 159, ../src/partials/_felix.scss */
+/* line 158, ../src/partials/_felix.scss */
 #center-container #overview-container {
   position: relative;
   margin-top: 18px;
 }
-/* line 163, ../src/partials/_felix.scss */
+/* line 162, ../src/partials/_felix.scss */
 #center-container #overview-container #overview-controller {
   position: absolute;
   right: 0px;
   top: -5px;
 }
-/* line 168, ../src/partials/_felix.scss */
+/* line 167, ../src/partials/_felix.scss */
 #center-container #overview-container #overview-controller p {
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -677,7 +676,7 @@ header h3 {
   background: #eee;
   color: #999;
 }
-/* line 177, ../src/partials/_felix.scss */
+/* line 176, ../src/partials/_felix.scss */
 #center-container #overview-container #overview {
   position: relative;
   -webkit-user-select: none;
@@ -688,32 +687,32 @@ header h3 {
   padding: 18px 0;
   height: 180px;
 }
-/* line 184, ../src/partials/_felix.scss */
+/* line 183, ../src/partials/_felix.scss */
 #center-container #overview-container #overview #overview-master-container {
   position: absolute;
   top: 0;
   height: 80px;
   width: 100%;
 }
-/* line 191, ../src/partials/_felix.scss */
+/* line 190, ../src/partials/_felix.scss */
 #center-container #overview-container #overview #overview-detail-container {
   position: absolute;
   top: 80px;
   height: 80px;
   width: 100%;
 }
-/* line 201, ../src/partials/_felix.scss */
+/* line 200, ../src/partials/_felix.scss */
 #center-container #tunnel-container {
   position: relative;
   margin-bottom: 18px;
 }
-/* line 205, ../src/partials/_felix.scss */
+/* line 204, ../src/partials/_felix.scss */
 #center-container #tunnel-container #tunnel-controller {
   position: absolute;
   right: 0px;
   top: -5px;
 }
-/* line 211, ../src/partials/_felix.scss */
+/* line 210, ../src/partials/_felix.scss */
 #center-container #tunnel-container #tunnel-controller p {
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -761,13 +760,13 @@ header h3 {
   background: #eee;
   color: #999;
 }
-/* line 220, ../src/partials/_felix.scss */
+/* line 219, ../src/partials/_felix.scss */
 #center-container #tunnel-container #infovis {
   width: 100%;
   height: 540px;
 }
 
-/* line 229, ../src/partials/_felix.scss */
+/* line 228, ../src/partials/_felix.scss */
 #right-container {
   display: inline;
   float: left;
@@ -779,40 +778,37 @@ header h3 {
   overflow-x: hidden;
 }
 /* line 232, ../src/partials/_felix.scss */
-#right-container #details-container {
-  overflow-y: scroll;
-  height: 774px;
-}
-/* line 236, ../src/partials/_felix.scss */
 #right-container #details-container ol {
   margin: 18px 0;
   list-style: none;
+  overflow-y: scroll;
+  height: 738px;
 }
-/* line 239, ../src/partials/_felix.scss */
+/* line 238, ../src/partials/_felix.scss */
 #right-container #details-container ol li {
   margin: 9px 0;
   padding: 9px 18px;
 }
-/* line 242, ../src/partials/_felix.scss */
+/* line 241, ../src/partials/_felix.scss */
 #right-container #details-container ol li img {
   float: left;
 }
-/* line 246, ../src/partials/_felix.scss */
+/* line 245, ../src/partials/_felix.scss */
 #right-container #details-container ol li p {
   margin-left: 60px;
   word-wrap: break-word;
 }
-/* line 249, ../src/partials/_felix.scss */
+/* line 248, ../src/partials/_felix.scss */
 #right-container #details-container ol li p span.username {
   padding-right: 3px;
   font-weight: bold;
 }
-/* line 254, ../src/partials/_felix.scss */
+/* line 253, ../src/partials/_felix.scss */
 #right-container #details-container ol li:hover {
   background: #eee;
 }
 
-/* line 263, ../src/partials/_felix.scss */
+/* line 262, ../src/partials/_felix.scss */
 footer {
   display: inline;
   float: left;

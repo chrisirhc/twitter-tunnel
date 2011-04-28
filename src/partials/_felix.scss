@@ -13,7 +13,6 @@ body{
 
 header{
 	
-	margin-top: 1*$v;
 	padding-top: 1.5*$v - 1;
 	padding-bottom: 0.5*$v - 1;
 	
@@ -230,12 +229,12 @@ header{
 	@include column($right-width, true);
 	
 	#details-container{
-		overflow-y: scroll;
-		height: 43*$v;
-		
 		ol{
 			margin: 1*$v 0;
 			list-style: none;
+			overflow-y: scroll;
+			height: 41*$v; // height of the details-container minus the margin
+			
 			li{
 				margin: 0.5*$v 0;
 				padding: 0.5*$v 1*$v;
