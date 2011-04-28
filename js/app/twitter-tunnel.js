@@ -172,11 +172,19 @@ $(function(){
 			},
 			 Events: {
 				 enable: true,
+				 onClick: function(node) {
+					 if (node.data && node.data.keyword) {
+						 var tweet = that.model.get(node.data.keyword).get("tweets").get(node.id);
+						 tweet.set({"selected": !tweet.get("selected")});
+					 }
+				 },
 				 onMouseEnter: function(node) {
-					 that.model.get(node.data.keyword).get("tweets").get(node.id).set({"hovered": true});
+					 var tweet = that.model.get(node.data.keyword).get("tweets").get(node.id);
+					 tweet.set({"hovered": true});
 				 },
 				 onMouseLeave: function(node) {
-					 that.model.get(node.data.keyword).get("tweets").get(node.id).set({"hovered": false});
+					 var tweet = that.model.get(node.data.keyword).get("tweets").get(node.id);
+					 tweet.set({"hovered": false});
 				 }
 			 }
 			});

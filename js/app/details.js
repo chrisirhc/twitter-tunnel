@@ -69,7 +69,7 @@ $(function(){
 		},
 		
 		initialize: function(){
-      _.bindAll(this, "contentChange");
+      _.bindAll(this, "contentChange", "scrollTo");
 		  this.model.bind("change:active", this.contentChange);
 			this.model.each(this.contentChange);
 		},
@@ -82,11 +82,21 @@ $(function(){
 					tweetView.color = model.get('color');
 					this.$("#tweets-details").append(tweetView.render().el);
 				}, this));
+				model.get('tweets').bind("change:selected", this.scrollTo);
 			} else {
 				// Remove the nodes
 				model.get('tweets').each(function (tweet) {
 					tweet.detailView && tweet.detailView.remove();
 				});
+				model.get('tweets').unbind("change:selected", this.scrollTo);
+			}
+		},
+
+		scrollTo: function (model) {
+			if (model.get("selected") === true) {
+				console.log($(model.detailView.el).position().top);
+				var tweetDetailsBox = this.$("#tweets-details");
+				tweetDetailsBox.scrollTop(tweetDetailsBox.scrollTop() + $(model.detailView.el).position().top);
 			}
 		},
 		

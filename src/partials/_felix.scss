@@ -231,6 +231,7 @@ header{
 			list-style: none;
 			overflow-y: scroll;
 			height: 41*$v; // height of the details-container minus the margin
+			position: relative; // used for scroll to to set this as the nearest offset parent
 			
 			li{
 				margin: 0.5*$v 0;

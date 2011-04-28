@@ -720,6 +720,7 @@ header h3 {
   list-style: none;
   overflow-y: scroll;
   height: 738px;
+  position: relative;
 }
 #right-container #details-container ol li {
   margin: 9px 0;
