@@ -48,9 +48,11 @@ $(function(){
 					}
 
 					// For now, just show everything?
-					// this.app.option.viewMin = data[0].data.created_at.unix_timestamp * 1000;
-					// this.app.option.viewMax = data[data.length-1].data.created_at.unix_timestamp * 1000;
+					this.rgraph.setTimeStep(this.app.option.viewMax - this.app.option.viewMin);
+					this.app.option.viewMin = data[0].data.created_at.unix_timestamp * 1000;
+					this.app.option.viewMax = data[data.length-1].data.created_at.unix_timestamp * 1000;
 					this.changeInterval();
+					this.rgraph.setTimeStep((this.app.option.viewMax - this.app.option.viewMin) / 1000 / 10);
 					this.rgraph.op.sum(data, {type: 'replot'});
 
 					model.insertedOnJIT = true;
