@@ -451,96 +451,63 @@ header h3 {
 #left-container #keyword-container li.keywords {
   border: 1px solid white;
 }
-#left-container #keyword-container li.keywords.color-0 {
-  color: #aa4768;
+#left-container #keyword-container li.keywords.selected {
+  color: white;
+  background: #999;
+}
+#left-container #keyword-container li.keywords.hovered {
+  color: black;
+  background: #eee;
+  cursor: pointer;
 }
 #left-container #keyword-container li.keywords.color-0.selected {
-  color: white;
   background: #aa4768;
-  cursor: pointer;
 }
 #left-container #keyword-container li.keywords.color-0.hovered {
+  color: #aa4768;
   border: 1px solid #aa4768;
-  color: black;
-  background: #eee;
-}
-#left-container #keyword-container li.keywords.color-1 {
-  color: #e44241;
 }
 #left-container #keyword-container li.keywords.color-1.selected {
-  color: white;
   background: #e44241;
-  cursor: pointer;
 }
 #left-container #keyword-container li.keywords.color-1.hovered {
+  color: #e44241;
   border: 1px solid #e44241;
-  color: black;
-  background: #eee;
-}
-#left-container #keyword-container li.keywords.color-2 {
-  color: #d9bf5d;
 }
 #left-container #keyword-container li.keywords.color-2.selected {
-  color: white;
   background: #d9bf5d;
-  cursor: pointer;
 }
 #left-container #keyword-container li.keywords.color-2.hovered {
+  color: #d9bf5d;
   border: 1px solid #d9bf5d;
-  color: black;
-  background: #eee;
-}
-#left-container #keyword-container li.keywords.color-3 {
-  color: #d98493;
 }
 #left-container #keyword-container li.keywords.color-3.selected {
-  color: white;
   background: #d98493;
-  cursor: pointer;
 }
 #left-container #keyword-container li.keywords.color-3.hovered {
+  color: #d98493;
   border: 1px solid #d98493;
-  color: black;
-  background: #eee;
-}
-#left-container #keyword-container li.keywords.color-4 {
-  color: #65a85b;
 }
 #left-container #keyword-container li.keywords.color-4.selected {
-  color: white;
   background: #65a85b;
-  cursor: pointer;
 }
 #left-container #keyword-container li.keywords.color-4.hovered {
+  color: #65a85b;
   border: 1px solid #65a85b;
-  color: black;
-  background: #eee;
-}
-#left-container #keyword-container li.keywords.color-5 {
-  color: #3b5379;
 }
 #left-container #keyword-container li.keywords.color-5.selected {
-  color: white;
   background: #3b5379;
-  cursor: pointer;
 }
 #left-container #keyword-container li.keywords.color-5.hovered {
+  color: #3b5379;
   border: 1px solid #3b5379;
-  color: black;
-  background: #eee;
-}
-#left-container #keyword-container li.keywords.color-6 {
-  color: #e98e4f;
 }
 #left-container #keyword-container li.keywords.color-6.selected {
-  color: white;
   background: #e98e4f;
-  cursor: pointer;
 }
 #left-container #keyword-container li.keywords.color-6.hovered {
+  color: #e98e4f;
   border: 1px solid #e98e4f;
-  color: black;
-  background: #eee;
 }
 #left-container #keyword-container li.keywords.disabled {
   text-decoration: line-through;
@@ -777,96 +744,63 @@ header h3 {
   padding-right: 3px;
   font-weight: bold;
 }
-#right-container #details-container ol li.color-0 {
-  color: #aa4768;
+#right-container #details-container ol li.selected {
+  color: white;
+  background: #999;
+}
+#right-container #details-container ol li.hovered {
+  color: black;
+  background: #eee;
+  cursor: pointer;
 }
 #right-container #details-container ol li.color-0.selected {
-  color: white;
   background: #aa4768;
-  cursor: pointer;
 }
 #right-container #details-container ol li.color-0.hovered {
+  color: #aa4768;
   border: 1px solid #aa4768;
-  color: black;
-  background: #eee;
-}
-#right-container #details-container ol li.color-1 {
-  color: #e44241;
 }
 #right-container #details-container ol li.color-1.selected {
-  color: white;
   background: #e44241;
-  cursor: pointer;
 }
 #right-container #details-container ol li.color-1.hovered {
+  color: #e44241;
   border: 1px solid #e44241;
-  color: black;
-  background: #eee;
-}
-#right-container #details-container ol li.color-2 {
-  color: #d9bf5d;
 }
 #right-container #details-container ol li.color-2.selected {
-  color: white;
   background: #d9bf5d;
-  cursor: pointer;
 }
 #right-container #details-container ol li.color-2.hovered {
+  color: #d9bf5d;
   border: 1px solid #d9bf5d;
-  color: black;
-  background: #eee;
-}
-#right-container #details-container ol li.color-3 {
-  color: #d98493;
 }
 #right-container #details-container ol li.color-3.selected {
-  color: white;
   background: #d98493;
-  cursor: pointer;
 }
 #right-container #details-container ol li.color-3.hovered {
+  color: #d98493;
   border: 1px solid #d98493;
-  color: black;
-  background: #eee;
-}
-#right-container #details-container ol li.color-4 {
-  color: #65a85b;
 }
 #right-container #details-container ol li.color-4.selected {
-  color: white;
   background: #65a85b;
-  cursor: pointer;
 }
 #right-container #details-container ol li.color-4.hovered {
+  color: #65a85b;
   border: 1px solid #65a85b;
-  color: black;
-  background: #eee;
-}
-#right-container #details-container ol li.color-5 {
-  color: #3b5379;
 }
 #right-container #details-container ol li.color-5.selected {
-  color: white;
   background: #3b5379;
-  cursor: pointer;
 }
 #right-container #details-container ol li.color-5.hovered {
+  color: #3b5379;
   border: 1px solid #3b5379;
-  color: black;
-  background: #eee;
-}
-#right-container #details-container ol li.color-6 {
-  color: #e98e4f;
 }
 #right-container #details-container ol li.color-6.selected {
-  color: white;
   background: #e98e4f;
-  cursor: pointer;
 }
 #right-container #details-container ol li.color-6.hovered {
+  color: #e98e4f;
   border: 1px solid #e98e4f;
-  color: black;
-  background: #eee;
 }
 
 footer {
