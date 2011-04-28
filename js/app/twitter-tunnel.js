@@ -165,7 +165,11 @@ $(function(){
 			   var left = parseInt(style.left);
 			   var w = domElement.offsetWidth;
 			   style.left = (left - w / 2) + 'px';
-			 }
+			 },
+			onComplete: function(){
+				that.app.trigger("tt-oncomplete");
+			},
+			
 			});
 			//load JSON data
 			rgraph.loadJSON(json);
@@ -281,7 +285,7 @@ $(function(){
 		    var y = e.offsetY - canvasY;
 		    var computedTime = this.rgraph.getTimeAtPosition(x,y);
 			
-			this.app.trigger("tt-cursor-position-change", {pos: computedTime*1000, id: 'line-cursor', replace: true});
+			this.app.trigger("tt-cursor-position-change", {pos: computedTime*1000, id: 'line-cursor', replace: true, color: "rgba(255,0,0,0.75)"});
 		},
 		
 		removeCursorLine: function(){

@@ -14,12 +14,13 @@ $(function(){
 		},
 		
 		initialize: function(op){
-			_.bindAll(this, "changeInterval", "contentChange", "addSingleLine", "removeSingleLine");
+			_.bindAll(this, "changeInterval", "contentChange", "addSingleLine", "removeSingleLine", "updateRingLines");
 			
 			this.app = op.app;
 			this.app.bind("tt-option-interval-change", this.changeInterval);
 			this.app.bind("tt-cursor-position-change", this.addSingleLine);
 			this.app.bind("tt-cursor-out", this.removeSingleLine);
+			this.app.bind("tt-oncomplete", this.updateRingLines);
 
 			this.model.bind('change:active', this.contentChange);
 
@@ -417,7 +418,7 @@ $(function(){
 					id: id,
 					value: pos,
 					width: 1,
-					color: 'rgba(255, 0, 0, 0.75)'
+					color: color
 				});
 			}
 		},
@@ -426,6 +427,30 @@ $(function(){
 			var xAxis = this.masterChart.xAxis[0];
 			xAxis.removePlotLine(id);
 		},
+		
+		addRingLines: function(){
+			var that = this;
+			// ugly direct access elements from TwitterTunnelVis
+			var times = _.pluck(that.app.TwitterTunnelVis.rgraph.canvas.circles.rings, 'time');
+			var times = _.map(times, function(i){ return i*1000 });
+			var times = _.sortBy(times, function(i){ return i });
+			_.map(times, function(i){
+                that.addSingleLine({ pos: i, id: 'ring-'+(i+''), color: "rgba(0,0,0,0.1)"});
+			});
+			this.ringTimes = times;
+		},
+		
+		removeRingLines: function(){
+			var that = this;
+			_.map(this.ringTimes, function(i){
+				that.removeSingleLine('ring-'+(i+''));
+			});
+		},
+		
+		updateRingLines: function(){
+			// change ring lines to reflect new rings
+			this.removeRingLines();
+			this.addRingLines();
 		}
 		
 	});
