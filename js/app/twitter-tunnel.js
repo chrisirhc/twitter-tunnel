@@ -246,6 +246,7 @@ $(function(){
 			var newNearTime = that.app.option.viewMax / 1000;
 			var newFarTime = that.app.option.viewMin / 1000
 			this.rgraph.fx.animateTime(newNearTime, newFarTime, {modes:['polar'], duration: 500 } );
+			this.updateTimeLabel();
 		},
 		
 		refresh: function(){
@@ -285,7 +286,43 @@ $(function(){
 		
 		removeCursorLine: function(){
 			this.app.trigger("tt-cursor-out", 'line-cursor');
-		}
+		},
+		
+		updateTimeLabel: function(){
+			
+			var startTime = new Date( this.app.option.viewMin );
+			var endTime = new Date( this.app.option.viewMax );
+			
+			var month=new Array(12);
+			month[0]="Jan";
+			month[1]="Feb";
+			month[2]="Mar";
+			month[3]="Apr";
+			month[4]="May";
+			month[5]="Jun";
+			month[6]="Jul";
+			month[7]="Aug";
+			month[8]="Sep";
+			month[9]="Oct";
+			month[10]="Nov";
+			month[11]="Dec";
+			
+			var startTimeString = 	month[ startTime.getMonth() ] + " " 
+									+ startTime.getDate() + " "
+									+ startTime.getHours() + ":"
+									+ (startTime.getMinutes()<10?
+										"0"+(startTime.getMinutes()+''):
+										startTime.getMinutes());
+			
+			var endTimeString = 	endTime.getHours() + ":"
+									+ (endTime.getMinutes()<10?
+										"0"+(endTime.getMinutes()+''):
+										endTime.getMinutes());
+			
+			$("#tunnel-time-label");
+			$("span#start-time").text(startTimeString);
+			$("span#end-time").text(endTimeString);
+		},
 		
 		
 	});

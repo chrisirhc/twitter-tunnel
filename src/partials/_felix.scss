@@ -230,6 +230,12 @@ header{
 		position: relative;
 		margin-bottom: 1*$v;
 		
+		#tunnel-time-label{
+			position: absolute;
+			left: 55px;
+			top: 0px;
+		}
+		
 		#tunnel-controller{
 			position: absolute;
 			right: 0px;

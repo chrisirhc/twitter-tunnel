@@ -765,12 +765,18 @@ header h3 {
   margin-bottom: 18px;
 }
 /* line 233, ../src/partials/_felix.scss */
+#center-container #tunnel-container #tunnel-time-label {
+  position: absolute;
+  left: 55px;
+  top: 0px;
+}
+/* line 239, ../src/partials/_felix.scss */
 #center-container #tunnel-container #tunnel-controller {
   position: absolute;
   right: 0px;
   top: -5px;
 }
-/* line 239, ../src/partials/_felix.scss */
+/* line 245, ../src/partials/_felix.scss */
 #center-container #tunnel-container #tunnel-controller p {
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -818,13 +824,13 @@ header h3 {
   background: #eee;
   color: #999;
 }
-/* line 248, ../src/partials/_felix.scss */
+/* line 254, ../src/partials/_felix.scss */
 #center-container #tunnel-container #infovis {
   width: 100%;
   height: 540px;
 }
 
-/* line 257, ../src/partials/_felix.scss */
+/* line 263, ../src/partials/_felix.scss */
 #right-container {
   display: inline;
   float: left;
@@ -835,38 +841,38 @@ header h3 {
 * html #right-container {
   overflow-x: hidden;
 }
-/* line 261, ../src/partials/_felix.scss */
+/* line 267, ../src/partials/_felix.scss */
 #right-container #details-container ol {
   margin: 18px 0;
   list-style: none;
   overflow-y: scroll;
   height: 738px;
 }
-/* line 267, ../src/partials/_felix.scss */
+/* line 273, ../src/partials/_felix.scss */
 #right-container #details-container ol li {
   margin: 9px 0;
   padding: 9px 18px;
 }
-/* line 270, ../src/partials/_felix.scss */
+/* line 276, ../src/partials/_felix.scss */
 #right-container #details-container ol li img {
   float: left;
 }
-/* line 274, ../src/partials/_felix.scss */
+/* line 280, ../src/partials/_felix.scss */
 #right-container #details-container ol li p {
   margin-left: 60px;
   word-wrap: break-word;
 }
-/* line 277, ../src/partials/_felix.scss */
+/* line 283, ../src/partials/_felix.scss */
 #right-container #details-container ol li p span.username {
   padding-right: 3px;
   font-weight: bold;
 }
-/* line 282, ../src/partials/_felix.scss */
+/* line 288, ../src/partials/_felix.scss */
 #right-container #details-container ol li:hover {
   background: #eee;
 }
 
-/* line 291, ../src/partials/_felix.scss */
+/* line 297, ../src/partials/_felix.scss */
 footer {
   display: inline;
   float: left;
