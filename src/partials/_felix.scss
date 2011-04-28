@@ -83,6 +83,8 @@ header{
 		}
 		
 		li.keywords{
+
+			margin: 1px;
 			
 			$goodRed: #e44241;
 			$goodYellow: #d9bf5d;
@@ -92,31 +94,31 @@ header{
 			$goodOrange: #e98e4f;
 			$goodPurple: #aa4768;
 			
-			&:nth-child(7n){
+			&.color-0 {
 				@include keyword-style($goodPurple);
 			}
 			
-			&:nth-child(7n+1){
+			&.color-1 {
 				@include keyword-style($goodRed);
 			}
 			
-			&:nth-child(7n+2){
+			&.color-2 {
 				@include keyword-style($goodYellow);
 			}
 			
-			&:nth-child(7n+3){
+			&.color-3 {
 				@include keyword-style($goodPink);
 			}
 			
-			&:nth-child(7n+4){
+			&.color-4 {
 				@include keyword-style($goodGreen);
 			}
 			
-			&:nth-child(7n+5){
+			&.color-5 {
 				@include keyword-style($goodBlue);
 			}
 			
-			&:nth-child(7n+6){
+			&.color-6 {
 				@include keyword-style($goodOrange);
 			}
 			

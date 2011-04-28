@@ -240,7 +240,8 @@ $(function(){
 		},
 		
 		render: function(){
-			$(this.el).html(this.template(this.model.toJSON()));
+			$(this.el).html(this.template(this.model.toJSON()))
+			.addClass("color-" + this.model.get("color"));
 			return this;
 		},
 		
@@ -281,6 +282,10 @@ $(function(){
 		},
 		
 		initialize: function(){
+			// Hardcoded number of colors
+			this.currentColor = -1;
+			this.numberOfColors = 7;
+
 			_.bindAll(this, 'addOne', 'addAll', 'render');
 			this.input = this.$('#keyword-input-text');
 			
@@ -320,9 +325,11 @@ $(function(){
 		
 		// default attribute values for keyword
 		newAttributes: function(){
+			this.currentColor = (this.currentColor + 1) % this.numberOfColors;
 			return {
 				keyword: this.input.val(),
-				active: true
+				active: true,
+				color: this.currentColor
 			};
 		},
 		
