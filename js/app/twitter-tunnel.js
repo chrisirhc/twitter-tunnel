@@ -307,7 +307,7 @@ $(function(){
 			// actually change the view of twitter tunnel
 			var newNearTime = that.app.option.viewMax / 1000;
 			var newFarTime = that.app.option.viewMin / 1000
-			this.rgraph.fx.animateTime(newNearTime, newFarTime, {modes:['polar'], duration: 500 } );
+			this.rgraph.fx.animateTime(newNearTime, newFarTime, {modes:['polar'], duration: 1500 } );
 			this.updateTimeLabel();
 			this.updateRingIntervalLabel();
 		},
