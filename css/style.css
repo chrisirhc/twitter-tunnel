@@ -633,7 +633,7 @@ header h3 {
   -o-user-select: none;
   user-select: none;
   padding: 18px 0;
-  height: 180px;
+  height: 54px;
 }
 #center-container #overview-container #overview #overview-master-container {
   position: absolute;
@@ -741,7 +741,7 @@ header h3 {
   margin: 18px 0;
   list-style: none;
   overflow-y: scroll;
-  height: 738px;
+  height: 630px;
   position: relative;
 }
 #right-container #details-container ol li {

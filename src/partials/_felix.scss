@@ -178,7 +178,7 @@ header{
 			position: relative;
 			@include user-select-none;
 			padding: 1*$v 0;
-			height: 10*$v;
+			height: 3*$v;
 			
 			#overview-master-container{
 				position:absolute;
@@ -253,7 +253,7 @@ header{
 			margin: 1*$v 0;
 			list-style: none;
 			overflow-y: scroll;
-			height: 41*$v; // height of the details-container minus the margin
+			height: 35*$v; // height of the details-container minus the margin
 			position: relative; // used for scroll to to set this as the nearest offset parent
 			
 			li{
