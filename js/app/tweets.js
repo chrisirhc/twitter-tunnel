@@ -136,7 +136,7 @@ $(function(){
 			// Swap out the below getJSON call with above when debugging
 			*/
 			$.getJSON("https://query.yahooapis.com/v1/public/yql?callback=?", {
-				q: 'use "https://raw.github.com/gist/325c570edab32842e416/fce7c69b3043fbe0a57773c19413d7dcda3ef108/twitter.conversation.xml";' +
+				q: 'use "https://gist.github.com/raw/325c570edab32842e416/e09058debde98691230a5a5de9b94acb6fe2c0a5/twitter.conversation.xml";' +
 					'select * from twitter.conversation where q="' + this.get("keyword") + '"',
 			format: 'json'
 			}, addTweets);
